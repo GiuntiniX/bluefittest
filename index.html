@@ -6,7 +6,7 @@
     <title>Terra Insights: O Mercado Fitness</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;900&display=swap');
@@ -22,6 +22,7 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--brand-dark);
             color: #f1f5f9;
+            /* Fundo geométrico */
             background-image: 
                 linear-gradient(30deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
                 linear-gradient(150deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
@@ -45,9 +46,11 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
+            /* Evita quebra no PDF */
+            break-inside: avoid; 
         }
 
-        .interactive-card { z-index: 1; }
+        .interactive-card { z-index: 1; break-inside: avoid; }
         .interactive-card::before {
             content: ''; position: absolute; inset: 0;
             background-size: cover; background-position: center;
@@ -65,6 +68,7 @@
         .visual-panel {
             position: relative; min-height: 350px; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 2rem; border-radius: 1.5rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+            break-inside: avoid;
         }
         .visual-panel-bg {
             position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 1s ease; z-index: -2;
@@ -80,7 +84,11 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .section-header { border-bottom: 2px solid rgba(255,255,255,0.1); position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem; }
+        .section-header { 
+            border-bottom: 2px solid rgba(255,255,255,0.1); 
+            position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem; 
+            break-after: avoid; 
+        }
         .section-header::after {
             content: ''; position: absolute; bottom: -2px; left: 0; width: 100px; height: 2px;
             background: linear-gradient(90deg, var(--brand-blue), var(--brand-yellow));
@@ -93,35 +101,18 @@
         .bar-gradient-yellow { background-image: linear-gradient(90deg, #ca8a04, #facc15); }
         .text-shadow-strong { text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
         
-        section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; break-inside: avoid; }
         section.visible { opacity: 1; transform: translateY(0); }
 
-        /* === CONFIGURAÇÃO CRÍTICA PARA PDF (BACKGROUND ESCURO) === */
-        @media print {
-            body { 
-                background-color: #0f172a !important; 
-                -webkit-print-color-adjust: exact !important;   /* Chrome/Safari/Edge */
-                print-color-adjust: exact !important;           /* Firefox */
-                color-adjust: exact !important; 
-                color: #f1f5f9 !important;
-            }
-            /* Forçar fundo nos painéis */
-            .glass-panel { 
-                background-color: rgba(30, 41, 59, 0.9) !important;
-                border: 1px solid #444 !important;
-                box-shadow: none !important;
-            }
-            .no-print { display: none !important; }
-            /* Evitar quebra de página no meio de um gráfico */
-            .glass-panel, .visual-panel, .section-header { page-break-inside: avoid; }
-        }
+        /* Esconde elementos na hora da impressão/geração do PDF */
+        .no-print { display: none !important; }
     </style>
 </head>
 <body class="antialiased min-h-screen">
 
-    <div id="content-wrapper" class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32">
+    <div id="pdf-content" class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 bg-[#0f172a]">
         
-        <header id="slide-header" class="mb-24 relative z-10">
+        <header class="mb-24 relative z-10">
             <div class="flex justify-between items-center py-6 border-b border-gray-800 mb-8">
                 <div class="flex items-center gap-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Logo Terra" class="h-8 w-auto">
@@ -131,7 +122,7 @@
                 <div class="text-xs text-gray-500 font-mono">FITNESS REPORT 2025</div>
             </div>
             
-            <div class="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl group">
+            <div class="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl group break-inside-avoid">
                 <div class="absolute inset-0 bg-cover bg-center" 
                      style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');">
                 </div>
@@ -325,22 +316,15 @@
 
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full z-50 p-4 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 flex flex-col md:flex-row items-center justify-center gap-4 no-print shadow-2xl">
-        <button onclick="downloadPDF()" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl border border-gray-600 transition-all shadow-lg w-full md:w-auto justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <div class="fixed bottom-0 left-0 w-full z-50 p-4 bg-gray-900/90 backdrop-blur-md border-t border-gray-800 flex justify-center gap-4 no-print shadow-2xl">
+        <button onclick="downloadVisualPDF()" id="btn-pdf" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-blue-500/40">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Baixar PDF (Visual Fiel)
         </button>
-        <button onclick="generateNativePPT()" id="btn-ppt" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg w-full md:w-auto justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
-            Baixar PPT (Editável)
-        </button>
-        <p class="text-[10px] text-gray-500 md:absolute md:right-4 mt-2 md:mt-0">
-            *PDF: Marque "Gráficos de Plano de Fundo" na impressão.
-        </p>
     </div>
 
     <script>
-        // --- ANIMAÇÃO (Igual ao anterior) ---
+        // --- ANIMAÇÃO DOS NÚMEROS E BARRAS ---
         const ANIMATION_DURATION = 1500; 
         
         function animateCounter(element, start, end, decimals) {
@@ -408,92 +392,45 @@
             document.querySelectorAll('section').forEach(section => observer.observe(section));
         });
 
-        // --- DOWNLOAD PDF (Simples e Eficiente) ---
-        function downloadPDF() {
-            window.print();
-        }
-
-        // --- GERADOR DE PPT NATIVO (Novo código robusto) ---
-        function generateNativePPT() {
-            const btn = document.getElementById('btn-ppt');
-            btn.innerHTML = 'Gerando...';
+        // --- FUNÇÃO DE DOWNLOAD PDF (html2pdf) ---
+        function downloadVisualPDF() {
+            const element = document.getElementById('pdf-content');
+            const btn = document.getElementById('btn-pdf');
+            const originalText = btn.innerHTML;
             
-            try {
-                let pptx = new PptxGenJS();
-                pptx.layout = 'LAYOUT_16x9';
-                pptx.author = 'Terra Insights';
-                pptx.company = 'Terra';
-                pptx.title = 'Fitness Report 2025';
+            btn.innerHTML = 'Gerando PDF... (Aguarde)';
+            btn.disabled = true;
 
-                // Cores
-                const BLUE = "2563eb";
-                const YELLOW = "facc15";
-                const DARK = "0f172a";
-                const WHITE = "ffffff";
+            // Antes de gerar, garantimos que tudo está visível (remove animação de scroll)
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => {
+                s.style.opacity = '1';
+                s.style.transform = 'none';
+            });
 
-                // Slide 1: Capa
-                let slide1 = pptx.addSlide();
-                slide1.background = { color: DARK };
-                slide1.addText("O BRASIL QUE TREINA", { x: 0.5, y: 2, w: '90%', fontSize: 44, color: WHITE, bold: true, align: 'left' });
-                slide1.addText("Terra Insights: Fitness Report 2025", { x: 0.5, y: 3, w: '90%', fontSize: 18, color: YELLOW });
-                slide1.addText("Metodologia: Base de 539 respondentes.", { x: 0.5, y: 5, fontSize: 12, color: "aaaaaa" });
+            const opt = {
+                margin:       [0, 0, 0, 0], // Margem zero para pegar o fundo total
+                filename:     'Terra_Insights_Fitness.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: true,
+                    backgroundColor: '#0f172a' // Garante fundo escuro no canvas
+                },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
 
-                // Slide 2: Perfil do Público
-                let slide2 = pptx.addSlide();
-                slide2.background = { color: WHITE };
-                slide2.addText("01. Quem é o Público?", { x: 0.5, y: 0.5, fontSize: 24, color: BLUE, bold: true });
-                
-                // Cards de dados
-                slide2.addShape(pptx.ShapeType.rect, { x: 0.5, y: 1.5, w: 2.5, h: 1.5, fill: BLUE });
-                slide2.addText("539\nRespondentes", { x: 0.5, y: 1.5, w: 2.5, h: 1.5, fontSize: 18, color: WHITE, align: 'center', valign: 'middle' });
-
-                slide2.addShape(pptx.ShapeType.rect, { x: 3.2, y: 1.5, w: 2.5, h: 1.5, fill: YELLOW });
-                slide2.addText("56.9%\nClasse C", { x: 3.2, y: 1.5, w: 2.5, h: 1.5, fontSize: 18, color: DARK, align: 'center', valign: 'middle' });
-
-                slide2.addShape(pptx.ShapeType.rect, { x: 5.9, y: 1.5, w: 2.5, h: 1.5, fill: BLUE });
-                slide2.addText("45.1%\nMatriculados", { x: 5.9, y: 1.5, w: 2.5, h: 1.5, fontSize: 18, color: WHITE, align: 'center', valign: 'middle' });
-
-                slide2.addText("Insight Importante:", { x: 0.5, y: 3.5, fontSize: 14, color: DARK, bold: true });
-                slide2.addText("A Classe C apresenta maior taxa de matrícula proporcional (50.16%) que as classes A/B (38.36%), sugerindo barreiras diferentes de entrada para públicos de alta renda.", { x: 0.5, y: 3.8, w: '90%', fontSize: 12, color: "666666" });
-
-                // Slide 3: Barreiras e Drivers
-                let slide3 = pptx.addSlide();
-                slide3.background = { color: WHITE };
-                slide3.addText("02. Barreiras e Motivações", { x: 0.5, y: 0.5, fontSize: 24, color: BLUE, bold: true });
-
-                slide3.addText("Principal Barreira: FALTA DE TEMPO", { x: 0.5, y: 1.5, fontSize: 16, color: "DD0000", bold: true });
-                slide3.addText("• Afeta 15.85% da Classe A/B (Maior índice)\n• Média geral de 11.32%\n• Classe C também cita 'Falta de Motivação' (7.2%)", { x: 0.5, y: 1.8, fontSize: 12, color: DARK });
-
-                slide3.addText("O que faz mudar de academia?", { x: 5.5, y: 1.5, fontSize: 16, color: DARK, bold: true });
-                slide3.addText("Classe C (Pragmatismo):", { x: 5.5, y: 1.8, fontSize: 12, color: BLUE, bold: true });
-                slide3.addText("• Proximidade (9.8%)\n• Promoções (8.3%)", { x: 5.5, y: 2.1, fontSize: 12, color: DARK });
-                
-                slide3.addText("Classe A/B (Exigência):", { x: 5.5, y: 3.0, fontSize: 12, color: "#CA8A04", bold: true });
-                slide3.addText("• Marca Admirada (5.9%)\n• Qualidade percebida", { x: 5.5, y: 3.3, fontSize: 12, color: DARK });
-
-                // Slide 4: Oferta e Preço
-                let slide4 = pptx.addSlide();
-                slide4.background = { color: DARK };
-                slide4.addText("03. Teste de Oferta: R$ 159,90", { x: 0.5, y: 0.5, fontSize: 24, color: YELLOW, bold: true });
-
-                slide4.addShape(pptx.ShapeType.rect, { x: 1, y: 2, w: 4, h: 3, fill: "1e293b", line: {color: "ffffff", width: 1} });
-                slide4.addText("Classe C\nACEITAÇÃO", { x: 1, y: 2.5, w: 4, align: 'center', color: BLUE, bold: true });
-                slide4.addText("24%", { x: 1, y: 3.2, w: 4, align: 'center', fontSize: 30, color: WHITE, bold: true });
-
-                slide4.addShape(pptx.ShapeType.rect, { x: 6, y: 2, w: 4, h: 3, fill: "1e293b", line: {color: "ffffff", width: 1} });
-                slide4.addText("Classe A/B\nREJEIÇÃO", { x: 6, y: 2.5, w: 4, align: 'center', color: "FF5555", bold: true });
-                slide4.addText("26%", { x: 6, y: 3.2, w: 4, align: 'center', fontSize: 30, color: WHITE, bold: true });
-
-                slide4.addText("Conclusão: Para o público A/B, o preço sozinho não justifica a troca. É necessário agregar benefícios premium.", { x: 1, y: 5.5, w: '80%', align: 'center', color: "aaaaaa", fontSize: 11, italic: true });
-
-                pptx.writeFile({ fileName: "Terra_Insights_Fitness.pptx" });
-                btn.innerHTML = 'Baixar PPT (Editável)';
-
-            } catch (e) {
-                console.error(e);
-                alert("Erro ao gerar PPT.");
-                btn.innerHTML = 'Tentar Novamente';
-            }
+            // Gera o PDF
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error(err);
+                alert("Erro ao gerar PDF. Verifique se as imagens estão acessíveis.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
         }
     </script>
 </body>
