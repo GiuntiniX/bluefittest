@@ -39,6 +39,11 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             break-inside: avoid;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-panel:hover {
+            transform: translateY(-5px);
+            border-color: rgba(204, 255, 0, 0.3);
         }
 
         /* Texto Gradiente */
@@ -58,7 +63,7 @@
             height: 12px; background-color: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden;
         }
         .bar-fill {
-            height: 100%; border-radius: 6px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            height: 100%; border-radius: 6px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); width: 0;
         }
         .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); }
         .fill-lime { background: linear-gradient(90deg, #aacc00, #CCFF00); }
@@ -85,7 +90,11 @@
                 break-inside: avoid;
             }
             .no-print { display: none !important; }
-            .text-gradient { -webkit-text-fill-color: #0057FF !important; } /* Fallback para cor sólida */
+            .text-gradient { -webkit-text-fill-color: #0057FF !important; }
+            
+            /* Remove animações para o PDF estático */
+            .reveal-section { opacity: 1 !important; transform: none !important; }
+            .bar-fill { transition: none !important; }
         }
     </style>
 </head>
@@ -103,217 +112,208 @@
                 <div class="text-xs text-[#CCFF00] font-mono">DATA REPORT 2025</div>
             </div>
             
-            <div class="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl group border border-gray-800">
-                <div class="absolute inset-0 bg-cover bg-center" 
+            <div class="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl group border border-gray-800">
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" 
                      style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');">
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"></div>
                 
                 <div class="absolute bottom-0 left-0 p-8 sm:p-12 w-full md:w-4/5">
-                    <h1 class="text-5xl sm:text-7xl font-black text-white leading-none mb-6">
-                        O PERFIL <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0057FF] to-[#CCFF00]">DO ALUNO BLUEFIT</span>
+                    <h1 class="text-5xl sm:text-7xl font-black text-white leading-none mb-6 drop-shadow-lg">
+                        RAIO-X DO <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0057FF] to-[#CCFF00]">MERCADO FITNESS</span>
                     </h1>
                     <p class="text-lg text-gray-300 font-light border-gradient-left pl-6 max-w-2xl">
-                        [cite_start]Uma análise profunda de 539 respondentes revelando como Classe C e A/B divergem em motivações, barreiras e percepção de valor[cite: 1, 2].
+                        Uma análise profunda sobre gênero, idade, renda e região. Quem treina, por que treina e o que os faria mudar.
                     </p>
                 </div>
             </div>
         </header>
 
         <section class="mb-24 reveal-section">
-            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
-                01. <span class="text-[#CCFF00]">Raio-X da Base</span>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4 flex items-center gap-3">
+                01. <span class="text-[#CCFF00]">Recorte de Gênero</span>
             </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#CCFF00" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#0057FF" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
                     </div>
-                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-1">Classe C</p>
-                    <p class="text-5xl font-black text-white number-stat mb-2">56,9%</p>
-                    [cite_start]<p class="text-xs text-gray-400">Maioria da base[cite: 72].</p>
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <p class="text-sm text-[#CCFF00]">Mais engajados:</p>
-                        <p class="text-xl font-bold text-white">50,1%</p>
-                        [cite_start]<p class="text-xs text-gray-400">Têm matrícula ativa[cite: 110].</p>
+                    <h3 class="text-2xl font-bold text-[#0057FF] mb-4 uppercase">Homens</h3>
+                    
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-400">Matrícula em Academia</p>
+                        <p class="text-5xl font-black text-white number-stat"><span class="counter" data-target="53.1">0</span>%</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#0057FF]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Frequência</p>
+                            <p class="text-white text-sm">Maioria 1-2x/semana (21,7%).</p>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#0057FF]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Objetivo #1</p>
+                            <p class="text-white text-sm">Redução de Estresse (10,3%).</p>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#0057FF]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Driver de Troca</p>
+                            <p class="text-white text-sm">Conveniência / Proximidade (12,4%).</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0057FF" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#CCFF00" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-8"/><path d="M9 12h6"/></svg>
                     </div>
-                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-1">Classe A/B</p>
-                    <p class="text-5xl font-black text-white number-stat mb-2">43,0%</p>
-                    [cite_start]<p class="text-xs text-gray-400">Minoria da base[cite: 72].</p>
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <p class="text-sm text-[#0057FF]">Menos fidelizados:</p>
-                        <p class="text-xl font-bold text-white">38,3%</p>
-                        [cite_start]<p class="text-xs text-gray-400">Têm matrícula ativa[cite: 111].</p>
+                    <h3 class="text-2xl font-bold text-[#CCFF00] mb-4 uppercase">Mulheres</h3>
+                    
+                    <div class="mb-6">
+                        <p class="text-sm text-gray-400">Matrícula em Academia</p>
+                        <p class="text-5xl font-black text-white number-stat"><span class="counter" data-target="48.7">0</span>%</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#CCFF00]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Frequência</p>
+                            <p class="text-white text-sm">Mais consistentes: 3-4x e 5x+ lideram (16,9% cada).</p>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#CCFF00]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Atividade Favorita</p>
+                            <p class="text-white text-sm">Corrida ao Ar Livre (62,8%).</p>
+                        </div>
+                        <div class="bg-gray-800/50 p-3 rounded-lg border-l-2 border-[#CCFF00]">
+                            <p class="text-xs text-gray-400 uppercase font-bold">Driver de Troca</p>
+                            <p class="text-white text-sm">Preço Baixo (16,9%).</p>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="glass-panel p-8 rounded-2xl bg-gradient-to-br from-[#0057FF]/20 to-transparent flex flex-col justify-center border border-[#0057FF]/30">
-                    <h3 class="text-xl font-bold text-white mb-3">⚡ Insight Crítico</h3>
-                    <p class="text-gray-200 text-sm leading-relaxed">
-                        Apesar de terem maior poder aquisitivo, a <strong>Classe A/B tem menor taxa de matrícula</strong>. [cite_start]Isso indica que o preço não é a barreira, mas sim a percepção de valor, tempo e exclusividade[cite: 111, 112].
-                    </p>
+        <section class="mb-24 reveal-section">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
+                02. <span class="text-gradient">Gerações & Hábitos</span>
+            </h2>
+
+            <div class="glass-panel p-8 rounded-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="space-y-3">
+                        <h4 class="text-xl font-bold text-white mb-2">16–24 Anos</h4>
+                        <div class="text-sm text-gray-400">
+                            <p class="mb-2"><strong class="text-[#0057FF]">Foco:</strong> Saúde (9,8%) e Emagrecimento.</p>
+                            <p class="mb-2"><strong class="text-[#0057FF]">Barreira:</strong> Falta de Tempo (13,6%).</p>
+                            <p class="mb-2"><strong class="text-[#0057FF]">Troca por:</strong> Promoção "R$ 9,90" (13,2%).</p>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-2.5">
+                            <div class="bg-[#0057FF] h-2.5 rounded-full bar-anim" style="width: 48%"></div>
+                        </div>
+                        <p class="text-xs text-right text-gray-500">48% Matriculados</p>
+                    </div>
+
+                    <div class="space-y-3 border-l-0 md:border-l border-gray-700 md:pl-8">
+                        <h4 class="text-xl font-bold text-white mb-2">25–34 Anos</h4>
+                        <div class="text-sm text-gray-400">
+                            <p class="mb-2"><strong class="text-[#CCFF00]">Foco:</strong> Estética e Massa Muscular.</p>
+                            <p class="mb-2"><strong class="text-[#CCFF00]">Barreira:</strong> Falta de Tempo Crítica (20,5%).</p>
+                            <p class="mb-2"><strong class="text-[#CCFF00]">Troca por:</strong> Proximidade (21,6%).</p>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-2.5">
+                            <div class="bg-[#CCFF00] h-2.5 rounded-full bar-anim" style="width: 52%"></div>
+                        </div>
+                        <p class="text-xs text-right text-gray-500">52% Matriculados (Pico)</p>
+                    </div>
+
+                    <div class="space-y-3 border-l-0 md:border-l border-gray-700 md:pl-8">
+                        <h4 class="text-xl font-bold text-white mb-2">60+ Anos</h4>
+                        <div class="text-sm text-gray-400">
+                            <p class="mb-2"><strong class="text-gray-200">Atividade:</strong> "Outras" (100%) - Hidro, Fisio.</p>
+                            <p class="mb-2"><strong class="text-gray-200">Barreira:</strong> Motivos diversos.</p>
+                            <p class="mb-2"><strong class="text-red-500">Alerta:</strong> Alta rejeição à nova academia (75%).</p>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-2.5">
+                            <div class="bg-gray-500 h-2.5 rounded-full bar-anim" style="width: 18%"></div>
+                        </div>
+                        <p class="text-xs text-right text-gray-500">18% Matriculados</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="mb-24 reveal-section">
             <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
-                02. <span class="text-gradient">O Jogo da Escolha</span>
+                03. <span class="text-gradient">O Fator Renda</span>
             </h2>
 
-            <div class="flex flex-col lg:flex-row gap-8">
-                <div class="lg:w-1/2 glass-panel p-8 rounded-2xl">
-                    <h3 class="text-lg font-bold text-[#CCFF00] uppercase mb-6 tracking-wide">O que faz eles trocarem?</h3>
-                    
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between items-end mb-2">
-                                <span class="text-white font-bold text-sm">Classe C: Proximidade & Preço</span>
-                                <span class="text-[#CCFF00] text-xs font-mono">Pragmatismo</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <div class="px-3 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-lg text-xs text-gray-300 w-full">
-                                    <span class="block text-white font-bold text-lg">9,8%</span>
-                                    [cite_start]Proximidade [cite: 83]
-                                </div>
-                                <div class="px-3 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-lg text-xs text-gray-300 w-full">
-                                    <span class="block text-white font-bold text-lg">8,3%</span>
-                                    [cite_start]Promoções [cite: 84]
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="h-px bg-gray-700"></div>
-
-                        <div>
-                            <div class="flex justify-between items-end mb-2">
-                                <span class="text-white font-bold text-sm">Classe A/B: Marca & Status</span>
-                                <span class="text-[#0057FF] text-xs font-mono">Exigência</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <div class="px-3 py-2 bg-[#0057FF]/10 border border-[#0057FF]/30 rounded-lg text-xs text-gray-300 w-full">
-                                    <span class="block text-white font-bold text-lg">5,9%</span>
-                                    [cite_start]Marca Admirada [cite: 86]
-                                </div>
-                                <div class="px-3 py-2 bg-[#0057FF]/10 border border-[#0057FF]/30 rounded-lg text-xs text-gray-300 w-full">
-                                    <span class="block text-white font-bold text-lg">Alta</span>
-                                    Qualidade/Serviço
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:w-1/2 glass-panel p-8 rounded-2xl border-l-4 border-red-500">
-                    <h3 class="text-lg font-bold text-red-500 uppercase mb-6 tracking-wide">Por que não treinam?</h3>
-                    
-                    <div class="space-y-6">
-                        <div class="relative">
-                            <div class="flex justify-between text-sm text-gray-300 mb-2">
-                                <span>Falta de Tempo (Classe A/B)</span>
-                                [cite_start]<span class="font-bold text-white">15,85% [cite: 90]</span>
-                            </div>
-                            <div class="bar-container"><div class="bar-fill fill-red" style="width: 75%"></div></div>
-                        </div>
-
-                        <div class="relative">
-                            <div class="flex justify-between text-sm text-gray-300 mb-2">
-                                <span>Falta de Tempo (Média Geral)</span>
-                                <span class="font-bold text-white">11,32%</span>
-                            </div>
-                            <div class="bar-container"><div class="bar-fill fill-red" style="width: 55%; opacity: 0.6"></div></div>
-                        </div>
-
-                        <div class="mt-6 p-4 bg-red-900/20 rounded-lg border border-red-500/20">
-                            <p class="text-sm text-gray-300 italic">
-                                [cite_start]"Para a Classe C, a <strong>Falta de Motivação (7,2%)</strong> é um ofensor quase tão grande quanto o tempo." [cite: 88]
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-24 reveal-section">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col">
-                    <div class="h-32 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=2000&auto=format&fit=crop');">
-                        <div class="w-full h-full bg-[#CCFF00]/80 flex items-center justify-center">
-                            <h3 class="text-3xl font-black text-black uppercase">Classe C</h3>
-                        </div>
-                    </div>
-                    <div class="p-8 flex-1">
-                        <h4 class="font-bold text-white mb-2">Objetivo: SAÚDE</h4>
-                        [cite_start]<p class="text-sm text-gray-400 mb-4">Buscam bem-estar e redução de estresse[cite: 94].</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Caminhada</span>
-                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Corrida</span>
-                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Academia</span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-[#CCFF00]">
+                    <h3 class="text-2xl font-bold text-white mb-2">5 a 10 Salários Mínimos</h3>
+                    <p class="text-sm text-[#CCFF00] font-bold uppercase tracking-wide mb-6">Pragmatismo & Saúde</p>
+                    
+                    <ul class="space-y-4 text-sm text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <span class="text-[#CCFF00]">✓</span>
+                            <span><strong>Multi-atividades:</strong> Caminhada, Corrida, Natação e Academia.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-[#CCFF00]">✓</span>
+                            <span><strong>Motivação:</strong> Preço e Proximidade decidem a troca.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-[#CCFF00]">✓</span>
+                            <span><strong>Oferta R$ 159,90:</strong> 24% de aceitação positiva.</span>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col">
-                    <div class="h-32 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2000&auto=format&fit=crop');">
-                        <div class="w-full h-full bg-[#0057FF]/80 flex items-center justify-center">
-                            <h3 class="text-3xl font-black text-white uppercase">Classe A/B</h3>
-                        </div>
-                    </div>
-                    <div class="p-8 flex-1">
-                        <h4 class="font-bold text-white mb-2">Objetivo: ESTÉTICA</h4>
-                        [cite_start]<p class="text-sm text-gray-400 mb-4">Foco em emagrecimento e corpo[cite: 95].</p>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Corrida</span>
-                            <span class="px-3 py-1 bg-white text-black font-bold rounded-full text-xs border border-white">"Atividades Diferenciadas" (41%)</span>
-                        </div>
-                    </div>
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-[#0057FF]">
+                    <h3 class="text-2xl font-bold text-white mb-2">Mais de 10 Salários</h3>
+                    <p class="text-sm text-[#0057FF] font-bold uppercase tracking-wide mb-6">Exigência & Tempo Escasso</p>
+                    
+                    <ul class="space-y-4 text-sm text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <span class="text-[#0057FF]">✓</span>
+                            <span><strong>Fora da Academia:</strong> 41% praticam atividades "Outras" (studios, outdoor).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-[#0057FF]">✓</span>
+                            <span><strong>Motivação:</strong> Marca Admirada e Qualidade. Preço impacta menos.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500">✕</span>
+                            <span><strong>Oferta R$ 159,90:</strong> Alta rejeição (26%). Exigem benefícios premium.</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </section>
 
         <section class="mb-10 reveal-section">
             <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
-                03. <span class="text-gradient">O Teste de Preço</span>
+                04. <span class="text-gradient">Brasil Continental</span>
             </h2>
             
-            <div class="glass-panel p-8 rounded-2xl border-t-4 border-[#0057FF]">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-                    <div>
-                        <p class="text-gray-400 text-sm uppercase tracking-widest">Oferta Testada</p>
-                        <h3 class="text-5xl font-black text-white">R$ 159,90<span class="text-lg text-gray-500 font-normal">/mês</span></h3>
-                    </div>
-                    <div class="text-right mt-4 md:mt-0">
-                        <p class="text-sm text-gray-300 max-w-md">
-                            "Como os diferentes públicos reagem a um plano 'full' neste valor?"
-                        </p>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/5 transition-colors">
+                    <h4 class="font-bold text-[#CCFF00] text-lg mb-2">Norte</h4>
+                    <p class="text-3xl font-black text-white mb-2">61,5%</p>
+                    <p class="text-xs text-gray-400 mb-4">Praticam Atividade (Mais ativos)</p>
+                    <p class="text-sm text-gray-300">Amantes de <strong>Corrida (64%)</strong>. Sensíveis a preço.</p>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="relative">
-                        <div class="flex justify-between mb-2">
-                            <span class="text-white font-bold flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-[#CCFF00]"></div> Classe C: Aceitação</span>
-                            [cite_start]<span class="text-[#CCFF00] font-bold">24,11% [cite: 97]</span>
-                        </div>
-                        <div class="bar-container"><div class="bar-fill fill-lime" style="width: 24.11%"></div></div>
-                    </div>
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/5 transition-colors">
+                    <h4 class="font-bold text-[#0057FF] text-lg mb-2">Centro-Oeste</h4>
+                    <p class="text-3xl font-black text-white mb-2">56,8%</p>
+                    <p class="text-xs text-gray-400 mb-4">Matriculados (Acima da média)</p>
+                    <p class="text-sm text-gray-300">Conveniência manda. <strong>Proximidade (20%)</strong> decide a troca.</p>
+                </div>
 
-                    <div class="relative">
-                        <div class="flex justify-between mb-2">
-                            <span class="text-white font-bold flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500"></div> Classe A/B: Rejeição ("Não")</span>
-                            [cite_start]<span class="text-red-500 font-bold">26,29% [cite: 98]</span>
-                        </div>
-                        <div class="bar-container"><div class="bar-fill fill-red" style="width: 26.29%"></div></div>
-                        <p class="text-xs text-gray-500 mt-2 text-right">O público A/B exige benefícios tangíveis para justificar a troca, o preço por si só não converte.</p>
-                    </div>
+                <div class="glass-panel p-6 rounded-xl hover:bg-white/5 transition-colors">
+                    <h4 class="font-bold text-red-400 text-lg mb-2">Sul</h4>
+                    <p class="text-3xl font-black text-white mb-2">30,7%</p>
+                    <p class="text-xs text-gray-400 mb-4">Matriculados (Mais baixa)</p>
+                    <p class="text-sm text-gray-300">Alta rejeição ao preço. Preferem atividades fora do padrão.</p>
                 </div>
             </div>
         </section>
@@ -341,11 +341,47 @@
     </div>
 
     <script>
-        // Animação de entrada ao rolar
+        // Animação de números
+        const animationDuration = 2000;
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = (progress * (end - start) + start).toFixed(1);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Observer para animar ao rolar
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    
+                    // Animar contadores
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        if (!counter.classList.contains('done')) {
+                            const target = parseFloat(counter.getAttribute('data-target'));
+                            animateValue(counter, 0, target, animationDuration);
+                            counter.classList.add('done');
+                        }
+                    });
+
+                    // Animar barras
+                    const bars = entry.target.querySelectorAll('.bar-anim');
+                    bars.forEach(bar => {
+                        // Força reflow para garantir animação
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
                 }
             });
         }, { threshold: 0.1 });
