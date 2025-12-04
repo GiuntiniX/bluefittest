@@ -3,127 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terra Insights: O Mercado Fitness</title>
+    <title>Terra Insights: Bluefit & Mercado Fitness</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@700;900&display=swap');
 
         :root {
-            --brand-blue: #2563eb;
-            --brand-yellow: #facc15;
-            --brand-dark: #0f172a;
-            --brand-gray: #1e293b;
+            /* Paleta Bluefit / Energia */
+            --brand-blue: #0057FF;    /* Azul Elétrico */
+            --brand-yellow: #CCFF00;  /* Lima/Amarelo Neon */
+            --bg-dark: #0a0a0a;       /* Preto quase absoluto */
+            --glass-bg: rgba(20, 20, 35, 0.7);
         }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--brand-dark);
+            background-color: var(--bg-dark);
             color: #f1f5f9;
+            /* Fundo abstrato tech */
             background-image: 
-                linear-gradient(30deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
-                linear-gradient(150deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
-                linear-gradient(30deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
-                linear-gradient(150deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
-                linear-gradient(60deg, #1e293b77 25%, transparent 25.5%, transparent 75%, #1e293b77 75%, #1e293b77),
-                linear-gradient(60deg, #1e293b77 25%, transparent 25.5%, transparent 75%, #1e293b77 75%, #1e293b77);
-            background-size: 80px 140px;
-            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+                radial-gradient(circle at 10% 20%, rgba(0, 87, 255, 0.15), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(204, 255, 0, 0.1), transparent 40%);
             background-attachment: fixed;
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .metric-highlight { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
+        h1, h2, h3, .number-stat { font-family: 'Montserrat', sans-serif; letter-spacing: -0.04em; }
 
+        /* --- ESTILOS VISUAIS --- */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-            break-inside: avoid; /* Evita quebra de página no meio do card */
-        }
-
-        .interactive-card { z-index: 1; break-inside: avoid; }
-        .interactive-card::before {
-            content: ''; position: absolute; inset: 0;
-            background-size: cover; background-position: center;
-            filter: grayscale(100%) brightness(0.3) contrast(1.2);
-            opacity: 0.9; z-index: -2;
-        }
-        .interactive-card::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(37, 99, 235, 0.15));
-            z-index: -1;
-        }
-        /* Efeito Hover simples */
-        .interactive-card:hover { border-color: var(--brand-blue); }
-
-        .visual-panel {
-            position: relative; min-height: 350px; display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 2rem; border-radius: 1.5rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             break-inside: avoid;
         }
-        .visual-panel-bg {
-            position: absolute; inset: 0; background-size: cover; background-position: center; z-index: -2;
-        }
-        .visual-panel-overlay {
-            position: absolute; inset: 0; z-index: -1;
-            background: linear-gradient(0deg, rgba(15,23,42,1) 0%, rgba(15,23,42,0.4) 60%, rgba(15,23,42,0.1) 100%);
-        }
 
+        /* Texto Gradiente */
         .text-gradient {
-            background: linear-gradient(to right, #2563eb, #facc15);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background: linear-gradient(to right, #0057FF, #CCFF00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .section-header { 
-            border-bottom: 2px solid rgba(255,255,255,0.1); 
-            position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem; 
-            break-after: avoid;
-        }
-        .section-header::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; width: 100px; height: 2px;
-            background: linear-gradient(90deg, var(--brand-blue), var(--brand-yellow));
-            box-shadow: 0 0 12px var(--brand-blue);
+        .border-gradient-left {
+            border-left: 4px solid;
+            border-image: linear-gradient(to bottom, #0057FF, #CCFF00) 1;
         }
 
-        .brand-bar-container { height: 14px; background-color: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-top: 8px; }
-        .brand-bar { height: 100%; background-size: 200% 100%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
-        .bar-gradient-blue { background-image: linear-gradient(90deg, #1d4ed8, #60a5fa); }
-        .bar-gradient-yellow { background-image: linear-gradient(90deg, #ca8a04, #facc15); }
-        .text-shadow-strong { text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
-        
-        /* Animação apenas para tela, não para impressão */
+        /* Barras de Progresso */
+        .bar-container {
+            height: 12px; background-color: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%; border-radius: 6px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); }
+        .fill-lime { background: linear-gradient(90deg, #aacc00, #CCFF00); }
+        .fill-red { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+
+        /* Animação de Scroll */
         @media screen {
-            section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-            section.visible { opacity: 1; transform: translateY(0); }
+            .reveal-section { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+            .reveal-section.active { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- CONFIGURAÇÃO DE IMPRESSÃO (PDF) --- */
+        /* CONFIGURAÇÃO DE IMPRESSÃO (PDF) */
         @media print {
-            /* Força o navegador a imprimir cores de fundo e imagens */
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                background-color: #0f172a !important;
-                color: #f1f5f9 !important;
+            body { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+                background-color: #0a0a0a !important;
+                color: #fff !important;
             }
-            
-            /* Remove margens padrão para aproveitar o papel */
-            @page { margin: 0.5cm; size: A4; }
-
-            /* Esconde o botão de download */
+            .glass-panel {
+                background-color: #111 !important;
+                border: 1px solid #333 !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
             .no-print { display: none !important; }
-
-            /* Garante que o texto fique legível */
-            .text-gradient { -webkit-text-fill-color: #2563eb !important; }
-            
-            /* Ajustes de layout para evitar cortes */
-            .glass-panel, .visual-panel { break-inside: avoid; page-break-inside: avoid; box-shadow: none; border: 1px solid #334155; }
-            .section-header { break-after: avoid; }
+            .text-gradient { -webkit-text-fill-color: #0057FF !important; } /* Fallback para cor sólida */
         }
     </style>
 </head>
@@ -131,287 +93,265 @@
 
     <div class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32">
         
-        <header class="mb-24 relative z-10">
+        <header class="mb-24 reveal-section">
             <div class="flex justify-between items-center py-6 border-b border-gray-800 mb-8">
                 <div class="flex items-center gap-3">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Logo Terra" class="h-8 w-auto">
-                    <div class="h-6 w-px bg-gray-600"></div>
-                    <span class="text-gray-300 font-bold tracking-wider text-sm">INSIGHTS</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-8 w-auto grayscale opacity-80">
+                    <div class="h-6 w-px bg-gray-700"></div>
+                    <span class="text-white font-bold tracking-widest text-xs uppercase">Bluefit Insights</span>
                 </div>
-                <div class="text-xs text-gray-500 font-mono">FITNESS REPORT 2025</div>
+                <div class="text-xs text-[#CCFF00] font-mono">DATA REPORT 2025</div>
             </div>
             
-            <div class="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl group break-inside-avoid">
+            <div class="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl group border border-gray-800">
                 <div class="absolute inset-0 bg-cover bg-center" 
                      style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');">
                 </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/50 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"></div>
                 
-                <div class="absolute bottom-0 left-0 p-8 sm:p-14 w-full md:w-3/4">
-                    <span class="inline-block px-3 py-1 mb-4 text-xs font-bold text-blue-900 bg-blue-400 rounded-full uppercase tracking-wide">Bluefit Analysis</span>
-                    <h1 class="text-5xl sm:text-7xl font-black text-white leading-none mb-6 drop-shadow-lg">
-                        O BRASIL QUE <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-400 to-yellow-400">TREINA</span>
+                <div class="absolute bottom-0 left-0 p-8 sm:p-12 w-full md:w-4/5">
+                    <h1 class="text-5xl sm:text-7xl font-black text-white leading-none mb-6">
+                        O PERFIL <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0057FF] to-[#CCFF00]">DO ALUNO BLUEFIT</span>
                     </h1>
-                    <p class="text-lg text-gray-300 max-w-2xl font-light text-shadow-strong border-l-4 border-yellow-400 pl-4">
-                        Hábitos, barreiras e a batalha entre o "projeto saúde" e a falta de tempo. Um mergulho nos dados de 539 respondentes.
+                    <p class="text-lg text-gray-300 font-light border-gradient-left pl-6 max-w-2xl">
+                        [cite_start]Uma análise profunda de 539 respondentes revelando como Classe C e A/B divergem em motivações, barreiras e percepção de valor[cite: 1, 2].
                     </p>
                 </div>
             </div>
         </header>
 
-        <section id="perfil" class="mb-32">
-            <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
-                01. <span class="text-gradient">Quem é o Público?</span>
+        <section class="mb-24 reveal-section">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
+                01. <span class="text-[#CCFF00]">Raio-X da Base</span>
             </h2>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                <div class="glass-panel interactive-card p-6 rounded-2xl group">
-                    <style>.interactive-card:nth-child(1)::before { background-image: url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop'); }</style>
-                    <div class="absolute top-0 right-0 p-4 opacity-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#CCFF00" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <p class="text-xs text-blue-300 uppercase font-bold tracking-widest mb-2 text-shadow-strong">Base Total</p>
-                    <p class="text-5xl font-black text-white leading-none mb-2 text-shadow-strong">
-                        <span id="counter1" data-target="539" data-decimals="0">0</span>
-                    </p>
-                    <p class="text-sm text-gray-300">Respondentes (16-34 anos).</p>
-                </div>
-                <div class="glass-panel interactive-card p-6 rounded-2xl group">
-                    <style>.interactive-card:nth-child(2)::before { background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop'); }</style>
-                    <div class="absolute top-0 right-0 p-4 opacity-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-1">Classe C</p>
+                    <p class="text-5xl font-black text-white number-stat mb-2">56,9%</p>
+                    [cite_start]<p class="text-xs text-gray-400">Maioria da base[cite: 72].</p>
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <p class="text-sm text-[#CCFF00]">Mais engajados:</p>
+                        <p class="text-xl font-bold text-white">50,1%</p>
+                        [cite_start]<p class="text-xs text-gray-400">Têm matrícula ativa[cite: 110].</p>
                     </div>
-                    <p class="text-xs text-yellow-300 uppercase font-bold tracking-widest mb-2 text-shadow-strong">Classe C</p>
-                    <p class="text-5xl font-black text-white leading-none mb-2 text-shadow-strong">
-                        <span id="counter2" data-target="56.9" data-decimals="1">0</span>%
-                    </p>
-                    <p class="text-sm text-gray-300">Maioria da amostra.</p>
                 </div>
-                <div class="glass-panel interactive-card p-6 rounded-2xl group">
-                    <style>.interactive-card:nth-child(3)::before { background-image: url('https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=2069&auto=format&fit=crop'); }</style>
-                    <div class="absolute top-0 right-0 p-4 opacity-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="M18 20V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v14"/><path d="M2 20h20"/><path d="M14 12v.01"/></svg>
-                    </div>
-                    <p class="text-xs text-blue-300 uppercase font-bold tracking-widest mb-2 text-shadow-strong">Matriculados</p>
-                    <p class="text-5xl font-black text-white leading-none mb-2 text-shadow-strong">
-                        <span id="counter3" data-target="45.1" data-decimals="1">0</span>%
-                    </p>
-                    <p class="text-sm text-gray-300">Taxa geral em academias.</p>
-                </div>
-                <div class="glass-panel interactive-card p-6 rounded-2xl group">
-                    <style>.interactive-card:nth-child(4)::before { background-image: url('https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop'); }</style>
-                    <div class="absolute top-0 right-0 p-4 opacity-50">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><activity points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    </div>
-                    <p class="text-xs text-yellow-300 uppercase font-bold tracking-widest mb-2 text-shadow-strong">Ativos</p>
-                    <p class="text-5xl font-black text-white leading-none mb-2 text-shadow-strong">
-                        <span id="counter4" data-target="52.1" data-decimals="1">0</span>%
-                    </p>
-                    <p class="text-sm text-gray-300">Praticam alguma atividade.</p>
-                </div>
-            </div>
 
-            <div class="glass-panel p-8 rounded-2xl flex flex-col md:flex-row items-center gap-8">
-                <div class="md:w-1/3">
-                    <h3 class="text-2xl font-bold text-white mb-2">Disparidade de Matrícula</h3>
-                    <p class="text-gray-400 text-sm">Curiosamente, a Classe C apresenta maior taxa de matrícula proporcional que as classes A/B, sugerindo que para A/B existem outras barreiras ou alternativas.</p>
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0057FF" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                    </div>
+                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-1">Classe A/B</p>
+                    <p class="text-5xl font-black text-white number-stat mb-2">43,0%</p>
+                    [cite_start]<p class="text-xs text-gray-400">Minoria da base[cite: 72].</p>
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <p class="text-sm text-[#0057FF]">Menos fidelizados:</p>
+                        <p class="text-xl font-bold text-white">38,3%</p>
+                        [cite_start]<p class="text-xs text-gray-400">Têm matrícula ativa[cite: 111].</p>
+                    </div>
                 </div>
-                <div class="md:w-2/3 w-full space-y-6" id="matricula-chart" data-ranking="animated" data-unit="%">
-                    <div class="ranking-item" data-value="50.16" data-max="55" data-label="Classe C" data-color="bar-gradient-blue"></div>
-                    <div class="ranking-item" data-value="38.36" data-max="55" data-label="Classe A/B" data-color="bar-gradient-yellow"></div>
+
+                <div class="glass-panel p-8 rounded-2xl bg-gradient-to-br from-[#0057FF]/20 to-transparent flex flex-col justify-center border border-[#0057FF]/30">
+                    <h3 class="text-xl font-bold text-white mb-3">⚡ Insight Crítico</h3>
+                    <p class="text-gray-200 text-sm leading-relaxed">
+                        Apesar de terem maior poder aquisitivo, a <strong>Classe A/B tem menor taxa de matrícula</strong>. [cite_start]Isso indica que o preço não é a barreira, mas sim a percepção de valor, tempo e exclusividade[cite: 111, 112].
+                    </p>
                 </div>
             </div>
         </section>
 
-        <section id="barreiras" class="mb-32">
-            <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
-                02. <span class="text-gradient">O que Impede & O que Move?</span>
+        <section class="mb-24 reveal-section">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
+                02. <span class="text-gradient">O Jogo da Escolha</span>
             </h2>
 
             <div class="flex flex-col lg:flex-row gap-8">
-                <div class="lg:w-1/2 visual-panel">
-                    <div class="visual-panel-bg" style="background-image: url('https://images.unsplash.com/photo-1513593771513-6568e733ac87?q=80&w=2070&auto=format&fit=crop'); background-position: center;"></div>
-                    <div class="visual-panel-overlay"></div>
-                    <div class="relative z-10">
-                        <div class="bg-black/60 backdrop-blur-md p-6 rounded-xl border border-red-500/30 mb-6">
-                            <h3 class="text-xl font-bold text-red-400 mb-4 uppercase flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                Principal Barreira: Tempo
-                            </h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-300 mb-1"><span>Classe A/B (Mais afetada)</span> <span class="font-bold">15.85%</span></div>
-                                    <div class="h-2 bg-gray-700 rounded-full"><div class="h-full bg-red-500 rounded-full" style="width: 75%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-300 mb-1"><span>Média Geral</span> <span class="font-bold">11.32%</span></div>
-                                    <div class="h-2 bg-gray-700 rounded-full"><div class="h-full bg-red-500/50 rounded-full" style="width: 55%"></div></div>
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-4 italic">Para a Classe C, a "Falta de Motivação" (7,20%) também é um fator relevante.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:w-1/2 glass-panel p-8 rounded-2xl flex flex-col justify-center">
-                    <h3 class="text-xl font-bold mb-6 text-yellow-300 uppercase tracking-wide">Drivers de Troca</h3>
-                    <div class="space-y-8">
+                <div class="lg:w-1/2 glass-panel p-8 rounded-2xl">
+                    <h3 class="text-lg font-bold text-[#CCFF00] uppercase mb-6 tracking-wide">O que faz eles trocarem?</h3>
+                    
+                    <div class="space-y-6">
                         <div>
-                            <h4 class="text-white font-bold mb-2 flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>Classe C</h4>
-                            <p class="text-gray-400 text-sm mb-3">Pragmatismo: Custo-benefício e facilidade.</p>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-white font-bold text-sm">Classe C: Proximidade & Preço</span>
+                                <span class="text-[#CCFF00] text-xs font-mono">Pragmatismo</span>
+                            </div>
                             <div class="flex gap-2">
-                                <span class="px-3 py-1 bg-blue-900/50 border border-blue-500/50 rounded text-xs text-blue-200">Proximidade (9.8%)</span>
-                                <span class="px-3 py-1 bg-blue-900/50 border border-blue-500/50 rounded text-xs text-blue-200">Promoções (8.3%)</span>
+                                <div class="px-3 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-lg text-xs text-gray-300 w-full">
+                                    <span class="block text-white font-bold text-lg">9,8%</span>
+                                    [cite_start]Proximidade [cite: 83]
+                                </div>
+                                <div class="px-3 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-lg text-xs text-gray-300 w-full">
+                                    <span class="block text-white font-bold text-lg">8,3%</span>
+                                    [cite_start]Promoções [cite: 84]
+                                </div>
                             </div>
                         </div>
+
                         <div class="h-px bg-gray-700"></div>
+
                         <div>
-                            <h4 class="text-white font-bold mb-2 flex items-center"><span class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>Classe A/B</h4>
-                            <p class="text-gray-400 text-sm mb-3">Exigência: Valor percebido e status.</p>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-white font-bold text-sm">Classe A/B: Marca & Status</span>
+                                <span class="text-[#0057FF] text-xs font-mono">Exigência</span>
+                            </div>
                             <div class="flex gap-2">
-                                <span class="px-3 py-1 bg-yellow-900/50 border border-yellow-500/50 rounded text-xs text-yellow-200">Marca Admirada (5.9%)</span>
-                                <span class="px-3 py-1 bg-yellow-900/50 border border-yellow-500/50 rounded text-xs text-yellow-200">Qualidade</span>
+                                <div class="px-3 py-2 bg-[#0057FF]/10 border border-[#0057FF]/30 rounded-lg text-xs text-gray-300 w-full">
+                                    <span class="block text-white font-bold text-lg">5,9%</span>
+                                    [cite_start]Marca Admirada [cite: 86]
+                                </div>
+                                <div class="px-3 py-2 bg-[#0057FF]/10 border border-[#0057FF]/30 rounded-lg text-xs text-gray-300 w-full">
+                                    <span class="block text-white font-bold text-lg">Alta</span>
+                                    Qualidade/Serviço
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 glass-panel p-8 rounded-2xl border-l-4 border-red-500">
+                    <h3 class="text-lg font-bold text-red-500 uppercase mb-6 tracking-wide">Por que não treinam?</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                <span>Falta de Tempo (Classe A/B)</span>
+                                [cite_start]<span class="font-bold text-white">15,85% [cite: 90]</span>
+                            </div>
+                            <div class="bar-container"><div class="bar-fill fill-red" style="width: 75%"></div></div>
+                        </div>
+
+                        <div class="relative">
+                            <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                <span>Falta de Tempo (Média Geral)</span>
+                                <span class="font-bold text-white">11,32%</span>
+                            </div>
+                            <div class="bar-container"><div class="bar-fill fill-red" style="width: 55%; opacity: 0.6"></div></div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-red-900/20 rounded-lg border border-red-500/20">
+                            <p class="text-sm text-gray-300 italic">
+                                [cite_start]"Para a Classe C, a <strong>Falta de Motivação (7,2%)</strong> é um ofensor quase tão grande quanto o tempo." [cite: 88]
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="objetivos" class="mb-32">
-            <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
-                03. <span class="text-gradient">O Treino & O Bolso</span>
+        <section class="mb-24 reveal-section">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="h-32 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1483721310020-03333e577078?q=80&w=2000&auto=format&fit=crop');">
+                        <div class="w-full h-full bg-[#CCFF00]/80 flex items-center justify-center">
+                            <h3 class="text-3xl font-black text-black uppercase">Classe C</h3>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-1">
+                        <h4 class="font-bold text-white mb-2">Objetivo: SAÚDE</h4>
+                        [cite_start]<p class="text-sm text-gray-400 mb-4">Buscam bem-estar e redução de estresse[cite: 94].</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Caminhada</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Corrida</span>
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Academia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col">
+                    <div class="h-32 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=2000&auto=format&fit=crop');">
+                        <div class="w-full h-full bg-[#0057FF]/80 flex items-center justify-center">
+                            <h3 class="text-3xl font-black text-white uppercase">Classe A/B</h3>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-1">
+                        <h4 class="font-bold text-white mb-2">Objetivo: ESTÉTICA</h4>
+                        [cite_start]<p class="text-sm text-gray-400 mb-4">Foco em emagrecimento e corpo[cite: 95].</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-800 rounded-full text-xs border border-gray-600">Corrida</span>
+                            <span class="px-3 py-1 bg-white text-black font-bold rounded-full text-xs border border-white">"Atividades Diferenciadas" (41%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 reveal-section">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-gray-800 pb-4">
+                03. <span class="text-gradient">O Teste de Preço</span>
             </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="glass-panel p-6 rounded-2xl md:col-span-2">
-                    <h3 class="text-xl font-bold mb-6 text-white">O Foco do Treino</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        <div class="p-4 rounded-xl bg-blue-600/10 border border-blue-500/20">
-                            <div class="text-3xl mb-2">🩺</div>
-                            <h4 class="font-bold text-blue-400 mb-1">Classe C</h4>
-                            <p class="text-sm text-gray-300">Busca primária por <strong>Saúde</strong> e <strong>Redução de Estresse</strong>. Modalidades simples como Caminhada e Corrida dominam.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-yellow-600/10 border border-yellow-500/20">
-                            <div class="text-3xl mb-2">💪</div>
-                            <h4 class="font-bold text-yellow-400 mb-1">Classe A/B</h4>
-                            <p class="text-sm text-gray-300">Foco em <strong>Estética</strong> e <strong>Emagrecimento</strong>. Interesse maior em modalidades diferenciadas e equipamentos de ponta.</p>
-                        </div>
+            
+            <div class="glass-panel p-8 rounded-2xl border-t-4 border-[#0057FF]">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                    <div>
+                        <p class="text-gray-400 text-sm uppercase tracking-widest">Oferta Testada</p>
+                        <h3 class="text-5xl font-black text-white">R$ 159,90<span class="text-lg text-gray-500 font-normal">/mês</span></h3>
+                    </div>
+                    <div class="text-right mt-4 md:mt-0">
+                        <p class="text-sm text-gray-300 max-w-md">
+                            "Como os diferentes públicos reagem a um plano 'full' neste valor?"
+                        </p>
                     </div>
                 </div>
 
-                <div class="visual-panel justify-center items-center text-center">
-                    <div class="visual-panel-bg" style="background-image: url('https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop');"></div>
-                    <div class="visual-panel-overlay"></div>
-                    <div class="relative z-10">
-                        <p class="text-xs font-bold text-gray-400 uppercase mb-2">Teste de Oferta</p>
-                        <h3 class="text-4xl font-black text-white mb-1">R$ 159,90</h3>
-                        <p class="text-sm text-gray-300 mb-6">Mensalidade</p>
-                        
-                        <div class="bg-black/80 p-4 rounded-lg text-left space-y-3">
-                            <div>
-                                <div class="flex justify-between text-xs text-blue-300 mb-1"><span>Classe C (Aceitação)</span> <span>24%</span></div>
-                                <div class="h-1.5 bg-gray-700 rounded"><div class="h-full bg-blue-500 rounded" style="width: 24%"></div></div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs text-red-300 mb-1"><span>Classe A/B (Rejeição)</span> <span>26%</span></div>
-                                <div class="h-1.5 bg-gray-700 rounded"><div class="h-full bg-red-500 rounded" style="width: 26%"></div></div>
-                            </div>
+                <div class="space-y-6">
+                    <div class="relative">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-white font-bold flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-[#CCFF00]"></div> Classe C: Aceitação</span>
+                            [cite_start]<span class="text-[#CCFF00] font-bold">24,11% [cite: 97]</span>
                         </div>
-                        <p class="text-[10px] text-gray-400 mt-2">A/B exige benefícios premium para justificar.</p>
+                        <div class="bar-container"><div class="bar-fill fill-lime" style="width: 24.11%"></div></div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-white font-bold flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-red-500"></div> Classe A/B: Rejeição ("Não")</span>
+                            [cite_start]<span class="text-red-500 font-bold">26,29% [cite: 98]</span>
+                        </div>
+                        <div class="bar-container"><div class="bar-fill fill-red" style="width: 26.29%"></div></div>
+                        <p class="text-xs text-gray-500 mt-2 text-right">O público A/B exige benefícios tangíveis para justificar a troca, o preço por si só não converte.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer class="border-t border-gray-800 pt-10 text-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 mx-auto mb-4 opacity-50">
-            <p class="text-gray-500 text-xs leading-relaxed">
-                © 2025 Pesquisa Terra Insights • O Mercado Fitness<br>
-                Imagens meramente ilustrativas (Fonte: Unsplash).
+        <footer class="border-t border-gray-800 pt-12 pb-8 text-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 mx-auto mb-4 grayscale opacity-50">
+            <p class="text-gray-600 text-xs font-mono">
+                © 2025 TERRA INSIGHTS • BASEADO EM 539 ENTREVISTAS<br>
+                DOCUMENTO CONFIDENCIAL • USO INTERNO
             </p>
         </footer>
 
     </div>
 
-    <div class="fixed bottom-6 right-6 z-50 no-print group">
-        <button onclick="window.print()" class="flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-2xl transition-all transform hover:scale-105">
+    <div class="fixed bottom-8 right-8 z-50 no-print group">
+        <button onclick="window.print()" class="flex items-center gap-3 bg-[#0057FF] hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-full shadow-[0_0_20px_rgba(0,87,255,0.5)] transition-all transform hover:scale-105 active:scale-95">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             PDF
         </button>
-        <div class="absolute bottom-full right-0 mb-3 w-48 bg-gray-800 text-white text-xs p-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg border border-gray-700">
-            Na janela de impressão, ative <strong>"Gráficos de plano de fundo"</strong> para ver as cores corretas.
+        <div class="absolute bottom-full right-0 mb-3 w-64 bg-gray-900 text-gray-300 text-xs p-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity border border-gray-700 shadow-xl pointer-events-none">
+            Na janela de impressão, selecione:<br>
+            1. Salvar como PDF<br>
+            2. Mais definições > <strong>Gráficos de plano de fundo</strong>.
         </div>
     </div>
 
     <script>
-        // --- ANIMAÇÃO (Mantida) ---
-        const ANIMATION_DURATION = 1500; 
-        
-        function animateCounter(element, start, end, decimals) {
-            let startTime;
-            const step = (timestamp) => {
-                if (!startTime) startTime = timestamp;
-                const progress = timestamp - startTime;
-                const percentage = Math.min(progress / ANIMATION_DURATION, 1);
-                const ease = (x) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
-                let current = ease(percentage) * (end - start) + start;
-                element.textContent = current.toFixed(decimals);
-                if (progress < ANIMATION_DURATION) window.requestAnimationFrame(step);
-                else element.textContent = end.toFixed(decimals);
-            };
-            window.requestAnimationFrame(step);
-        }
-
-        function animateBars(container) {
-            if (container.classList.contains('animated')) return;
-            container.classList.add('animated');
-            const unit = container.getAttribute('data-unit') || '';
-            const items = container.querySelectorAll('.ranking-item');
-            items.forEach((item, index) => {
-                const val = parseFloat(item.getAttribute('data-value'));
-                const max = parseFloat(item.getAttribute('data-max'));
-                const label = item.getAttribute('data-label');
-                const colorClass = item.getAttribute('data-color');
-                const uniqueId = `bar-${Math.random().toString(36).substr(2, 9)}`;
-                const width = Math.min(100, (val / max) * 100);
-                item.innerHTML = `
-                    <div class="flex justify-between items-end mb-2">
-                        <span class="font-bold text-sm text-gray-200 uppercase tracking-wide">${label}</span>
-                        <span class="text-lg font-bold text-white font-mono" id="${uniqueId}-val">0${unit}</span>
-                    </div>
-                    <div class="brand-bar-container">
-                        <div class="brand-bar ${colorClass} shadow-[0_0_10px_rgba(37,99,235,0.3)]" style="width: 0%"></div>
-                    </div>`;
-                setTimeout(() => {
-                    const bar = item.querySelector('.brand-bar');
-                    const valEl = item.querySelector(`#${uniqueId}-val`);
-                    bar.style.width = `${width}%`;
-                    animateCounter(valEl, 0, val, (unit === '%' ? 1 : 0));
-                }, index * 200);
-            });
-        }
-
+        // Animação de entrada ao rolar
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    const counters = entry.target.querySelectorAll('[id^="counter"]');
-                    counters.forEach(c => {
-                        if(!c.classList.contains('done')) {
-                            c.classList.add('done');
-                            animateCounter(c, 0, parseFloat(c.getAttribute('data-target')), parseInt(c.getAttribute('data-decimals')));
-                        }
-                    });
-                    const rankings = entry.target.querySelectorAll('[data-ranking="animated"]');
-                    rankings.forEach(r => animateBars(r));
+                    entry.target.classList.add('active');
                 }
             });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.1 });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('section').forEach(section => observer.observe(section));
+        document.querySelectorAll('.reveal-section').forEach((section) => {
+            observer.observe(section);
         });
     </script>
 </body>
