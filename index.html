@@ -22,7 +22,6 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--brand-dark);
             color: #f1f5f9;
-            /* Fundo geométrico */
             background-image: 
                 linear-gradient(30deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
                 linear-gradient(150deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
@@ -46,7 +45,7 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
-            /* Evita quebra no PDF */
+            /* Importante para PDF não cortar card no meio */
             break-inside: avoid; 
         }
 
@@ -86,7 +85,7 @@
 
         .section-header { 
             border-bottom: 2px solid rgba(255,255,255,0.1); 
-            position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem; 
+            position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem;
             break-after: avoid; 
         }
         .section-header::after {
@@ -101,16 +100,19 @@
         .bar-gradient-yellow { background-image: linear-gradient(90deg, #ca8a04, #facc15); }
         .text-shadow-strong { text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
         
-        section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; break-inside: avoid; }
-        section.visible { opacity: 1; transform: translateY(0); }
-
-        /* Esconde elementos na hora da impressão/geração do PDF */
-        .no-print { display: none !important; }
+        /* Animação inicial apenas para tela, não para PDF */
+        @media screen {
+            section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+            section.visible { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Classe auxiliar para ocultar botões na hora do PDF */
+        .no-pdf { display: none !important; }
     </style>
 </head>
 <body class="antialiased min-h-screen">
 
-    <div id="pdf-content" class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 bg-[#0f172a]">
+    <div id="content-to-print" class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32">
         
         <header class="mb-24 relative z-10">
             <div class="flex justify-between items-center py-6 border-b border-gray-800 mb-8">
@@ -158,6 +160,7 @@
                     </p>
                     <p class="text-sm text-gray-300">Respondentes (16-34 anos).</p>
                 </div>
+
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(2)::before { background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -169,6 +172,7 @@
                     </p>
                     <p class="text-sm text-gray-300">Maioria da amostra.</p>
                 </div>
+
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(3)::before { background-image: url('https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=2069&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -180,6 +184,7 @@
                     </p>
                     <p class="text-sm text-gray-300">Taxa geral em academias.</p>
                 </div>
+
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(4)::before { background-image: url('https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -306,34 +311,34 @@
             </div>
         </section>
 
-        <footer class="border-t border-gray-800 pt-10 text-center">
+        <footer class="border-t border-gray-800 pt-10 text-center pb-8">
             <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 mx-auto mb-4 opacity-50">
             <p class="text-gray-500 text-xs leading-relaxed">
                 © 2025 Pesquisa Terra Insights • O Mercado Fitness<br>
-                Imagens meramente ilustrativas (Fonte: Unsplash).
+                Imagens meramente ilustrativas (Fonte: Unsplash e Dreamstime).<br>
+                <span class="block mt-2 text-gray-600">Metodologia: Levantamento quantitativo com 539 respondentes via plataforma mobile.</span>
             </p>
         </footer>
 
     </div>
 
-    <div class="fixed bottom-0 left-0 w-full z-50 p-4 bg-gray-900/90 backdrop-blur-md border-t border-gray-800 flex justify-center gap-4 no-print shadow-2xl">
-        <button onclick="downloadVisualPDF()" id="btn-pdf" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-blue-500/40">
+    <div class="fixed bottom-0 left-0 w-full z-50 p-4 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 flex justify-center gap-4 shadow-2xl" data-html2canvas-ignore="true">
+        <button onclick="downloadPDFVisual()" id="btn-download" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-blue-500/40">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Baixar PDF (Visual Fiel)
         </button>
     </div>
 
     <script>
-        // --- ANIMAÇÃO DOS NÚMEROS E BARRAS ---
+        // --- ANIMAÇÃO (Mantida) ---
         const ANIMATION_DURATION = 1500; 
-        
         function animateCounter(element, start, end, decimals) {
             let startTime;
             const step = (timestamp) => {
                 if (!startTime) startTime = timestamp;
                 const progress = timestamp - startTime;
-                const ease = (x) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
                 const percentage = Math.min(progress / ANIMATION_DURATION, 1);
+                const ease = (x) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
                 let current = ease(percentage) * (end - start) + start;
                 element.textContent = current.toFixed(decimals);
                 if (progress < ANIMATION_DURATION) window.requestAnimationFrame(step);
@@ -392,44 +397,47 @@
             document.querySelectorAll('section').forEach(section => observer.observe(section));
         });
 
-        // --- FUNÇÃO DE DOWNLOAD PDF (html2pdf) ---
-        function downloadVisualPDF() {
-            const element = document.getElementById('pdf-content');
-            const btn = document.getElementById('btn-pdf');
-            const originalText = btn.innerHTML;
+        // --- FUNÇÃO DE DOWNLOAD PDF VISUAL (html2pdf) ---
+        function downloadPDFVisual() {
+            const btn = document.getElementById('btn-download');
+            const element = document.getElementById('content-to-print');
             
             btn.innerHTML = 'Gerando PDF... (Aguarde)';
             btn.disabled = true;
 
-            // Antes de gerar, garantimos que tudo está visível (remove animação de scroll)
-            const sections = document.querySelectorAll('section');
-            sections.forEach(s => {
+            // 1. Forçar visibilidade total para o "print" (remover animações de scroll)
+            const allSections = document.querySelectorAll('section');
+            allSections.forEach(s => {
                 s.style.opacity = '1';
-                s.style.transform = 'none';
+                s.style.transform = 'translateY(0)';
             });
 
+            // 2. Configurações para garantir o "Espelho"
             const opt = {
-                margin:       [0, 0, 0, 0], // Margem zero para pegar o fundo total
-                filename:     'Terra_Insights_Fitness.pdf',
+                margin:       [0.3, 0, 0.5, 0], // Margens pequenas [top, left, bottom, right]
+                filename:     'Terra_Insights_Fitness_Report.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true, 
-                    logging: true,
-                    backgroundColor: '#0f172a' // Garante fundo escuro no canvas
+                    scale: 2, // Alta resolução
+                    useCORS: true, // Permitir imagens externas (Unsplash)
+                    backgroundColor: '#0f172a', // Fundo escuro forçado
+                    scrollY: 0 // Começar do topo
                 },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
-            // Gera o PDF
+            // 3. Gerar
             html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = originalText;
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Baixar PDF (Visual Fiel)
+                `;
                 btn.disabled = false;
             }).catch(err => {
                 console.error(err);
-                alert("Erro ao gerar PDF. Verifique se as imagens estão acessíveis.");
-                btn.innerHTML = originalText;
+                alert('Erro ao gerar. Verifique sua conexão com as imagens.');
                 btn.disabled = false;
+                btn.innerHTML = 'Tentar Novamente';
             });
         }
     </script>
