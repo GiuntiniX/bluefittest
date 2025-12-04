@@ -131,9 +131,15 @@
             .no-print { display: none !important; }
             .reveal { opacity: 1 !important; transform: none !important; }
             .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            /* Ajuste para logos no print */
+            
+            /* Ajuste Global Imagens */
             header img, footer img { max-height: 40px; width: auto; }
-             /* Ajuste da logo manforte no print para ficar escura novamente */
+            
+            /* TROCA DE LOGOS NA IMPRESSÃO */
+            .logo-screen { display: none !important; }
+            .logo-print { display: inline-block !important; }
+
+            /* Ajuste da logo manforte no print para ficar escura novamente */
             .brand-logo { filter: none !important; }
         }
     </style>
@@ -151,7 +157,8 @@
                 
                 <div class="h-8 w-px bg-gray-500/50 mx-2"></div>
                 
-                <img src="https://p2.trrsf.com/image/fget/cf/131/40/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-7 md:h-9 w-auto ml-4 opacity-90">
+                <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="logo-screen h-7 md:h-9 w-auto ml-4 opacity-90">
+                <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="logo-print hidden h-7 md:h-9 w-auto ml-4">
             </div>
             
             <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-none uppercase drop-shadow-lg">
@@ -440,10 +447,12 @@
             <div class="flex justify-center items-center gap-4 mb-6 opacity-60 hover:opacity-100 transition-opacity">
                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto">
                  <span class="text-gray-600">|</span>
-                 <img src="https://p2.trrsf.com/image/fget/cf/131/40/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-6 w-auto grayscale opacity-80">
+                 <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="logo-screen h-6 w-auto opacity-80">
+                 <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="logo-print hidden h-6 w-auto">
             </div>
             <p class="text-gray-600 text-xs px-4 leading-relaxed mb-8">
-                © 2025 Terra Insights. Dados baseados em 539 respondentes. Metodologia: O levantamento foi realizado via plataforma mobile e seguiu critérios demográficos do IBGE.
+                © 2025 Terra Insights. Dados baseados em 539 respondentes.<br>
+                <span class="block mt-2">Metodologia: O levantamento foi realizado via plataforma mobile e seguiu critérios demográficos do IBGE.</span>
             </p>
         </footer>
 
