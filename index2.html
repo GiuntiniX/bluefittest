@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra Insights: Mercado Fitness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@700;900&display=swap');
+
+        :root {
+            /* Paleta Terra Insights */
+            --terra-orange: #E35205;
+            --terra-dark: #121212;
+            --terra-gray: #2D2D2D;
+            --text-light: #F3F4F6;
+            --accent-blue: #0057FF;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--terra-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND DE ACADEMIA (AMBIENTAÇÃO) --- */
+        .fitness-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Imagem de academia moderna e escura */
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15; /* Sutil para não atrapalhar leitura */
+            filter: grayscale(100%) contrast(120%);
+            mix-blend-mode: luminosity;
+        }
+
+        /* Gradiente sobre a imagem para garantir leitura */
+        .fitness-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 20%, rgba(18, 18, 18, 0.7), var(--terra-dark));
+        }
+
+        h1, h2, h3, h4, .stat-number { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
+
+        /* --- CARDS & VIDRO --- */
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 4px solid var(--terra-orange);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            break-inside: avoid;
+        }
+        .glass-panel:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 50px rgba(227, 82, 5, 0.1);
+            border-color: rgba(227, 82, 5, 0.3);
+        }
+
+        /* --- TIPOGRAFIA --- */
+        .text-terra { color: var(--terra-orange); }
+        .text-gradient {
+            background: linear-gradient(135deg, #E35205, #FF8C00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- ANIMAÇÕES DE SCROLL --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- BARRAS DE DADOS --- */
+        .bar-track {
+            width: 100%; background-color: rgba(255,255,255,0.05); border-radius: 99px; height: 12px; overflow: hidden; margin-top: 8px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .bar-fill {
+            height: 100%; border-radius: 99px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Efeito de brilho na barra */
+        .bar-fill::after {
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+        .fill-orange { background: linear-gradient(90deg, #E35205, #ff9100); box-shadow: 0 0 15px rgba(227, 82, 5, 0.4); }
+        .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); box-shadow: 0 0 15px rgba(0, 87, 255, 0.4); }
+
+        /* --- PDF PRINT --- */
+        @media print {
+            body { background-color: #fff !important; color: #000 !important; background-image: none !important; }
+            .fitness-bg, .fitness-overlay { display: none !important; }
+            .glass-panel {
+                background-color: #fff !important;
+                border: 1px solid #ccc !important;
+                border-left: 4px solid #E35205 !important;
+                box-shadow: none !important;
+                color: #000 !important;
+                break-inside: avoid;
+            }
+            .text-gradient { -webkit-text-fill-color: #E35205 !important; }
+            .no-print { display: none !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+            .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            /* Ajuste para logos no print */
+            header img, footer img { max-height: 40px; width: auto; }
+             /* Ajuste da logo manforte no print para ficar escura novamente */
+            .brand-logo { filter: none !important; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-500 selection:text-white">
+
+    <div class="fitness-bg"></div>
+    <div class="fitness-overlay"></div>
+
+    <div class="pt-10 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 relative z-10">
+        
+        <header class="mb-24 text-center reveal">
+            <div class="inline-flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 px-10 py-5 rounded-full shadow-2xl mb-10 transform hover:scale-105 transition-transform duration-300">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-8 md:h-10 w-auto mr-6">
+                
+                <div class="h-8 w-px bg-gray-500/50 mx-2"></div>
+                
+                <img src="https://p2.trrsf.com/image/fget/cf/131/40/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-7 md:h-9 w-auto ml-4 opacity-90">
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-none uppercase drop-shadow-lg">
+                Raio-X do <br>
+                <span class="text-gradient">Mercado Fitness</span>
+            </h1>
+            
+            <div class="flex flex-col md:flex-row flex-wrap justify-center items-center gap-4 text-sm font-medium text-gray-400 mt-8">
+                <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">📅 Dez/2025</span>
+                <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">👥 539 Respondentes Classe AB</span>
+                <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">🇧🇷 Nacional</span>
+                <span class="bg-gray-800/80 pl-4 pr-2 py-1 rounded-full border border-gray-700 flex items-center gap-2">
+                    Marca: 
+                    <img src="https://www.manforteengenharia.com.br/img/brand/logo5.png" alt="Manforte Engenharia" class="brand-logo h-6 w-auto brightness-0 invert">
+                </span>
+            </div>
+        </header>
+
+        <section class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">01</div>
+                <h2 class="text-3xl font-bold text-white">Engajamento Geral</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 relative overflow-hidden group">
+                    <div class="absolute -right-10 -top-10 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg width="200" height="200" viewBox="0 0 24 24" fill="white"><path d="M20.57 14.86L22 13.43L20.57 12L17 15.57L8.43 7L12 3.43L10.57 2L9.14 3.43L7.71 2L5.57 4.14L4.14 2.71L2.71 4.14L4.14 5.57L2 7.71L3.43 9.14L2 10.57L3.43 12L7 8.43L15.57 17L12 20.57L13.43 22L14.86 20.57L16.29 22L18.43 19.86L19.86 21.29L21.29 19.86L19.86 18.43L22 16.29L20.57 14.86Z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-8 border-b border-gray-700 pb-4">Praticam Atividade Física?</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-base text-gray-300 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-pink-500"></span> Mulheres
+                                </span>
+                                <span class="text-2xl font-black text-white">60%</span>
+                            </div>
+                            <div class="bar-track"><div class="bar-fill fill-orange" style="width: 60%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-base text-gray-300 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Homens
+                                </span>
+                                <span class="text-2xl font-black text-white">57%</span>
+                            </div>
+                            <div class="bar-track"><div class="bar-fill fill-blue" style="width: 57%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 relative overflow-hidden group">
+                     <div class="absolute -right-6 -bottom-6 opacity-5 group-hover:opacity-15 transition-opacity">
+                        <svg width="180" height="180" viewBox="0 0 24 24" fill="white"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-8 border-b border-gray-700 pb-4">Matriculados em Academia</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-base text-gray-300 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Homens
+                                </span>
+                                <span class="text-2xl font-black text-white">53,1%</span>
+                            </div>
+                            <div class="bar-track"><div class="bar-fill fill-blue" style="width: 53.1%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-base text-gray-300 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-pink-500"></span> Mulheres
+                                </span>
+                                <span class="text-2xl font-black text-white">48,7%</span>
+                            </div>
+                            <div class="bar-track"><div class="bar-fill fill-orange" style="width: 48.7%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">02</div>
+                <h2 class="text-3xl font-bold text-white">Hábitos & Motivações</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4 text-terra">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <h4 class="font-bold uppercase text-sm tracking-wide">Frequência Semanal</h4>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="bg-white/5 p-4 rounded-lg border-l-4 border-orange-500">
+                                <p class="text-white font-bold mb-1">Mulheres (Consistência)</p>
+                                <p class="text-sm text-gray-400 leading-relaxed">Maior representatividade em treinos frequentes: <strong>3-4x</strong> e <strong>5x+</strong> (17% cada).</p>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-lg border-l-4 border-blue-600">
+                                <p class="text-white font-bold mb-1">Homens</p>
+                                <p class="text-sm text-gray-400 leading-relaxed">Maioria treina <strong>1-2x</strong> por semana (21,7%).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6">
+                    <div class="flex items-center gap-3 mb-4 text-terra">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                        <h4 class="font-bold uppercase text-sm tracking-wide">O que faz trocar?</h4>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex justify-between items-center bg-black/20 p-3 rounded">
+                            <span class="text-gray-300 text-sm">Preço (Mulheres)</span>
+                            <span class="font-bold text-white text-lg">16,9%</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-black/20 p-3 rounded">
+                            <span class="text-gray-300 text-sm">Conveniência (Homens)</span>
+                            <span class="font-bold text-white text-lg">12,4%</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-orange-500/10 border border-orange-500/20 p-3 rounded">
+                            <span class="text-terra text-sm font-semibold">Promo R$9,90</span>
+                            <span class="font-bold text-terra text-lg">8,7%</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="glass-panel p-6 relative">
+                    <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay rounded-xl" alt="Running">
+                    
+                    <div class="flex items-center gap-3 mb-4 text-terra relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        <h4 class="font-bold uppercase text-sm tracking-wide">Preferências</h4>
+                    </div>
+                    <div class="space-y-4 relative z-10">
+                        <div>
+                            <p class="text-pink-400 font-bold mb-1 text-sm flex items-center gap-2">🏃‍♀️ Mulheres</p>
+                            <p class="text-sm text-gray-300">Domínio absoluto de <strong>Corrida ao ar livre (62%)</strong> e Caminhada.</p>
+                        </div>
+                        <div class="h-px bg-gray-700"></div>
+                        <div>
+                            <p class="text-blue-400 font-bold mb-1 text-sm flex items-center gap-2">🏋️‍♂️ Homens</p>
+                            <p class="text-sm text-gray-300">Mix: Corrida (34%), Natação e Musculação.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">03</div>
+                <h2 class="text-3xl font-bold text-white">Barreiras & Objetivos</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8">
+                    <h3 class="text-xl font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="text-red-500">⛔</span> Barreiras à Entrada
+                    </h3>
+                    
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-bold text-gray-300">Falta de Tempo (Mulheres)</span>
+                            <span class="text-sm font-bold text-terra">24,3%</span>
+                        </div>
+                        <div class="bar-track"><div class="bar-fill fill-orange" style="width: 24.3%"></div></div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-bold text-gray-300">Falta de Tempo (Homens)</span>
+                            <span class="text-sm font-bold text-terra">14,7%</span>
+                        </div>
+                        <div class="bar-track"><div class="bar-fill fill-orange" style="width: 14.7%"></div></div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-gray-900/50 rounded-lg border border-gray-700">
+                        <p class="text-xs text-gray-400 text-center">Outras barreiras masculinas: <br> <span class="text-white">"Falta de motivação" (7%)</span> e <span class="text-white">"Não gosto de academia" (7,7%)</span>.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 flex flex-col justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+                    <h3 class="text-xl font-bold text-white mb-6 text-center">Objetivos Principais (Homens)</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-gray-800/80 p-6 rounded-2xl text-center border border-gray-700 hover:border-terra transition-colors group">
+                            <div class="text-4xl mb-3 transform group-hover:scale-110 transition-transform">🧘‍♂️</div>
+                            <span class="text-lg font-bold text-white block">Estresse</span>
+                            <span class="text-sm text-terra font-mono">10,3%</span>
+                        </div>
+                        <div class="bg-gray-800/80 p-6 rounded-2xl text-center border border-gray-700 hover:border-terra transition-colors group">
+                            <div class="text-4xl mb-3 transform group-hover:scale-110 transition-transform">💪</div>
+                            <span class="text-lg font-bold text-white block">Massa</span>
+                            <span class="text-sm text-terra font-mono">9,1%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-24 reveal">
+            <div class="flex items-center gap-4 mb-10">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">04</div>
+                <h2 class="text-3xl font-bold text-white">Segmentação Estratégica</h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="glass-panel p-6 border-l-8 border-l-terra">
+                    <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-terra" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Por Idade
+                    </h4>
+                    <div class="grid md:grid-cols-3 gap-8 text-sm text-gray-300">
+                        <div class="bg-white/5 p-4 rounded-lg">
+                            <strong class="text-white text-lg block mb-2">16-24 Anos</strong>
+                            <p>Sensíveis a preço. <br>Lembram da <em class="text-terra">Smart Fit</em>. <br>Trocam por <strong>Promoção R$ 9,90</strong>.</p>
+                        </div>
+                        <div class="bg-terra-orange/10 p-4 rounded-lg border border-terra/20">
+                            <strong class="text-white text-lg block mb-2">25-34 Anos</strong>
+                            <p><strong>Pico de matrícula (52%)</strong>. <br>O fator decisivo é a <strong>Proximidade</strong> (21,5%).</p>
+                        </div>
+                        <div class="bg-white/5 p-4 rounded-lg">
+                            <strong class="text-white text-lg block mb-2">60+ Anos</strong>
+                            <p>Alta rejeição à academia tradicional. Preferem Fisio/Hidro.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6">
+                        <h4 class="text-lg font-bold text-white mb-4">Por Renda</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">5-10 Salários</span>
+                                <span class="text-green-400 font-bold">Aceitação Alta (24%)</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400">> 10 Salários</span>
+                                <span class="text-red-400 font-bold">Rejeição (26%)</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Classe alta busca marcas "boutique" e qualidade superior.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel p-6">
+                        <h4 class="text-lg font-bold text-white mb-4">Destaques Regionais</h4>
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-gray-800 p-2 rounded"><strong class="text-terra block">Norte</strong>Mais ativos (61%).</div>
+                            <div class="bg-gray-800 p-2 rounded"><strong class="text-terra block">Centro-Oeste</strong>Foco em Saúde.</div>
+                            <div class="bg-gray-800 p-2 rounded"><strong class="text-terra block">Nordeste</strong>Alta intenção de compra.</div>
+                            <div class="bg-gray-800 p-2 rounded"><strong class="text-terra block">Sul</strong>Baixa matrícula.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 reveal">
+            <div class="glass-panel p-10 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-orange-900/20 to-blue-900/20 z-0"></div>
+                
+                <h2 class="text-2xl font-bold text-white mb-8 relative z-10">Interesse na Nova Academia <span class="text-terra">(R$ 159,90)</span></h2>
+                
+                <div class="grid md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-700 relative z-10">
+                    <div class="pb-4 md:pb-0">
+                        <p class="text-gray-400 uppercase text-xs tracking-widest mb-2">Feminino</p>
+                        <p class="text-5xl font-black text-white mb-1">29,6%</p>
+                        <p class="text-sm text-green-400 font-bold">Sim / Com Certeza</p>
+                    </div>
+                    <div class="py-4 md:py-0">
+                        <p class="text-gray-400 uppercase text-xs tracking-widest mb-2">Masculino</p>
+                        <p class="text-5xl font-black text-white mb-1">25,1%</p>
+                        <p class="text-sm text-green-400 font-bold">Sim / Com Certeza</p>
+                    </div>
+                    <div class="pt-4 md:pt-0">
+                        <p class="text-gray-400 uppercase text-xs tracking-widest mb-2">Oportunidade</p>
+                        <p class="text-5xl font-black text-gray-300 mb-1">~16%</p>
+                        <p class="text-sm text-gray-400">Indecisos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pt-12 border-t border-gray-800">
+            <div class="flex justify-center items-center gap-4 mb-6 opacity-60 hover:opacity-100 transition-opacity">
+                 <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto">
+                 <span class="text-gray-600">|</span>
+                 <img src="https://p2.trrsf.com/image/fget/cf/131/40/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-6 w-auto grayscale opacity-80">
+            </div>
+            <p class="text-gray-600 text-xs px-4 leading-relaxed mb-8">
+                © 2025 Terra Insights. Dados baseados em 539 respondentes. Metodologia: O levantamento foi realizado via plataforma mobile e seguiu critérios demográficos do IBGE.
+            </p>
+        </footer>
+
+    </div>
+
+    <div class="fixed bottom-8 right-8 z-50 no-print group">
+        <button onclick="window.print()" class="flex items-center gap-3 bg-terra-orange text-white hover:bg-orange-600 font-bold py-3 px-6 rounded-full shadow-lg shadow-orange-900/50 transition-all transform hover:scale-105 active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Baixar PDF
+        </button>
+    </div>
+
+    <script>
+        const observerOptions = { threshold: 0.1 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    const bars = entry.target.querySelectorAll('.bar-fill');
+                    bars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => bar.style.width = width, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
