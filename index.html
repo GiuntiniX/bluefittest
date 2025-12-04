@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terra Insights: O Mercado Fitness</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;900&display=swap');
 
         :root {
-            /* Paleta Bluefit / Energia */
-            --brand-blue: #2563eb;    /* Azul Royal Vibrante */
-            --brand-yellow: #facc15;  /* Amarelo Energia */
-            --brand-dark: #0f172a;    /* Azul Noite Profundo */
-            --brand-gray: #1e293b;    /* Cinza Azulado */
+            --brand-blue: #2563eb;
+            --brand-yellow: #facc15;
+            --brand-dark: #0f172a;
+            --brand-gray: #1e293b;
         }
         
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--brand-dark);
             color: #f1f5f9;
-            /* Fundo geométrico sutil */
             background-image: 
                 linear-gradient(30deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
                 linear-gradient(150deg, #0f172a 12%, transparent 12.5%, transparent 87%, #0f172a 87.5%, #0f172a),
@@ -34,24 +36,18 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, .metric-highlight {
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: -0.03em;
-        }
+        h1, h2, h3, .metric-highlight { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
 
-        /* --- VIDRO E TEXTURA --- */
         .glass-panel {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            transition: transform 0.4s ease, border-color 0.4s ease;
             position: relative;
             overflow: hidden;
         }
 
-        /* Cartões Interativos */
         .interactive-card { z-index: 1; }
         .interactive-card::before {
             content: ''; position: absolute; inset: 0;
@@ -64,14 +60,9 @@
             background: linear-gradient(to top, rgba(15, 23, 42, 0.95), rgba(37, 99, 235, 0.15));
             z-index: -1; transition: all 0.6s ease-in-out;
         }
-        .interactive-card:hover::before {
-            filter: grayscale(20%) brightness(0.6) contrast(1.1); transform: scale(1.05); opacity: 1;
-        }
-        .interactive-card:hover {
-             border-color: var(--brand-blue); transform: translateY(-5px);
-        }
+        .interactive-card:hover::before { filter: grayscale(20%) brightness(0.6) contrast(1.1); transform: scale(1.05); opacity: 1; }
+        .interactive-card:hover { border-color: var(--brand-blue); transform: translateY(-5px); }
 
-        /* Painéis Visuais */
         .visual-panel {
             position: relative; min-height: 350px; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 2rem; border-radius: 1.5rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
@@ -85,44 +76,45 @@
             background: linear-gradient(0deg, rgba(15,23,42,1) 0%, rgba(15,23,42,0.4) 60%, rgba(15,23,42,0.1) 100%);
         }
 
-        /* --- TIPOGRAFIA --- */
         .text-gradient {
             background: linear-gradient(to right, #2563eb, #facc15);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .section-header {
-            border-bottom: 2px solid rgba(255,255,255,0.1); position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem;
-        }
+        .section-header { border-bottom: 2px solid rgba(255,255,255,0.1); position: relative; padding-bottom: 1rem; margin-bottom: 2.5rem; }
         .section-header::after {
             content: ''; position: absolute; bottom: -2px; left: 0; width: 100px; height: 2px;
             background: linear-gradient(90deg, var(--brand-blue), var(--brand-yellow));
             box-shadow: 0 0 12px var(--brand-blue);
         }
 
-        /* Barras de Progresso */
-        .brand-bar-container {
-            height: 14px; background-color: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-top: 8px;
-        }
-        .brand-bar {
-            height: 100%; background-size: 200% 100%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative;
-        }
-        
+        .brand-bar-container { height: 14px; background-color: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .brand-bar { height: 100%; background-size: 200% 100%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
         .bar-gradient-blue { background-image: linear-gradient(90deg, #1d4ed8, #60a5fa); }
         .bar-gradient-yellow { background-image: linear-gradient(90deg, #ca8a04, #facc15); }
-        
         .text-shadow-strong { text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
         
-        /* Animação de Scroll */
         section { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         section.visible { opacity: 1; transform: translateY(0); }
+
+        /* CONFIGURAÇÃO PARA IMPRESSÃO (PDF) */
+        @media print {
+            body { 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact; 
+                background-color: #0f172a !important;
+                color: #f1f5f9 !important;
+            }
+            .no-print { display: none !important; }
+            .glass-panel, .visual-panel { break-inside: avoid; page-break-inside: avoid; }
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen">
 
-    <div class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-20">
+    <div id="content-wrapper" class="pt-8 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-24">
         
-        <header class="mb-24 relative z-10">
+        <header id="slide-header" class="mb-24 relative z-10 ppt-section">
             <div class="flex justify-between items-center py-6 border-b border-gray-800 mb-8">
                 <div class="flex items-center gap-3">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Logo Terra" class="h-8 w-auto">
@@ -133,7 +125,7 @@
             </div>
             
             <div class="relative w-full h-[450px] rounded-3xl overflow-hidden shadow-2xl group">
-                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" 
+                <div class="absolute inset-0 bg-cover bg-center" 
                      style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');">
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/50 to-transparent"></div>
@@ -151,7 +143,7 @@
             </div>
         </header>
 
-        <section id="perfil" class="mb-32">
+        <section id="perfil" class="mb-32 ppt-section">
             <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
                 01. <span class="text-gradient">Quem é o Público?</span>
             </h2>
@@ -168,7 +160,6 @@
                     </p>
                     <p class="text-sm text-gray-300">Respondentes (16-34 anos).</p>
                 </div>
-
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(2)::before { background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -180,7 +171,6 @@
                     </p>
                     <p class="text-sm text-gray-300">Maioria da amostra.</p>
                 </div>
-
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(3)::before { background-image: url('https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=2069&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -192,7 +182,6 @@
                     </p>
                     <p class="text-sm text-gray-300">Taxa geral em academias.</p>
                 </div>
-
                 <div class="glass-panel interactive-card p-6 rounded-2xl group">
                     <style>.interactive-card:nth-child(4)::before { background-image: url('https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2069&auto=format&fit=crop'); }</style>
                     <div class="absolute top-0 right-0 p-4 opacity-50">
@@ -218,7 +207,7 @@
             </div>
         </section>
 
-        <section id="barreiras" class="mb-32">
+        <section id="barreiras" class="mb-32 ppt-section">
             <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
                 02. <span class="text-gradient">O que Impede & O que Move?</span>
             </h2>
@@ -249,7 +238,7 @@
                 </div>
 
                 <div class="lg:w-1/2 glass-panel p-8 rounded-2xl flex flex-col justify-center">
-                    <h3 class="text-xl font-bold mb-6 text-yellow-300 uppercase tracking-wide">Drivers de Troca (O que faz mudar?)</h3>
+                    <h3 class="text-xl font-bold mb-6 text-yellow-300 uppercase tracking-wide">Drivers de Troca</h3>
                     <div class="space-y-8">
                         <div>
                             <h4 class="text-white font-bold mb-2 flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>Classe C</h4>
@@ -273,7 +262,7 @@
             </div>
         </section>
 
-        <section id="objetivos" class="mb-32">
+        <section id="objetivos" class="mb-32 ppt-section">
             <h2 class="text-3xl md:text-4xl font-bold section-header text-white">
                 03. <span class="text-gradient">O Treino & O Bolso</span>
             </h2>
@@ -319,20 +308,30 @@
             </div>
         </section>
 
-        <footer class="border-t border-gray-800 pt-10 text-center pb-10">
+        <footer class="border-t border-gray-800 pt-10 text-center">
             <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 mx-auto mb-4 opacity-50">
             <p class="text-gray-500 text-xs leading-relaxed">
                 © 2025 Pesquisa Terra Insights • O Mercado Fitness<br>
-                Imagens meramente ilustrativas (Fonte: Unsplash e Dreamstime).<br>
-                <span class="block mt-2 text-gray-600">Metodologia: Levantamento quantitativo com 539 respondentes via plataforma mobile.</span>
+                Imagens meramente ilustrativas (Fonte: Unsplash).
             </p>
         </footer>
 
     </div>
 
+    <div class="fixed bottom-0 left-0 w-full z-50 p-4 bg-gray-900/90 backdrop-blur-md border-t border-gray-800 flex justify-center gap-4 no-print" id="download-bar">
+        <button onclick="downloadPDF()" class="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl border border-gray-600 transition-all shadow-lg hover:shadow-blue-500/20">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Baixar PDF
+        </button>
+        <button onclick="generatePPT()" id="btn-ppt" class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-blue-500/40">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+            Gerar Apresentação (PPT)
+        </button>
+    </div>
+
     <script>
-        // Animação dos Números
-        const ANIMATION_DURATION = 2000; 
+        // --- LÓGICA DE ANIMAÇÃO (Mantida do anterior) ---
+        const ANIMATION_DURATION = 1500; 
         
         function animateCounter(element, start, end, decimals) {
             let startTime;
@@ -343,32 +342,24 @@
                 const percentage = Math.min(progress / ANIMATION_DURATION, 1);
                 let current = ease(percentage) * (end - start) + start;
                 element.textContent = current.toFixed(decimals);
-                if (progress < ANIMATION_DURATION) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    element.textContent = end.toFixed(decimals);
-                }
+                if (progress < ANIMATION_DURATION) window.requestAnimationFrame(step);
+                else element.textContent = end.toFixed(decimals);
             };
             window.requestAnimationFrame(step);
         }
 
-        // Animação das Barras de Ranking
         function animateBars(container) {
             if (container.classList.contains('animated')) return;
             container.classList.add('animated');
-            
             const unit = container.getAttribute('data-unit') || '';
             const items = container.querySelectorAll('.ranking-item');
-
             items.forEach((item, index) => {
                 const val = parseFloat(item.getAttribute('data-value'));
                 const max = parseFloat(item.getAttribute('data-max'));
                 const label = item.getAttribute('data-label');
                 const colorClass = item.getAttribute('data-color');
                 const uniqueId = `bar-${Math.random().toString(36).substr(2, 9)}`;
-                
                 const width = Math.min(100, (val / max) * 100);
-
                 item.innerHTML = `
                     <div class="flex justify-between items-end mb-2">
                         <span class="font-bold text-sm text-gray-200 uppercase tracking-wide">${label}</span>
@@ -376,37 +367,20 @@
                     </div>
                     <div class="brand-bar-container">
                         <div class="brand-bar ${colorClass} shadow-[0_0_10px_rgba(37,99,235,0.3)]" style="width: 0%"></div>
-                    </div>
-                `;
-
+                    </div>`;
                 setTimeout(() => {
                     const bar = item.querySelector('.brand-bar');
                     const valEl = item.querySelector(`#${uniqueId}-val`);
                     bar.style.width = `${width}%`;
-                    
-                    // Animar número
-                    let startTime;
-                    const step = (t) => {
-                         if(!startTime) startTime=t;
-                         const p = Math.min((t-startTime)/ANIMATION_DURATION, 1);
-                         const ease = (x) => x === 1 ? 1 : 1 - Math.pow(2, -10 * x);
-                         valEl.textContent = (ease(p)*val).toFixed(2) + unit; 
-                         if(p<1) requestAnimationFrame(step);
-                         else valEl.textContent = val.toFixed(2) + unit;
-                    };
-                    requestAnimationFrame(step);
-
+                    animateCounter(valEl, 0, val, (unit === '%' ? 1 : 0)); // Pequeno ajuste para casas decimais
                 }, index * 200);
             });
         }
 
-        // Observer de Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
-                    // Disparar animações específicas
                     const counters = entry.target.querySelectorAll('[id^="counter"]');
                     counters.forEach(c => {
                         if(!c.classList.contains('done')) {
@@ -414,7 +388,6 @@
                             animateCounter(c, 0, parseFloat(c.getAttribute('data-target')), parseInt(c.getAttribute('data-decimals')));
                         }
                     });
-
                     const rankings = entry.target.querySelectorAll('[data-ranking="animated"]');
                     rankings.forEach(r => animateBars(r));
                 }
@@ -422,10 +395,74 @@
         }, { threshold: 0.15 });
 
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('section').forEach(section => {
-                observer.observe(section);
-            });
+            document.querySelectorAll('section').forEach(section => observer.observe(section));
         });
+
+        // --- LÓGICA DE DOWNLOAD ---
+
+        // 1. Download PDF (Usa a impressão nativa ajustada via CSS @media print)
+        function downloadPDF() {
+            window.print();
+        }
+
+        // 2. Gerar PPT (Usa html2canvas para tirar "fotos" das seções e colocar nos slides)
+        async function generatePPT() {
+            const btn = document.getElementById('btn-ppt');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Gerando slides...';
+            btn.disabled = true;
+
+            try {
+                const pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9';
+                pptx.title = 'Terra Insights - Fitness';
+
+                // Seleciona todas as áreas que queremos transformar em slides
+                // Header e Sections com a classe .ppt-section
+                const elements = document.querySelectorAll('.ppt-section');
+
+                // Força todos os elementos a estarem visíveis para o print (remove animação de scroll momentaneamente)
+                document.querySelectorAll('section').forEach(s => {
+                    s.style.opacity = '1';
+                    s.style.transform = 'none';
+                });
+
+                for (let i = 0; i < elements.length; i++) {
+                    const el = elements[i];
+                    
+                    // Captura a imagem da seção
+                    const canvas = await html2canvas(el, {
+                        scale: 2, // Melhor qualidade
+                        useCORS: true, // Tenta carregar imagens externas (Unsplash)
+                        backgroundColor: '#0f172a' // Cor de fundo do slide
+                    });
+
+                    const imgData = canvas.toDataURL('image/png');
+                    
+                    const slide = pptx.addSlide();
+                    slide.background = { color: "0f172a" };
+                    
+                    // Adiciona a imagem ao slide preenchendo o máximo possível
+                    slide.addImage({ 
+                        data: imgData, 
+                        x: 0, 
+                        y: 0, 
+                        w: '100%', 
+                        h: '100%', 
+                        sizing: { type: 'contain', w: 10, h: 5.625 } // Ajuste para 16:9
+                    });
+                }
+
+                pptx.writeFile({ fileName: 'Terra_Insights_Fitness_Report.pptx' });
+
+            } catch (error) {
+                alert('Erro ao gerar PPT. Verifique se as imagens externas permitem acesso.');
+                console.error(error);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
