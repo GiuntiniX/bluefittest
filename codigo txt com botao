@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Terra Insights: Mercado Fitness - Estratégia</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@700;900&display=swap');
+
+        :root {
+
+            --terra-orange: #FF7700; /* Laranja mais vibrante */
+
+            --terra-dark: #0A0A0A; /* Fundo mais escuro */
+
+            --terra-gray: #1E1E1E; /* Cinza de painel mais escuro */
+
+            --text-light: #F3F4F6;
+
+            --accent-blue: #0088FF; /* Azul mais vibrante */
+
+        }
+
+        body {
+
+            font-family: 'Inter', sans-serif;
+
+            background-color: var(--terra-dark);
+
+            color: var(--text-light);
+
+            overflow-x: hidden;
+
+            position: relative;
+
+        }
+
+        /* --- TELA DE LOGIN --- */
+
+        #login-screen {
+
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+
+            background-color: var(--terra-dark);
+
+            /* Gradiente radial mais intenso */
+
+            background-image: radial-gradient(circle at 50% 20%, rgba(30, 30, 30, 1), var(--terra-dark));
+
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+
+        }
+
+        .login-box {
+
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1); border-top: 4px solid var(--terra-orange);
+
+            padding: 3rem; border-radius: 1.5rem; text-align: center;
+
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); max-width: 90%; width: 400px;
+
+        }
+
+        .login-input {
+
+            width: 100%; padding: 1rem; margin-top: 1.5rem; background: rgba(0, 0, 0, 0.5); /* Mais escuro */
+
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.5rem; color: white;
+
+            font-size: 1rem; outline: none; transition: all 0.3s; text-align: center;
+
+        }
+
+        .login-input:focus { border-color: var(--terra-orange); box-shadow: 0 0 15px rgba(255, 119, 0, 0.4); } /* Brilho laranja */
+
+        .login-btn {
+
+            margin-top: 1.5rem; background: var(--terra-orange); color: white; font-weight: bold;
+
+            padding: 0.75rem 2rem; border-radius: 99px; transition: all 0.3s; width: 100%; cursor: pointer;
+
+            box-shadow: 0 8px 15px rgba(255, 119, 0, 0.3); /* Sombra laranja */
+
+        }
+
+        .login-btn:hover { background-color: #ff8c00; transform: scale(1.02); box-shadow: 0 10px 25px rgba(255, 119, 0, 0.5); }
+
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+        @keyframes shake {
+
+            10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); }
+
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); }
+
+        }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+
+        #main-content { opacity: 0; transition: opacity 1.5s ease; display: none; }
+
+        .fitness-bg {
+
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');
+
+            background-size: cover; background-position: center;
+
+            opacity: 0.1; /* Imagem de fundo mais sutil */
+
+            filter: grayscale(100%) contrast(150%); mix-blend-mode: luminosity;
+
+        }
+
+        .fitness-overlay {
+
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+
+            background: radial-gradient(circle at 50% 20%, rgba(30, 30, 30, 0.8), var(--terra-dark)); /* Overlay ajustado */
+
+        }
+
+        h1, h2, h3, h4, .stat-number { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
+
+        /* TÍTULO ESTÁTICO COM DEGRADÊ DE ALTA VISUALIZAÇÃO */
+
+        .text-gradient-title {
+
+            /* Degrade Estático: Laranja Forte para Amarelo Ouro */
+
+            background: linear-gradient(90deg, #FF7700 0%, #FFD700 100%); 
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            text-shadow: 0 0 10px rgba(255, 119, 0, 0.4); /* Sombra para destacar */
+
+            display: inline-block; 
+
+        }
+
+        /* Painéis com Glassmorphism melhorado */
+
+        .glass-panel {
+
+            background: rgba(30, 30, 30, 0.9); 
+
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-left: 4px solid var(--terra-orange);
+
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); 
+
+            border-radius: 1rem;
+
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); break-inside: avoid;
+
+        }
+
+        .glass-panel:hover {
+
+            transform: translateY(-5px) scale(1.005);
+
+            box-shadow: 0 15px 45px rgba(255, 119, 0, 0.2), 0 0 0 1px rgba(255, 119, 0, 0.4);
+
+            border-color: rgba(255, 119, 0, 0.5);
+
+        }
+
+        .text-terra { color: var(--terra-orange); }
+
+        .text-gradient {
+
+            background: linear-gradient(135deg, var(--terra-orange), #FFB74D); 
+
+            -webkit-background-clip: text; 
+
+            -webkit-text-fill-color: transparent;
+
+        }
+
+        /* Barras de progresso - Brilho interno */
+
+        .bar-track {
+
+            width: 100%; background-color: rgba(255,255,255,0.08); 
+
+            border-radius: 99px; height: 14px; 
+
+            overflow: hidden; margin-top: 8px;
+
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+
+        }
+
+        .bar-fill {
+
+            height: 100%; border-radius: 99px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+
+            position: relative; overflow: hidden;
+
+        }
+
+        .bar-fill::after {
+
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); 
+
+            transform: translateX(-100%); animation: shimmer 2s infinite;
+
+        }
+
+        /* Cores das Barras com Brilho */
+
+        .fill-orange { background: linear-gradient(90deg, var(--terra-orange), #ff9933); box-shadow: 0 0 15px rgba(255, 119, 0, 0.6); }
+
+        .fill-blue { background: linear-gradient(90deg, #0057FF, #3399FF); box-shadow: 0 0 15px rgba(0, 87, 255, 0.6); }
+
+        .fill-green { background: linear-gradient(90deg, #10b981, #6ee7b7); box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
+
+        .fill-red { background: linear-gradient(90deg, #ef4444, #fca5a5); box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+
+        .fill-purple { background: linear-gradient(90deg, #8b5cf6, #c4b5fd); box-shadow: 0 0 15px rgba(139, 92, 246, 0.6); }
+
+        /* --- NOVO CABEÇALHO FIXO --- */
+
+        #fixed-header {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 50;
+
+            width: 100%;
+
+            background: rgba(10, 10, 10, 0.95); 
+
+            backdrop-filter: blur(15px); 
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            padding: 0.75rem 0;
+
+        }
+
+        /* --- ABAS (REGIÃO & IDADE) --- */
+
+        .custom-tab {
+
+            cursor: pointer; padding: 10px 24px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.2);
+
+            transition: all 0.3s; background: rgba(30, 30, 30, 0.8); 
+
+            color: #ccc; font-weight: 700; font-size: 0.9rem; white-space: nowrap;
+
+        }
+
+        .custom-tab.active {
+
+            background: var(--terra-orange); color: var(--terra-dark); 
+
+            border-color: var(--terra-orange);
+
+            box-shadow: 0 0 25px rgba(255, 119, 0, 0.4); 
+
+            transform: scale(1.05);
+
+        }
+
+        /* Gráfico de Barras Verticais */
+
+        .chart-bar { 
+
+            width: 45px; 
+
+            border-radius: 6px 6px 0 0; 
+
+            transition: height 1.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s;
+
+            position: relative; 
+
+            opacity: 0.9; 
+
+            height: 0%;
+
+        }
+
+        .chart-bar:hover { opacity: 1; transform: scale(1.05); } 
+
+        /* Cores e Brilho das Barras Verticais */
+
+        .bg-blue-600\/60 { 
+
+            background-color: rgba(0, 87, 255, 0.8) !important; 
+
+            box-shadow: 0 0 10px rgba(0, 87, 255, 0.4); 
+
+        }
+
+        .bg-orange-500\/80 { 
+
+            background-color: rgba(255, 119, 0, 0.8) !important; 
+
+            box-shadow: 0 0 10px rgba(255, 119, 0, 0.4); 
+
+        }
+
+        .bar-label {
+
+            font-size: 11px; 
+
+            text-shadow: 0 0 5px rgba(0,0,0,0.8); 
+
+        }
+
+        /* Estilos de Cards de Destaque */
+
+        .card-highlight {
+
+            background: rgba(255, 255, 255, 0.05);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+
+            transition: all 0.3s;
+
+        }
+
+        .card-highlight:hover {
+
+            transform: translateY(-3px);
+
+            border-color: var(--terra-orange);
+
+        }
+
+        /* Estilo para a seção Geografia do Consumo - Mapa Geral */
+
+        .region-summary-card {
+
+            background-color: var(--terra-gray);
+
+            transition: all 0.4s;
+
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+        }
+
+        .region-summary-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        /* --- BOTÃO DE DOWNLOAD (ÍCONE ANIMADO) --- */
+
+        .interactive-download-btn {
+
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+            box-shadow: 0 8px 25px rgba(255, 119, 0, 0.5); 
+
+            position: relative;
+
+            z-index: 10;
+
+            overflow: hidden;
+
+            transform: scale(1);
+
+        }
+
+        .interactive-download-btn:active {
+
+            transform: scale(0.95); 
+
+        }
+
+        .pulse-shadow {
+
+            animation: pulse-orange 2s infinite;
+
+        }
+
+        @keyframes pulse-orange {
+
+            0% { box-shadow: 0 8px 25px rgba(255, 119, 0, 0.5); }
+
+            50% { box-shadow: 0 8px 35px rgba(255, 119, 0, 0.8); }
+
+            100% { box-shadow: 0 8px 25px rgba(255, 119, 0, 0.5); }
+
+        }
+
+        /* Animação do Ícone de Download */
+
+        @keyframes bounce-y {
+
+            0%, 100% { transform: translateY(0); }
+
+            50% { transform: translateY(-3px); }
+
+        }
+
+        .download-icon {
+
+            animation: bounce-y 1.5s infinite;
+
+        }
+
+
+        /* ======================================= */
+
+        /* === OTIMIZAÇÃO PARA PDF/IMPRESSÃO === */
+
+        /* ======================================= */
+
+        @media print {
+
+            /* 1. Visibilidade e Contraste Máximos */
+
+            body { 
+
+                background-color: #fff !important; /* Fundo branco */
+
+                color: #000 !important; /* Texto preto */
+
+                padding-bottom: 0 !important;
+
+                margin: 0 !important; /* Remove margem do body */
+
+                min-height: 100vh;
+
+            }
+
+            .pt-10.pb-32 { padding-top: 0 !important; padding-bottom: 2rem !important; }
+
+            h1, h2, h3, h4, strong { color: #111 !important; }
+
+            .text-terra { color: #E35205 !important; } /* Laranja sólido */
+
+            .text-gradient-title, .text-gradient { 
+
+                -webkit-text-fill-color: #E35205 !important; 
+
+                text-shadow: none !important;
+
+                filter: none !important;
+
+            }
+
+            /* NOVO: Cabeçalho da Primeira Página */
+            #print-header {
+                display: block !important;
+                padding: 1.5rem 2rem;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid #ccc;
+            }
+            .brand-logo-print { /* Ajusta o logo do patrocinador para impressão (preto) */
+                filter: grayscale(100%) brightness(0);
+            }
+
+
+            /* 2. Remoção de Elementos Interativos/Desnecessários */
+
+            #login-screen, .fitness-bg, .fitness-overlay, .no-print, .custom-tab, .tab-scroll-container, .content-area { 
+
+                display: none !important; 
+
+            }
+
+            #main-content { 
+
+                display: block !important; 
+
+                opacity: 1 !important; 
+
+            }
+
+            /* 3. Estilo dos Painéis (Glassmorphism no PDF) */
+
+            .glass-panel, .region-summary-card, .card-highlight {
+
+                background-color: #f7f7f7 !important; /* Cinza bem claro */
+
+                border: 1px solid #ccc !important; /* Borda cinza suave */
+
+                border-left: 4px solid #E35205 !important; /* Mantém a cor de destaque */
+
+                box-shadow: none !important;
+
+                color: #111 !important;
+
+                break-inside: avoid; /* Previne quebras ruins */
+
+                margin-bottom: 1rem !important; /* Reduz espaço entre seções */
+
+            }
+
+            /* 4. Forçar a Exibição de TODO o Conteúdo Oculto (Abas) */
+            #print-data-container {
+                display: block !important;
+            }
+            .print-section-data {
+                margin-top: 1.5rem !important;
+                padding-top: 1rem !important;
+                border-top: 1px dashed #ccc !important;
+                page-break-before: auto !important;
+            }
+            .print-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 1rem !important;
+            }
+            .print-list {
+                background-color: #eee !important;
+                padding: 0.75rem !important;
+                border-left: 4px solid #E35205 !important;
+                border-radius: 0.5rem !important;
+                color: #111 !important;
+            }
+            .print-list strong { color: #111 !important; }
+
+
+            /* 5. Estilo dos Gráficos (Ajuste de Cor e Eliminar Animação) */
+            .bar-fill { 
+                height: 10px !important;
+            }
+            .bar-track {
+                height: 10px !important;
+                background-color: #ddd !important;
+                box-shadow: none !important;
+            }
+            .fill-orange, .fill-blue, .fill-green, .fill-red, .bg-blue-600\/60, .bg-orange-500\/80 {
+                background: #E35205 !important; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                box-shadow: none !important;
+            }
+            .bar-label { color: #000 !important; text-shadow: none !important; }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="antialiased selection:bg-orange-500 selection:text-white">
+
+    <div id="login-screen">
+
+        <div class="login-box">
+
+            <div class="flex justify-center items-center gap-4 mb-8">
+
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-8 w-auto">
+
+                <div class="h-6 w-px bg-gray-500"></div>
+
+                <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-7 w-auto opacity-90">
+
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mb-2">Área Restrita</h2>
+
+            <p class="text-gray-400 text-sm mb-6">Informe a senha para visualizar a Estratégia.</p>
+
+            <input type="password" id="passwordInput" class="login-input" placeholder="Digite a senha..." autofocus>
+
+            <button onclick="checkPassword()" class="login-btn">ACESSAR DADOS</button>
+
+            <p id="error-msg" class="text-red-500 text-xs mt-4 hidden">Senha incorreta.</p>
+
+        </div>
+
+    </div>
+
+    <div id="main-content">
+
+        <div class="fitness-bg"></div>
+
+        <div class="fitness-overlay"></div>
+
+        <nav id="fixed-header" class="no-print">
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex justify-between items-center">
+
+                <div class="flex items-center gap-4">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto">
+
+                    <div class="h-5 w-px bg-gray-600/50"></div>
+
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="h-6 w-auto opacity-90">
+
+                </div>
+
+                <div class="flex items-center gap-4">
+
+                    <span class="text-gray-400 text-xs font-medium uppercase hidden sm:block">Patrocinado por:</span>
+
+                    <img src="https://bluefitcampolargo.com.br/wp-content/uploads/2024/06/Bluefit-Branco-Photoroom.webp" alt="Manforte Engenharia" class="brand-logo h-8 w-auto filter-blue-glow">
+
+                </div>
+
+            </div>
+
+        </nav>
+
+        <div class="pt-10 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 relative z-10">
+            
+            <div id="print-header" class="no-print" style="display: none;">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto brand-logo-print">
+                        <div class="h-5 w-px bg-gray-600/50" style="background-color: #999;"></div>
+                        <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="h-6 w-auto">
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #111;">Patrocinado por:</span>
+                        <img src="https://bluefitcampolargo.com.br/wp-content/uploads/2024/06/Bluefit-Branco-Photoroom.webp" alt="Manforte Engenharia" class="h-8 w-auto brand-logo-print" style="filter: grayscale(100%) brightness(0) !important;">
+                    </div>
+                </div>
+            </div>
+
+            <header class="mb-20 text-center">
+
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-none uppercase drop-shadow-lg mt-10 md:mt-20">
+
+                    Raio-X do <br>
+
+                    <span class="text-gradient-title">Mercado Fitness</span> 
+
+                </h1>
+
+                <div class="flex flex-col md:flex-row flex-wrap justify-center items-center gap-4 text-sm font-medium text-gray-400 mt-8">
+
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors cursor-default">📅 Dez/2025</span>
+
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors cursor-default">👥 539 Respondentes Classe A/B e C</span>
+
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors cursor-default">🇧🇷 Nacional</span>
+
+                </div>
+
+            </header>
+
+            <section class="mb-24">
+
+                <div class="flex items-center gap-4 mb-10">
+
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">01</div>
+
+                    <h2 class="text-3xl font-bold text-white">Principais Insights por Gênero</h2>
+
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <div class="glass-panel p-8 border-l-orange-500 relative overflow-hidden group">
+
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500 transform group-hover:scale-110">
+
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-3.87 0-7 3.13-7 7 0 3.18 2.12 5.87 5 6.74V17h-2v2h2v3h2v-3h2v-2h-2v-1.26c2.88-.87 5-3.56 5-6.74 0-3.87-3.13-7-7-7zm0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+
+                        </div>
+
+                        <h3 class="text-2xl font-black text-terra-orange mb-6 flex items-center gap-2">👩 Feminino</h3>
+
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+
+                            <div class="bg-black/20 p-4 rounded-lg card-highlight">
+
+                                <span class="text-xs text-gray-400 uppercase">Praticam</span>
+
+                                <span class="block text-2xl font-bold text-white animate-num" data-value="60.0" data-suffix="%">0%</span>
+
+                            </div>
+
+                            <div class="bg-black/20 p-4 rounded-lg card-highlight">
+
+                                <span class="text-xs text-gray-400 uppercase">Matriculadas</span>
+
+                                <span class="block text-2xl font-bold text-white animate-num" data-value="48.7" data-suffix="%">0%</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="space-y-6">
+
+                            <div>
+
+                                <div class="flex justify-between text-sm mb-1">
+
+                                    <span class="text-gray-300">Intenção de Compra (R$ 159,90)</span>
+
+                                    <span class="text-orange-400 font-bold animate-num" data-value="29.6" data-suffix="%">0%</span>
+
+                                </div>
+
+                                <div class="bar-track"><div class="bar-fill fill-orange" data-width="29.6%"></div></div>
+
+                            </div>
+
+                            <ul class="space-y-3 text-sm text-gray-300">
+
+                                <li><strong>🎯 Foco:</strong> Corrida (62,8%) e Caminhada (37%).</li>
+
+                                <li><strong>📅 Hábito:</strong> Consistente (34% treinam 3x+).</li>
+
+                                <li><strong>💸 Gatilho:</strong> Sensibilidade a Preço Baixo.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <div class="glass-panel p-8 border-l-blue-600 relative overflow-hidden group">
+
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity duration-500 transform group-hover:scale-110">
+
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M16 2v2h3.59l-5.29 5.29a6 6 0 1 0 1.42 1.42L21 5.41V9h2V2h-7zm-4 18a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>
+
+                        </div>
+
+                        <h3 class="text-2xl font-black text-blue-500 mb-6 flex items-center gap-2">👨 Masculino</h3>
+
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+
+                            <div class="bg-black/20 p-4 rounded-lg card-highlight">
+
+                                <span class="text-xs text-gray-400 uppercase">Praticam</span>
+
+                                <span class="block text-2xl font-bold text-white animate-num" data-value="57.0" data-suffix="%">0%</span>
+
+                            </div>
+
+                            <div class="bg-black/20 p-4 rounded-lg card-highlight">
+
+                                <span class="text-xs text-gray-400 uppercase">Matriculados</span>
+
+                                <span class="block text-2xl font-bold text-blue-400 animate-num" data-value="53.1" data-suffix="%">0%</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="space-y-6">
+
+                            <div>
+
+                                <div class="flex justify-between text-sm mb-1">
+
+                                    <span class="text-gray-300">Intenção de Compra (R$ 159,90)</span>
+
+                                    <span class="text-blue-400 font-bold animate-num" data-value="25.1" data-suffix="%">0%</span>
+
+                                </div>
+
+                                <div class="bar-track"><div class="bar-fill fill-blue" data-width="25.1%"></div></div>
+
+                            </div>
+
+                            <ul class="space-y-3 text-sm text-gray-300">
+
+                                <li><strong>🏋️ Mix:</strong> Corrida (34%), Natação (20%), Gym (20%).</li>
+
+                                <li><strong>📉 Hábito:</strong> Baixa freq. (21% treinam 1-2x).</li>
+
+                                <li><strong>📍 Gatilho:</strong> Conveniência/Proximidade.</li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="mb-24">
+
+                <div class="flex items-center gap-4 mb-10">
+
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">02</div>
+
+                    <h2 class="text-3xl font-bold text-white">O Ciclo de Vida do Aluno</h2>
+
+                </div>
+
+                <div class="glass-panel p-8">
+
+                    <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
+
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="h-64 flex items-center justify-between gap-4 w-full pr-4"> 
+                            
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="57.9%">
+
+                                        <span class="bar-label text-white text-glow-white">57,9%</span>
+
+                                    </div>
+
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="48.3%">
+
+                                        <span class="bar-label text-terra-orange text-glow-orange">48,3%</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-label">16-24</div>
+
+                            </div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="61.4%">
+
+                                        <span class="bar-label text-white text-glow-white">61,4%</span>
+
+                                    </div>
+
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="52.4%">
+
+                                        <span class="bar-label text-terra-orange text-glow-orange">52,4%</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-label">25-34</div>
+
+                            </div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="46.0%">
+
+                                        <span class="bar-label text-white text-glow-white">46,0%</span>
+
+                                    </div>
+
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="50.8%">
+
+                                        <span class="bar-label text-terra-orange text-glow-orange">50,8%</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-label">35-44</div>
+
+                            </div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="38.5%">
+
+                                        <span class="bar-label text-white text-glow-white">38,5%</span>
+
+                                    </div>
+
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="33.3%">
+
+                                        <span class="bar-label text-terra-orange text-glow-orange">33,3%</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-label">45-59</div>
+
+                            </div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="25.0%">
+
+                                        <span class="bar-label text-white text-glow-white">25,0%</span>
+
+                                    </div>
+
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="18.8%">
+
+                                        <span class="bar-label text-terra-orange text-glow-orange">18,8%</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-label">60+</div>
+
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <ul class="space-y-4">
+
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-purple-500 hover:bg-white/10 transition-colors cursor-default card-highlight">
+
+                                    <strong class="block text-white mb-1">Entrada no Funil (16-24 anos)</strong>
+
+                                    <p class="text-sm text-gray-400">Alta prática (57%) mas com gap de matrícula. Exigem planos flexíveis e experiência digital.</p>
+
+                                </li>
+
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-terra-orange hover:bg-white/10 transition-colors cursor-default card-highlight">
+
+                                    <strong class="block text-white mb-1">O Auge (25-34 anos)</strong>
+
+                                    <p class="text-sm text-gray-400">Maior taxa de atividade (61,38%) e matrícula (52,41%). É o público core.</p>
+
+                                </li>
+
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-blue-500 hover:bg-white/10 transition-colors cursor-default card-highlight">
+
+                                    <strong class="block text-white mb-1">A Oportunidade (35-44 anos)</strong>
+
+                                    <p class="text-sm text-gray-400">Curiosamente, a taxa de matrícula (50,79%) supera a de prática declarada (46%), indicando alunos pagantes mas inativos (Ghost Members).</p>
+
+                                </li>
+
+                            </ul>
+
+                            <div class="flex gap-6 mt-6 justify-center lg:justify-start">
+
+                                <div class="flex items-center gap-2">
+
+                                    <div class="w-3 h-3 bg-blue-600/60 rounded-full"></div>
+
+                                    <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">Praticam Atividade</span>
+
+                                </div>
+
+                                <div class="flex items-center gap-2">
+
+                                    <div class="w-3 h-3 bg-orange-500/80 rounded-full"></div>
+
+                                    <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">Matriculados</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="mb-24 no-print">
+
+                <div class="flex items-center gap-4 mb-6">
+
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">03</div>
+
+                    <h2 class="text-3xl font-bold text-white">Raio-X por Geração</h2>
+
+                </div>
+
+                <div class="tab-scroll-container mb-8">
+
+                    <button class="custom-tab active" onclick="updateAgeTab('allAges', this)">Média Geral</button>
+
+                    <button class="custom-tab" onclick="updateAgeTab('age1624', this)">16 – 24 Anos</button>
+
+                    <button class="custom-tab" onclick="updateAgeTab('age2534', this)">25 – 34 Anos</button>
+
+                    <button class="custom-tab" onclick="updateAgeTab('age3544', this)">35 – 44 Anos</button>
+
+                    <button class="custom-tab" onclick="updateAgeTab('age60', this)">60+ Anos</button>
+
+                </div>
+
+                <div id="age-content-area" class="content-area"></div>
+
+            </section>
+
+            <section class="mb-24 no-print">
+
+                <div class="flex items-center gap-4 mb-10">
+
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">04</div>
+
+                    <h2 class="text-3xl font-bold text-white">Geografia do Consumo</h2>
+
+                </div>
+
+                <div class="glass-panel p-8">
+
+                    <div class="tab-scroll-container mb-8 justify-center">
+
+                        <button class="custom-tab active" onclick="updateRegion('todos', this)">Mapa Geral</button>
+
+                        <button class="custom-tab" onclick="updateRegion('norte', this)">Norte</button>
+
+                        <button class="custom-tab" onclick="updateRegion('nordeste', this)">Nordeste</button>
+
+                        <button class="custom-tab" onclick="updateRegion('centro', this)">Centro-Oeste</button>
+
+                        <button class="custom-tab" onclick="updateRegion('sudeste', this)">Sudeste</button>
+
+                        <button class="custom-tab" onclick="updateRegion('sul', this)">Sul</button>
+
+                    </div>
+
+                    <div id="region-content-area" class="content-area"></div>
+
+                </div>
+
+            </section>
+
+            <div id="print-data-container" style="display: none;">
+                </div>
+
+
+            <footer class="text-center pt-12 border-t border-gray-800">
+
+<section class="mb-24">
+    <div class="flex items-center gap-4 mb-10">
+        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">05</div>
+        <h2 class="text-3xl font-bold text-white">Nossas Personas Estratégicas</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="glass-panel p-6 border-l-4 border-purple-500 relative flex flex-col sm:flex-row gap-6">
+            
+            <div class="flex-shrink-0 text-center sm:text-left">
+                <div class="w-24 h-24 rounded-full bg-purple-900/50 border-4 border-purple-500 flex items-center justify-center mx-auto sm:mx-0 mb-3 text-5xl transition-transform hover:scale-105">
+                    🏃‍♀️
+                </div>
+                <p class="text-xs text-gray-400 font-medium">Hobbies: Caminhada, Natação</p>
+            </div>
+
+            <div class="flex-grow">
+                <h3 class="text-2xl font-black text-purple-400 mb-1">Debora (Preço & Proximidade)</h3>
+                <p class="text-xs text-gray-500 uppercase font-semibold mb-3">Jovem Exploradora | Foco: Flexibilidade e Economia</p>
+
+                <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-4 text-sm">
+                    <div class="flex items-center gap-2"><span class="text-terra">**24 Anos**</span> | Sudeste</div>
+                    <div class="flex items-center gap-2"><span class="text-terra">**5–10 Sal. Mínimos**</span> | Renda Média</div>
+                    <div class="col-span-2">
+                        <p class="text-gray-300 text-sm mt-1 leading-snug">Lia busca planos acessíveis e treinos rápidos (30’). **Converte com R$ 9,90 no 1º mês + 7 dias grátis.**</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-700 pt-4">
+                    <h4 class="text-white font-bold text-sm mb-2">Audiência Digital (Alcance / Visualizações)</h4>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-terra">Terra: **44% Alcance** / 7MM Views</span>
+                        <span class="text-blue-400">Vivo: **16% Alcance** / 2MM Views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 border-l-4 border-yellow-500 relative flex flex-col sm:flex-row gap-6">
+            
+            <div class="flex-shrink-0 text-center sm:text-left">
+                <div class="w-24 h-24 rounded-full bg-yellow-900/50 border-4 border-yellow-500 flex items-center justify-center mx-auto sm:mx-0 mb-3 text-5xl transition-transform hover:scale-105">
+                    💪
+                </div>
+                <p class="text-xs text-gray-400 font-medium">Hobbies: Corrida, Crossfit</p>
+            </div>
+
+            <div class="flex-grow">
+                <h3 class="text-2xl font-black text-yellow-400 mb-1">Gui Performance (Premium & Tempo)</h3>
+                <p class="text-xs text-gray-500 uppercase font-semibold mb-3">Praticante Core | Foco: Otimização de Resultados e Premium</p>
+
+                <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-4 text-sm">
+                    <div class="flex items-center gap-2"><span class="text-terra">**30 Anos**</span> | Sudeste</div>
+                    <div class="flex items-center gap-2"><span class="text-terra">**>10 Sal. Mínimos**</span> | Renda Alta</div>
+                    <div class="col-span-2">
+                        <p class="text-gray-300 text-sm mt-1 leading-snug">Gui busca ganho de massa no menor tempo. **Converte com proposta premium:** Day Pass e equipamentos superiores.</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-700 pt-4">
+                    <h4 class="text-white font-bold text-sm mb-2">Audiência Digital (Alcance / Visualizações)</h4>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-terra">Terra: **46% Alcance** / 4MM Views</span>
+                        <span class="text-blue-400">Vivo: **17% Alcance** / 2MM Views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-6 border-l-4 border-green-500 relative flex flex-col sm:flex-row gap-6">
+            
+            <div class="flex-shrink-0 text-center sm:text-left">
+                <div class="w-24 h-24 rounded-full bg-green-900/50 border-4 border-green-500 flex items-center justify-center mx-auto sm:mx-0 mb-3 text-5xl transition-transform hover:scale-105">
+                    🧘
+                </div>
+                <p class="text-xs text-gray-400 font-medium">Hobbies: Aulas em Grupo, Caminhada</p>
+            </div>
+
+            <div class="flex-grow">
+                <h3 class="text-2xl font-black text-green-400 mb-1">Bruno Rotina (Equilíbrio & Saúde)</h3>
+                <p class="text-xs text-gray-500 uppercase font-semibold mb-3">O Aluno Consolidado | Foco: Consistência e Bem-Estar</p>
+
+                <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-4 text-sm">
+                    <div class="flex items-center gap-2"><span class="text-terra">**31 Anos**</span> | Sudeste</div>
+                    <div class="flex items-center gap-2"><span class="text-terra">**5–10 Sal. Mínimos**</span> | Renda Média</div>
+                    <div class="col-span-2">
+                        <p class="text-gray-300 text-sm mt-1 leading-snug">Bruno busca estabilidade e aulas antiestresse. **Converte com garantia de satisfação e tour guiado.**</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-700 pt-4">
+                    <h4 class="text-white font-bold text-sm mb-2">Audiência Digital (Alcance / Visualizações)</h4>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-terra">Terra: **44% Alcance** / 6MM Views</span>
+                        <span class="text-blue-400">Vivo: **16% Alcance** / 2MM Views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-panel p-6 border-l-4 border-blue-500 relative flex flex-col sm:flex-row gap-6">
+            
+            <div class="flex-shrink-0 text-center sm:text-left">
+                <div class="w-24 h-24 rounded-full bg-blue-900/50 border-4 border-blue-500 flex items-center justify-center mx-auto sm:mx-0 mb-3 text-5xl transition-transform hover:scale-105">
+                    💎
+                </div>
+                <p class="text-xs text-gray-400 font-medium">Hobbies: Pilates, Studios Boutique</p>
+            </div>
+
+            <div class="flex-grow">
+                <h3 class="text-2xl font-black text-blue-400 mb-1">Marcela Premium (Experiência & Flex)</h3>
+                <p class="text-xs text-gray-500 uppercase font-semibold mb-3">Oportunidade (Membro Fantasma) | Foco: Conveniência e Qualidade</p>
+
+                <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-4 text-sm">
+                    <div class="flex items-center gap-2"><span class="text-terra">**29 Anos**</span> | Sudeste</div>
+                    <div class="flex items-center gap-2"><span class="text-terra">**>10 Sal. Mínimos**</span> | Renda Alta</div>
+                    <div class="col-span-2">
+                        <p class="text-gray-300 text-sm mt-1 leading-snug">Marcela busca estrutura premium e flexibilidade. Barreira: falta de tempo. **Converte com experiência VIP e Plano Flex.**</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-t border-gray-700 pt-4">
+                    <h4 class="text-white font-bold text-sm mb-2">Audiência Digital (Alcance / Visualizações)</h4>
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-terra">Terra: **46% Alcance** / 4MM Views</span>
+                        <span class="text-blue-400">Vivo: **16% Alcance** / 1MM Views</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+                <div class="flex justify-center items-center gap-6 mb-6 opacity-70 hover:opacity-100 transition-opacity">
+
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto">
+
+                    <div class="h-4 w-px bg-gray-600"></div>
+
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="logo-screen h-6 w-auto">
+
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="logo-print hidden h-6 w-auto">
+
+                    <div class="h-4 w-px bg-gray-600"></div>
+
+                    <img src="https://bluefitcampolargo.com.br/wp-content/uploads/2024/06/Bluefit-Branco-Photoroom.webp" alt="Manforte Engenharia" class="brand-logo h-6 w-auto brightness-0 invert">
+
+                </div>
+
+                <p class="text-gray-600 text-xs px-4 leading-relaxed mb-8">
+
+                    © 2025 Terra Insights. Dados baseados em 539 respondentes.<br>
+
+                    Metodologia: O levantamento foi realizado via plataforma mobile e seguiu critérios demográficos do IBGE.
+
+                </p>
+
+            </footer>
+
+        </div>
+
+        <div class="fixed bottom-8 right-8 z-50 no-print group">
+
+            <button onclick="window.print()" class="flex items-center gap-3 bg-terra-orange text-white hover:bg-orange-600 font-bold py-3 px-6 rounded-full interactive-download-btn pulse-shadow">
+
+                Baixar Relatório
+
+                <svg class="w-5 h-5 fill-current download-icon" viewBox="0 0 24 24">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // === DADOS ===
+
+        const ageData = {
+
+            allAges: {
+
+                title: "Média Geral",
+
+                summary: "O mercado é polarizado: jovens buscam preço, adultos buscam tempo/conveniência e seniores buscam saúde funcional. O desafio é reter o público após os 35 anos.",
+
+                brands: [ 
+
+                    { name: "Smart Fit", val: "15,7%" }, 
+
+                    { name: "Ultra", val: "11,4%" }, 
+
+                    { name: "Panobianco", val: "10,7%" },
+
+                    { name: "Bluefit", val: "8,6%" },
+
+                    { name: "Bodytech", val: "3%" }
+
+                ],
+
+                stats: [ { label: "Prática Média", val: "53%", icon: "📊" }, { label: "Matrícula Média", val: "48%", icon: "💳" }, { label: "Fator Decisão", val: "Preço/Local", icon: "⚖️" } ],
+
+                bars: [ { label: "Intenção Média (Nova Gym)", val: 26.5, color: "orange" }, { label: "Frequência Média 3-4x", val: 22.0, color: "blue" }, { label: "Frequência Média 1-2x", val: 20.0, color: "blue" } ],
+
+                insight: "A estratégia deve ser híbrida: Preço para atrair a base (jovens) e Conveniência/Serviço para reter o topo da pirâmide (adultos)."
+
+            },
+
+            age1624: {
+
+                title: "O Jovem Explorador (16-24)",
+
+                summary: "Alta atividade, mas baixa fidelidade. Sensíveis a preço e buscam variedade.",
+
+                brands: [ 
+
+                    { name: "Smart Fit", val: "9,41%" }, 
+
+                    { name: "Ultra", val: "7,65%" }, 
+
+                    { name: "Panobianco", val: "7,06%" },
+
+                    { name: "Bluefit", val: "6,47%" }
+
+                ],
+
+                stats: [ { label: "Atividade", val: "Corrida (35%)", icon: "🏃" }, { label: "Gatilho", val: "Promo R$9,90", icon: "🏷️" }, { label: "Barreira", val: "Não gostei", icon: "😒" } ],
+
+                bars: [ { label: "Intenção Nova Academia (Sim)", val: 22.3, color: "orange" }, { label: "Frequência 1-2x/sem", val: 12.7, color: "blue" }, { label: "Frequência 5x+/sem", val: 10.5, color: "blue" } ],
+
+                insight: "Barreira principal não é apenas tempo (13%), mas experiência ruim ('Já tentei e não gostei'). Solução: Gamificação, aulas em grupo dinâmicas e planos flexíveis sem fidelidade longa."
+
+            },
+
+            age2534: {
+
+                title: "O Praticante Core (25-34)",
+
+                summary: "O auge da performance e do ticket médio.",
+
+                brands: [ 
+
+                    { name: "Smart Fit", val: "15,7%" }, 
+
+                    { name: "Ultra", val: "11,4%" }, 
+
+                    { name: "Bluefit", val: "8,6%" } 
+
+                ],
+
+                stats: [ { label: "Atividade", val: "Caminhada+Gym", icon: "🏋️" }, { label: "Gatilho", val: "Proximidade 21%", icon: "📍" }, { label: "Objetivo", val: "Estética", icon: "💪" } ],
+
+                bars: [ { label: "Intenção Nova Academia (Sim)", val: 23.0, color: "orange" }, { label: "Indecisos (Oportunidade)", val: 22.3, color: "gray" }, { label: "Frequência 1-2x/sem", val: 21.5, color: "blue" } ],
+
+                insight: "A barreira do tempo explode aqui (20,54%). A academia precisa vender 'tempo': treinos curtos (30min), proximidade e zero atrito na entrada (check-in rápido). Formato 'Express' é o ideal."
+
+            },
+
+            age3544: {
+
+                title: "O Aluno Consolidado (35-44)",
+
+                summary: "Menor volume, mas mais fiéis.",
+
+                brands: [ 
+
+                    { name: "Smart Fit", val: "15,7%" }, 
+
+                    { name: "Bodytech", val: "3%" } 
+
+                ],
+
+                stats: [ { label: "Frequência", val: "3-4x (29%)", icon: "📅" }, { label: "Matrícula", val: "50,8%", icon: "💳" }, { label: "Propensão", val: "Consideraria", icon: "🤔" } ],
+
+                bars: [ { label: "Consideraria Nova Academia", val: 30.4, color: "green" }, { label: "Frequência 3-4x", val: 29.5, color: "blue" } ],
+
+                insight: "Maior propensão declarada para a Nova Academia Completa (30,4%). Muitos são 'Ghost Members' (pagam e não vão). Estratégia: Reativação via comunidade e desafios de bem-estar, focando em qualidade de vida."
+
+            },
+
+            age60: {
+
+                title: "O Público Sênior (60+)",
+
+                summary: "Buscam saúde funcional, não academia tradicional.",
+
+                brands: [ 
+
+                    { name: "Sem Marca", val: "100%" }
+
+                ],
+
+                stats: [ { label: "Atividade", val: "Outra (100%)", icon: "🏊" }, { label: "Barreira", val: "Outra (63%)", icon: "🚫" }, { label: "Rejeição", val: "75%", icon: "📉" } ],
+
+                bars: [ { label: "Rejeição Nova Academia", val: 75.5, color: "red" }, { label: "Matrícula Ativa", val: 18.7, color: "blue" } ],
+
+                insight: "O modelo de academia de ferro não funciona (rejeição de 75%). Eles precisam de 'Centros de Longevidade': Hidro, Pilates e Dança, com forte componente de socialização e segurança."
+
+            }
+
+        };
+
+        const detailedRegionData = {
+
+            centro: {
+
+                stats: [ 
+
+                    { label: "Matrícula", value: "56,8%", sub: "Acima da média" }, 
+
+                    { label: "Objetivo: Saúde", value: "21,5%", sub: "Líder" }, 
+
+                    { label: "Marca: Ultra", value: "19,1%", sub: "Citação" }, 
+
+                    { label: "Indecisos", value: "26,0%", sub: "Oportunidade" } 
+
+                ],
+
+                list: [ "<strong>Frequência:</strong> 3–4x (22%) e 1–2x (18%).", "<strong>Atividades:</strong> Caminhada (32%), Academia (25%), Corrida (22%).", "<strong>Gatilho:</strong> Proximidade (20%).", "<strong>Nova Academia:</strong> 12% 'Com certeza' e 26% Indecisos." ]
+
+            },
+
+            nordeste: {
+
+                stats: [ 
+
+                    { label: "Interesse", value: "26,8%", sub: "Alta Intenção" }, 
+
+                    { label: "Barreira: Motivação", value: "29,3%", sub: "Líder" }, 
+
+                    { label: "Ativos", value: "52,9%", sub: "Praticam" }, 
+
+                    { label: "Matrícula", value: "41,4%", sub: "Baixa" } 
+
+                ],
+
+                list: [ "<strong>Nova Academia:</strong> 26,79% 'Com certeza' (Potencial).", "<strong>Barreira:</strong> Falta de motivação é o maior obstáculo.", "<strong>Matrícula:</strong> Abaixo de CO e Norte." ]
+
+            },
+
+            // DADOS DA REGIÃO NORTE - INCLUÍDOS E ATUALIZADOS
+
+            norte: {
+
+                stats: [ 
+
+                    { label: "Ativos", value: "61,5%", sub: "Mais Alta" }, 
+
+                    { label: "Troca: Preço", value: "17,0%", sub: "Fator #1" }, 
+
+                    { label: "Ativ. Corrida", value: "64,6%", sub: "Outdoor" }, 
+
+                    { label: "Nova Gym", value: "30,0%", sub: "Positiva" } 
+
+                ],
+
+                list: [ "<strong>Frequência:</strong> Equilibrada (13% 1-2x / 12% 3-4x).", "<strong>Matrícula:</strong> 49,2% (Meio a meio).", "<strong>Atividades:</strong> Caminhada (35%)." ]
+
+            },
+
+            sudeste: {
+
+                stats: [ 
+
+                    { label: "Barreira: Tempo", value: "31,2%", sub: "Crítico" }, 
+
+                    { label: "Obj. Massa", value: "18,0%", sub: "Muscular" }, 
+
+                    { label: "Freq. 3-4x", value: "20,8%", sub: "Média" }, 
+
+                    { label: "Indecisos", value: "27,0%", sub: "Preço" } 
+
+                ],
+
+                list: [ "<strong>Atividades:</strong> Mix: Caminhada (37%), Natação (31%), Gym (31%).", "<strong>Matrícula:</strong> 46,8%.", "<strong>Nova Academia:</strong> 16,7% 'Com certeza'." ]
+
+            },
+
+            sul: {
+
+                stats: [ 
+
+                    { label: "Matrícula", value: "30,7%", sub: "Mais Baixa" }, 
+
+                    { label: "Rejeição", value: "42,5%", sub: "Preço Alto" }, 
+
+                    { label: "Ativ. Outra", value: "59,0%", sub: "Atípico" }, 
+
+                    { label: "Barreira: Exp.", value: "16,0%", sub: "Não gostou" } 
+
+                ],
+
+                list: [ "<strong>Barreiras:</strong> 'Outra' (40%) e Experiência ruim.", "<strong>Cenário:</strong> Alta rejeição à proposta de R$ 159,90.", "<strong>Prática:</strong> Região menos ativa (42,5%)." ]
+
+            }
+
+        };
+
+        // === HELPERS DE ANIMAÇÃO ===
+
+        function animateValue(obj, start, end, duration, suffix = '') {
+
+            let startTimestamp = null;
+
+            const step = (timestamp) => {
+
+                if (!startTimestamp) startTimestamp = timestamp;
+
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+                const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+                
+
+                obj.innerHTML = (ease * end).toFixed(1).replace('.', ',') + suffix;
+
+                if (progress < 1) {
+
+                    window.requestAnimationFrame(step);
+
+                } else {
+
+                    obj.innerHTML = end.toFixed(1).replace('.', ',') + suffix;
+
+                }
+
+            };
+
+            window.requestAnimationFrame(step);
+
+        }
+
+        function triggerAnimations(container) {
+
+            const numbers = container.querySelectorAll('.animate-num');
+
+            numbers.forEach(num => {
+
+                const val = parseFloat(num.getAttribute('data-value'));
+
+                const suffix = num.getAttribute('data-suffix') || '';
+
+                animateValue(num, 0, val, 2000, suffix);
+
+            });
+
+            const bars = container.querySelectorAll('.bar-fill');
+
+            bars.forEach(bar => {
+
+                const targetWidth = bar.getAttribute('data-width');
+
+                bar.style.width = '0%';
+
+                setTimeout(() => {
+
+                    bar.style.width = targetWidth;
+
+                }, 100);
+
+            });
+
+            const verticalBars = container.querySelectorAll('.animate-vertical-bar');
+
+            verticalBars.forEach(bar => {
+
+                const targetHeight = bar.getAttribute('data-height');
+
+                bar.style.height = '0%';
+
+                setTimeout(() => {
+
+                    bar.style.height = targetHeight;
+
+                }, 100);
+
+            });
+
+        }
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO ESTÁTICA (SOMENTE PARA PDF) ---
+
+        function renderAllAgesForPrint(dataSets) {
+            let fullHtml = '<h2 style="font-size: 1.8rem; font-weight: 700; color: #111; margin-top: 1rem;">03. Raio-X por Geração (Dados Completos)</h2>';
+            
+            for (const key in dataSets) {
+                if (!dataSets.hasOwnProperty(key) || key === 'allAges') continue;
+
+                const data = dataSets[key];
+                
+                // --- Indicadores Chave (Barras horizontais estáticas) ---
+                let barsHtml = data.bars.map(bar => {
+                    const val = bar.val.toFixed(1).replace('.', ',');
+                    return `
+                        <div style="margin-bottom: 0.75rem; break-inside: avoid;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #333; margin-bottom: 0.25rem;">
+                                <span>${bar.label}</span>
+                                <span style="font-weight: bold; color: #E35205;">${val}%</span>
+                            </div>
+                            <div style="width: 100%; background-color: #ddd; border-radius: 99px; height: 8px; overflow: hidden;">
+                                <div style="height: 100%; border-radius: 99px; width: ${bar.val}%; background-color: #E35205; -webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // --- Stats ---
+                let statsHtml = data.stats.map(s => `
+                    <div style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; text-align: center; background-color: #fff; break-inside: avoid;">
+                        <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">${s.label}</span>
+                        <span style="display: block; font-size: 1.25rem; font-weight: 900; color: #111;">${s.val.replace('.', ',')}</span>
+                        <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">(${s.icon})</span>
+                    </div>
+                `).join('');
+
+                fullHtml += `
+                    <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                        <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">${data.title}</h3>
+                        <p style="font-size: 0.9rem; color: #333; margin-bottom: 1.5rem;">${data.summary}</p>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                            ${statsHtml}
+                        </div>
+                        
+                        <h4 style="font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 0.75rem;">Indicadores de Comportamento</h4>
+                        ${barsHtml}
+
+                        <p style="font-size: 0.9rem; color: #111; margin-top: 1rem;"><strong>Insight Principal:</strong> ${data.insight}</p>
+                    </div>
+                `;
+            }
+            return fullHtml;
+        }
+
+        function renderAllRegionsForPrint(dataSets) {
+            let fullHtml = '<h2 style="font-size: 1.8rem; font-weight: 700; color: #111; margin-top: 2rem;">04. Geografia do Consumo (Detalhado)</h2>';
+
+            for (const key in dataSets) {
+                if (!dataSets.hasOwnProperty(key) || key === 'todos') continue;
+
+                const data = dataSets[key];
+                const regionName = document.querySelector(`button[onclick="updateRegion('${key}', this)"]`).textContent;
+
+                // --- Stats ---
+                let statsHtml = data.stats.map(s => {
+                    let valueDisplay = s.value;
+                    return `
+                        <div class="card-highlight" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; text-align: center; background-color: #fff; break-inside: avoid;">
+                            <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">${s.label}</span>
+                            <span style="display: block; font-size: 1.5rem; font-weight: 900; color: #111;">${valueDisplay.replace('.', ',')}</span>
+                            <span style="font-size: 0.875rem; color: #E35205;">${s.sub}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                // --- List ---
+                let listItems = data.list.map(item => `<li style="position: relative; padding-left: 1rem; list-style: none; margin-bottom: 0.3rem;">• ${item}</li>`).join('');
+
+
+                fullHtml += `
+                    <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                        <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">Região: ${regionName}</h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                            ${statsHtml}
+                        </div>
+
+                        <div class="print-list" style="padding: 1rem;">
+                            <h4 style="font-size: 1.1rem; font-weight: 700; color: #E35205; margin-bottom: 0.5rem;">Detalhes Chave</h4>
+                            <ul style="padding-left: 0; margin-left: 0;">${listItems}</ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- Inclui o Mapa Geral no final ---
+            const initialMapHtml = `
+                <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                    <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">Resumo: Mapa Geral</h3>
+                    <p style="font-size: 0.9rem; color: #333; margin-bottom: 1rem;">Este é o resumo das regiões exibido inicialmente na página web (Seção 04).</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Norte</h4><p style="font-size: 0.8rem;">Os Mais Ativos (61,5%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Nordeste</h4><p style="font-size: 0.8rem;">Alta Intenção (26,8%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Centro-Oeste</h4><p style="font-size: 0.8rem;">Saúde & Matrícula (56,7%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Sudeste</h4><p style="font-size: 0.8rem;">Falta de Tempo (31%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Sul</h4><p style="font-size: 0.8rem;">Baixa Adesão (30,7%)</p></div>
+                    </div>
+                </div>
+            `;
+            fullHtml += initialMapHtml;
+            return fullHtml;
+        }
+
+
+        // === RENDERIZADORES DA PÁGINA WEB (MANTIDOS) ===
+
+        function renderAgeContent(key) {
+
+            const data = ageData[key];
+
+            const container = document.getElementById('age-content-area');
+
+            
+
+            let html = `
+
+                <div class="grid lg:grid-cols-3 gap-6">
+
+                    <div class="glass-panel p-6 flex flex-col justify-between">
+
+                        <div>
+
+                            <h3 class="text-2xl font-bold text-white mb-2">${data.title}</h3>
+
+                            <p class="text-gray-400 text-sm mb-6">${data.summary}</p>
+
+                            <div class="space-y-4">
+
+                                ${data.stats.map(s => `
+
+                                    <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg border border-white/5 card-highlight">
+
+                                        <span class="text-2xl">${s.icon}</span>
+
+                                        <div>
+
+                                            <p class="text-xs text-gray-500 uppercase font-bold">${s.label}</p>
+
+                                            <p class="text-white font-bold">${s.val}</p>
+
+                                        </div>
+
+                                    </div>
+
+                                `).join('')}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="glass-panel p-6">
+
+                        <h4 class="text-terra-orange font-bold text-sm uppercase mb-6">Indicadores Chave</h4>
+
+                        <div class="space-y-6">
+
+                            ${data.bars.map(bar => `
+
+                                <div>
+
+                                    <div class="flex justify-between mb-1">
+
+                                        <span class="text-sm text-gray-300">${bar.label}</span>
+
+                                        <span class="text-sm font-bold text-white animate-num" data-value="${bar.val}" data-suffix="%">0%</span>
+
+                                    </div>
+
+                                    <div class="bar-track">
+
+                                        <div class="bar-fill ${bar.color === 'orange' ? 'fill-orange' : bar.color === 'red' ? 'fill-red' : bar.color === 'green' ? 'fill-green' : 'fill-blue'}" data-width="${bar.val}%"></div>
+
+                                    </div>
+
+                                </div>
+
+                            `).join('')}
+
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-gray-700">
+
+                            <p class="text-xs text-gray-400 mb-2">Marcas Citadas:</p>
+
+                            <div class="flex gap-2 flex-wrap">
+
+                                ${data.brands.map(b => `<span class="bg-gray-800 px-3 py-1 rounded text-xs text-white border border-gray-600">${b.name} <span class="text-terra-orange ml-1">${b.val}</span></span>`).join('')}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="glass-panel p-6 bg-gradient-to-br from-gray-900 to-gray-800 border-l-orange-500">
+
+                        <h4 class="text-white font-bold text-lg mb-4">🧠 Insight Terra</h4>
+
+                        <p class="text-gray-300 leading-relaxed text-sm italic">"${data.insight}"</p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            container.innerHTML = html;
+
+            triggerAnimations(container);
+
+            container.style.opacity = 1;
+
+        }
+
+        function renderRegionContent(key) {
+
+            const container = document.getElementById('region-content-area');
+
+            container.innerHTML = ''; 
+
+            if (key === 'todos') {
+
+                let html = `
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
+
+                    <div class="region-summary-card p-6 rounded-xl border border-gray-700 text-center relative overflow-hidden group hover:shadow-[0_0_30px_rgba(255,119,0,0.3)] transition-all duration-300">
+
+                        <div class="absolute inset-0 bg-terra-orange opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+                        <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">🏆</span>
+
+                        <h4 class="font-bold text-white text-lg">Região Norte</h4>
+
+                        <p class="text-terra-orange text-sm font-bold mb-2">Os Mais Ativos (61,5%)</p>
+
+                        <p class="text-xs text-gray-400">Corrida (64%) domina. Preço (17%) é o fator de troca #1.</p>
+
+                    </div>
+
+                    <div class="region-summary-card p-6 rounded-xl border border-gray-700 text-center relative overflow-hidden group hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all duration-300">
+
+                        <div class="absolute inset-0 bg-green-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+                        <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
+
+                        <h4 class="font-bold text-white text-lg">Nordeste</h4>
+
+                        <p class="text-green-400 text-sm font-bold mb-2">Alta Intenção (26,8%)</p>
+
+                        <p class="text-xs text-gray-400">Oportunidade para a nova academia. Maior barreira: Motivação.</p>
+
+                    </div>
+
+                    <div class="region-summary-card p-6 rounded-xl border border-gray-700 text-center relative overflow-hidden group hover:shadow-[0_0_30px_rgba(0,87,255,0.3)] transition-all duration-300">
+
+                        <div class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+                        <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">🎯</span>
+
+                        <h4 class="font-bold text-white text-lg">Centro-Oeste</h4>
+
+                        <p class="text-blue-400 text-sm font-bold mb-2">Saúde & Matrícula</p>
+
+                        <p class="text-xs text-gray-400">56,7% matriculados. Proximidade é o gatilho principal.</p>
+
+                    </div>
+
+                    <div class="region-summary-card p-6 rounded-xl border border-gray-700 text-center relative overflow-hidden group hover:shadow-[0_0_30px_rgba(255,140,0,0.3)] transition-all duration-300">
+
+                        <div class="absolute inset-0 bg-orange-600 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+                        <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">⏱️</span>
+
+                        <h4 class="font-bold text-white text-lg">Sudeste</h4>
+
+                        <p class="text-orange-400 text-sm font-bold mb-2">Falta de Tempo (31%)</p>
+
+                        <p class="text-xs text-gray-400">Foco em massa muscular. Muitos indecisos sobre nova academia.</p>
+
+                    </div>
+
+                    <div class="region-summary-card p-6 rounded-xl border border-gray-700 text-center relative overflow-hidden group hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] transition-all duration-300">
+
+                        <div class="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+                        <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform">📉</span>
+
+                        <h4 class="font-bold text-white text-lg">Sul</h4>
+
+                        <p class="text-red-400 text-sm font-bold mb-2">Baixa Adesão</p>
+
+                        <p class="text-xs text-gray-400">Alta rejeição ao preço (42%). Preferem atividades 'Outras'.</p>
+
+                    </div>
+
+                </div>`;
+
+                container.innerHTML = html;
+
+            } else {
+
+                const data = detailedRegionData[key];
+
+                let statsHtml = '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">';
+
+                data.stats.forEach(stat => {
+
+                    // Remove '%' e substitui ',' por '.' para que parseFloat funcione corretamente
+
+                    let valString = stat.value.replace('%','').replace(',','.'); 
+
+                    let valNum = parseFloat(valString);
+
+                    const isPureNumber = !isNaN(valNum) && /^[0-9.,]+%?$/.test(stat.value.trim());
+
+                    
+
+                    let contentHtml = '';
+
+                    if (isPureNumber) {
+
+                        // Passa o valor numérico (com ponto) para o data-value
+
+                        const suffix = stat.value.includes('%') ? '%' : '';
+
+                        contentHtml = `<span class="text-4xl md:text-5xl font-black text-white block mb-2 animate-num" data-value="${valNum}" data-suffix="${suffix}">0${suffix}</span>`;
+
+                    } else {
+
+                        contentHtml = `<span class="text-3xl md:text-4xl font-black text-white block mb-2">${stat.value}</span>`;
+
+                    }
+
+                    statsHtml += `
+
+                        <div class="bg-white/5 p-6 rounded-xl border border-white/10 text-center group hover:border-terra-orange transition-colors card-highlight">
+
+                            <span class="text-xs text-gray-400 uppercase tracking-widest block mb-2">${stat.label}</span>
+
+                            ${contentHtml}
+
+                            <span class="text-sm text-terra-orange block">${stat.sub}</span>
+
+                        </div>
+
+                    `;
+
+                });
+
+                statsHtml += '</div>';
+
+                let listHtml = '<div class="bg-black/20 p-6 rounded-lg border-l-4 border-terra-orange"><ul class="space-y-3 text-sm text-gray-300 custom-list">';
+
+                data.list.forEach(item => { listHtml += `<li>${item}</li>`; });
+
+                listHtml += '</ul></div>';
+
+                container.innerHTML = statsHtml + listHtml;
+
+                triggerAnimations(container);
+
+            }
+
+            container.style.opacity = 1;
+
+        }
+
+        // === CONTROLES E INICIALIZAÇÃO ===
+
+        function updateAgeTab(key, btn) {
+
+            document.querySelectorAll('.tab-scroll-container .custom-tab').forEach(b => b.classList.remove('active'));
+
+            btn.classList.add('active');
+
+            const container = document.getElementById('age-content-area');
+
+            container.style.opacity = 0;
+
+            setTimeout(() => renderAgeContent(key), 200);
+
+        }
+
+        function updateRegion(key, btn) {
+
+            btn.parentElement.querySelectorAll('.custom-tab').forEach(b => b.classList.remove('active'));
+
+            btn.classList.add('active');
+
+            const container = document.getElementById('region-content-area');
+
+            container.style.opacity = 0;
+
+            setTimeout(() => renderRegionContent(key), 200);
+
+        }
+
+        const correctPassword = "123";
+
+        
+        // Função que injeta o conteúdo estático no container de impressão
+        function handlePrintInjection() {
+            const printContainer = document.getElementById('print-data-container');
+            const mainContent = document.querySelector('.pt-10'); // A área principal do conteúdo
+            const printHeader = document.getElementById('print-header'); // O novo cabeçalho de impressão
+            
+            // 1. Oculta o conteúdo dinâmico (visível no browser)
+            document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'none');
+            
+            // 2. Injeta o conteúdo de todas as abas de Idade e Região na área oculta
+            const agePrintHtml = renderAllAgesForPrint(ageData);
+            const regionPrintHtml = renderAllRegionsForPrint(detailedRegionData);
+            
+            // 3. Reorganiza e insere o conteúdo para impressão
+            
+            // Move o cabeçalho principal da página (Raio-X do Mercado Fitness)
+            const mainHeader = document.querySelector('header.mb-20').cloneNode(true);
+            
+            printContainer.innerHTML = ''; // Limpa o container antes de injetar
+            
+            // Adiciona o cabeçalho superior (logo e patrocinador)
+            printContainer.appendChild(printHeader.cloneNode(true));
+            printContainer.querySelector('#print-header').style.display = 'flex'; // Exibe o cabeçalho no PDF
+
+            // Adiciona o cabeçalho principal (Raio-X)
+            printContainer.appendChild(mainHeader);
+
+
+            // Adiciona o restante das seções (01 e 02)
+            document.querySelectorAll('section:nth-of-type(1), section:nth-of-type(2)').forEach(sec => {
+                printContainer.appendChild(sec.cloneNode(true));
+            });
+
+            // Adiciona as seções 03 e 04 (abas)
+            printContainer.innerHTML += agePrintHtml;
+            printContainer.innerHTML += regionPrintHtml;
+            
+            mainContent.appendChild(printContainer); // Move o container injetado para dentro da área principal
+            printContainer.style.display = 'block';
+
+            // Oculta o conteúdo original do main-content durante a impressão
+            document.querySelectorAll('section, header').forEach(el => el.classList.add('hidden-during-print'));
+            
+            // Garante que o container de impressão não seja ocultado
+            document.getElementById('print-data-container').classList.remove('hidden-during-print');
+        }
+
+        // Função que limpa o conteúdo injetado após o PDF ser fechado
+        function handlePrintCleanup() {
+            const printContainer = document.getElementById('print-data-container');
+            const mainContent = document.querySelector('.pt-10');
+
+            // 1. Remove o conteúdo injetado do container principal
+            printContainer.innerHTML = '';
+            
+            // 2. Reexibe o conteúdo original da página web
+            document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'block');
+            document.querySelectorAll('.hidden-during-print').forEach(el => el.classList.remove('hidden-during-print'));
+            
+            // Re-renderiza o conteúdo da aba ativa para evitar tela vazia
+            renderAgeContent(document.querySelector('.tab-scroll-container:nth-of-type(1) .custom-tab.active').getAttribute('onclick').split("'")[1]);
+            renderRegionContent(document.querySelector('.tab-scroll-container:nth-of-type(2) .custom-tab.active').getAttribute('onclick').split("'")[1]);
+        }
+
+        // Atribui as funções de preparação e limpeza aos eventos de impressão
+        window.onbeforeprint = handlePrintInjection;
+        window.onafterprint = handlePrintCleanup;
+
+
+        function checkPassword() {
+
+            const input = document.getElementById('passwordInput');
+
+            const errorMsg = document.getElementById('error-msg');
+
+            
+
+            if (input.value === correctPassword) {
+
+                errorMsg.classList.add('hidden'); 
+
+                document.getElementById('login-screen').style.opacity = '0';
+
+                document.getElementById('login-screen').style.visibility = 'hidden';
+
+                document.getElementById('main-content').style.display = 'block';
+
+                
+                setTimeout(() => {
+
+                    document.getElementById('main-content').style.opacity = '1';
+
+                    
+                    renderAgeContent('allAges'); 
+
+                    renderRegionContent('todos'); 
+
+                    
+
+                    triggerAnimations(document.getElementById('main-content'));
+
+                }, 50);
+
+            } else {
+
+                errorMsg.classList.remove('hidden');
+
+                input.value = ''; 
+
+                input.focus();
+
+                document.querySelector('.login-box').classList.add('shake');
+
+                setTimeout(() => document.querySelector('.login-box').classList.remove('shake'), 500);
+
+            }
+
+        }
+
+        document.getElementById('passwordInput').addEventListener('keydown', function (e) {
+
+            if (e.key === 'Enter') {
+
+                e.preventDefault();
+
+                checkPassword();
+
+            }
+
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    triggerAnimations(entry.target);
+
+                    observer.unobserve(entry.target);
+
+                }
+
+            });
+
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('section').forEach(section => {
+
+            observer.observe(section);
+
+        });
+
+    </script>
+
+</body>
+
+</html>
