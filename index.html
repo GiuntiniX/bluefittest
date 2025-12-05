@@ -429,19 +429,35 @@
         }
 
 
-        /* Ajustes para Impressão */
+        /* ======================================= */
+
+        /* === OTIMIZAÇÃO PARA PDF/IMPRESSÃO === */
+
+        /* ======================================= */
 
         @media print {
 
-            /* Mantém as cores nos painéis para melhor legibilidade no papel */
+            /* 1. Visibilidade e Contraste Máximos */
 
-            .glass-panel {
+            body { 
 
-                background-color: #f0f0f0 !important; border-left-color: #E35205 !important; color: #111 !important;
+                background-color: #fff !important; /* Fundo branco */
 
-                box-shadow: none !important;
+                color: #000 !important; /* Texto preto */
+
+                padding-bottom: 0 !important;
+
+                margin: 0 !important; /* Remove margem do body */
+
+                min-height: 100vh;
 
             }
+
+            .pt-10.pb-32 { padding-top: 0 !important; padding-bottom: 2rem !important; }
+
+            h1, h2, h3, h4, strong { color: #111 !important; }
+
+            .text-terra { color: #E35205 !important; } /* Laranja sólido */
 
             .text-gradient-title, .text-gradient { 
 
@@ -453,37 +469,83 @@
 
             }
 
-            .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            /* 2. Remoção de Elementos Interativos/Desnecessários */
 
-            /* Forçar as cores originais da barra para impressão */
+            #login-screen, .fitness-bg, .fitness-overlay, .no-print, .custom-tab, .tab-scroll-container, .content-area { 
 
-            .fill-orange, .fill-blue, .fill-green, .fill-red {
+                display: none !important; 
 
-                -webkit-print-color-adjust: exact;
+            }
 
-                print-color-adjust: exact;
+            #main-content { 
 
-                background: #E35205 !important; /* Laranja Sólido */
+                display: block !important; 
 
-                opacity: 1 !important;
+                opacity: 1 !important; 
+
+            }
+
+            /* 3. Estilo dos Painéis (Glassmorphism no PDF) */
+
+            .glass-panel, .region-summary-card, .card-highlight {
+
+                background-color: #f7f7f7 !important; /* Cinza bem claro */
+
+                border: 1px solid #ccc !important; /* Borda cinza suave */
+
+                border-left: 4px solid #E35205 !important; /* Mantém a cor de destaque */
 
                 box-shadow: none !important;
 
-            }
+                color: #111 !important;
 
-            .bg-blue-600\/60, .bg-orange-500\/80 {
+                break-inside: avoid; /* Previne quebras ruins */
 
-                 background-color: #E35205 !important;
-
-                 box-shadow: none !important;
+                margin-bottom: 1rem !important; /* Reduz espaço entre seções */
 
             }
 
-            .bar-label { color: #000 !important; }
+            /* 4. Forçar a Exibição de TODO o Conteúdo Oculto (Abas) */
+            #print-data-container {
+                display: block !important;
+            }
+            .print-section-data {
+                margin-top: 1.5rem !important;
+                padding-top: 1rem !important;
+                border-top: 1px dashed #ccc !important;
+                page-break-before: auto !important;
+            }
+            .print-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 1rem !important;
+            }
+            .print-list {
+                background-color: #eee !important;
+                padding: 0.75rem !important;
+                border-left: 4px solid #E35205 !important;
+                border-radius: 0.5rem !important;
+                color: #111 !important;
+            }
+            .print-list strong { color: #111 !important; }
 
-            .region-summary-card { background-color: #fff !important; border: 1px solid #ccc !important; box-shadow: none !important;}
 
-            .text-terra { color: #E35205 !important; }
+            /* 5. Estilo dos Gráficos (Ajuste de Cor e Eliminar Animação) */
+            .bar-fill { 
+                height: 10px !important;
+            }
+            .bar-track {
+                height: 10px !important;
+                background-color: #ddd !important;
+                box-shadow: none !important;
+            }
+            .fill-orange, .fill-blue, .fill-green, .fill-red, .bg-blue-600\/60, .bg-orange-500\/80 {
+                background: #E35205 !important; 
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                box-shadow: none !important;
+            }
+            .bar-label { color: #000 !important; text-shadow: none !important; }
 
         }
 
@@ -727,8 +789,9 @@
 
                     <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
 
-                    <div class="grid lg:grid-cols-2 gap-12 items-center"> <div class="h-64 flex items-end justify-between gap-4 w-full pr-4">
-
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="h-64 flex items-center justify-between gap-4 w-full pr-4"> 
+                            
                             <div class="chart-bar-group flex-1 group relative justify-between h-full">
 
                                 <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
@@ -899,7 +962,7 @@
 
             </section>
 
-            <section class="mb-24">
+            <section class="mb-24 no-print">
 
                 <div class="flex items-center gap-4 mb-6">
 
@@ -927,7 +990,7 @@
 
             </section>
 
-            <section class="mb-24">
+            <section class="mb-24 no-print">
 
                 <div class="flex items-center gap-4 mb-10">
 
@@ -960,6 +1023,10 @@
                 </div>
 
             </section>
+
+            <div id="print-data-container" style="display: none;">
+                </div>
+
 
             <footer class="text-center pt-12 border-t border-gray-800">
 
@@ -1312,7 +1379,123 @@
 
         }
 
-        // === RENDERIZADORES ===
+        // --- FUNÇÕES DE RENDERIZAÇÃO ESTÁTICA (SOMENTE PARA PDF) ---
+
+        function renderAllAgesForPrint(dataSets) {
+            let fullHtml = '<h2 style="font-size: 1.8rem; font-weight: 700; color: #111; margin-top: 1rem;">03. Raio-X por Geração (Dados Completos)</h2>';
+            
+            for (const key in dataSets) {
+                if (!dataSets.hasOwnProperty(key) || key === 'allAges') continue;
+
+                const data = dataSets[key];
+                
+                // --- Indicadores Chave (Barras horizontais estáticas) ---
+                let barsHtml = data.bars.map(bar => {
+                    const val = bar.val.toFixed(1).replace('.', ',');
+                    return `
+                        <div style="margin-bottom: 0.75rem; break-inside: avoid;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #333; margin-bottom: 0.25rem;">
+                                <span>${bar.label}</span>
+                                <span style="font-weight: bold; color: #E35205;">${val}%</span>
+                            </div>
+                            <div style="width: 100%; background-color: #ddd; border-radius: 99px; height: 8px; overflow: hidden;">
+                                <div style="height: 100%; border-radius: 99px; width: ${bar.val}%; background-color: #E35205; -webkit-print-color-adjust: exact; print-color-adjust: exact;"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // --- Stats ---
+                let statsHtml = data.stats.map(s => `
+                    <div style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; text-align: center; background-color: #fff; break-inside: avoid;">
+                        <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">${s.label}</span>
+                        <span style="display: block; font-size: 1.25rem; font-weight: 900; color: #111;">${s.val.replace('.', ',')}</span>
+                        <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">(${s.icon})</span>
+                    </div>
+                `).join('');
+
+                fullHtml += `
+                    <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                        <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">${data.title}</h3>
+                        <p style="font-size: 0.9rem; color: #333; margin-bottom: 1.5rem;">${data.summary}</p>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                            ${statsHtml}
+                        </div>
+                        
+                        <h4 style="font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 0.75rem;">Indicadores de Comportamento</h4>
+                        ${barsHtml}
+
+                        <p style="font-size: 0.9rem; color: #111; margin-top: 1rem;"><strong>Insight Principal:</strong> ${data.insight}</p>
+                    </div>
+                `;
+            }
+            return fullHtml;
+        }
+
+        function renderAllRegionsForPrint(dataSets) {
+            let fullHtml = '<h2 style="font-size: 1.8rem; font-weight: 700; color: #111; margin-top: 2rem;">04. Geografia do Consumo (Detalhado)</h2>';
+
+            for (const key in dataSets) {
+                if (!dataSets.hasOwnProperty(key) || key === 'todos') continue;
+
+                const data = dataSets[key];
+                const regionName = document.querySelector(`button[onclick="updateRegion('${key}', this)"]`).textContent;
+
+                // --- Stats ---
+                let statsHtml = data.stats.map(s => {
+                    let valueDisplay = s.value;
+                    return `
+                        <div class="card-highlight" style="padding: 0.75rem; border: 1px solid #ccc; border-radius: 0.5rem; text-align: center; background-color: #fff; break-inside: avoid;">
+                            <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">${s.label}</span>
+                            <span style="display: block; font-size: 1.5rem; font-weight: 900; color: #111;">${valueDisplay.replace('.', ',')}</span>
+                            <span style="font-size: 0.875rem; color: #E35205;">${s.sub}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                // --- List ---
+                let listItems = data.list.map(item => `<li style="position: relative; padding-left: 1rem; list-style: none; margin-bottom: 0.3rem;">• ${item}</li>`).join('');
+
+
+                fullHtml += `
+                    <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                        <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">Região: ${regionName}</h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                            ${statsHtml}
+                        </div>
+
+                        <div class="print-list" style="padding: 1rem;">
+                            <h4 style="font-size: 1.1rem; font-weight: 700; color: #E35205; margin-bottom: 0.5rem;">Detalhes Chave</h4>
+                            <ul style="padding-left: 0; margin-left: 0;">${listItems}</ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // --- Inclui o Mapa Geral no final ---
+            const initialMapData = detailedRegionData.todos; // Se o mapa geral tiver dados como as outras regiões, você os renderizaria aqui
+            const initialMapHtml = `
+                <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
+                    <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">Resumo: Mapa Geral</h3>
+                    <p style="font-size: 0.9rem; color: #333; margin-bottom: 1rem;">Este é o resumo das regiões exibido inicialmente na página web (Seção 04).</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Norte</h4><p style="font-size: 0.8rem;">Os Mais Ativos (61,5%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Nordeste</h4><p style="font-size: 0.8rem;">Alta Intenção (26,8%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Centro-Oeste</h4><p style="font-size: 0.8rem;">Saúde & Matrícula (56,7%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Sudeste</h4><p style="font-size: 0.8rem;">Falta de Tempo (31%)</p></div>
+                        <div style="padding: 1rem; background-color: #fff; border: 1px solid #ccc;"><h4 style="font-weight: 700;">Sul</h4><p style="font-size: 0.8rem;">Baixa Adesão (30,7%)</p></div>
+                    </div>
+                </div>
+            `;
+            fullHtml += initialMapHtml;
+            return fullHtml;
+        }
+
+
+        // === RENDERIZADORES DA PÁGINA WEB (MANTIDOS) ===
 
         function renderAgeContent(key) {
 
@@ -1578,7 +1761,7 @@
 
         }
 
-        // === CONTROLES ===
+        // === CONTROLES E INICIALIZAÇÃO ===
 
         function updateAgeTab(key, btn) {
 
@@ -1608,11 +1791,52 @@
 
         }
 
-        // === INICIALIZAÇÃO ===
-
         const correctPassword = "123";
 
         
+        // Função que injeta o conteúdo estático no container de impressão
+        function handlePrintInjection() {
+            const printContainer = document.getElementById('print-data-container');
+            
+            // 1. Oculta o conteúdo dinâmico (visível no browser)
+            document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'none');
+
+            // 2. Injeta o conteúdo de todas as abas de Idade e Região na área oculta
+            const agePrintHtml = renderAllAgesForPrint(ageData);
+            const regionPrintHtml = renderAllRegionsForPrint(detailedRegionData);
+            
+            // Adiciona títulos de seção para o PDF
+            const section3Title = document.querySelector('section:nth-of-type(3) h2').outerHTML.replace(/text-white/, 'text-black');
+            const section4Title = document.querySelector('section:nth-of-type(4) h2').outerHTML.replace(/text-white/, 'text-black');
+
+            // 3. Monta a estrutura para o PDF
+            printContainer.innerHTML = `
+                ${section3Title}
+                ${agePrintHtml}
+                ${section4Title}
+                ${regionPrintHtml}
+            `;
+            printContainer.style.display = 'block';
+        }
+
+        // Função que limpa o conteúdo injetado após o PDF ser fechado
+        function handlePrintCleanup() {
+            const printContainer = document.getElementById('print-data-container');
+            printContainer.innerHTML = '';
+            printContainer.style.display = 'none';
+
+            // Reexibe o conteúdo dinâmico da página
+            document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'block');
+            
+            // Re-renderiza o conteúdo da aba ativa para evitar tela vazia
+            renderAgeContent(document.querySelector('.tab-scroll-container:nth-of-type(1) .custom-tab.active').getAttribute('onclick').split("'")[1]);
+            renderRegionContent(document.querySelector('.tab-scroll-container:nth-of-type(2) .custom-tab.active').getAttribute('onclick').split("'")[1]);
+        }
+
+        // Atribui as funções de preparação e limpeza aos eventos de impressão
+        window.onbeforeprint = handlePrintInjection;
+        window.onafterprint = handlePrintCleanup;
+
 
         function checkPassword() {
 
@@ -1632,12 +1856,12 @@
 
                 document.getElementById('main-content').style.display = 'block';
 
+                
                 setTimeout(() => {
 
                     document.getElementById('main-content').style.opacity = '1';
 
                     
-
                     renderAgeContent('allAges'); 
 
                     renderRegionContent('todos'); 
