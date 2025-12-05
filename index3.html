@@ -105,6 +105,7 @@
         .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); box-shadow: 0 0 15px rgba(0, 87, 255, 0.4); }
         .fill-green { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .fill-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .fill-purple { background: linear-gradient(90deg, #8b5cf6, #a78bfa); box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
 
         /* --- ABAS (REGIÃO & IDADE) --- */
         .tab-scroll-container {
@@ -141,6 +142,19 @@
         .chart-bar:hover { opacity: 1; transform: scaleY(1.02); }
         .chart-label { margin-top: 10px; font-size: 0.75rem; color: #9ca3af; }
 
+        /* Textos flutuantes nas barras */
+        .bar-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+        .text-glow-white { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        .text-glow-orange { text-shadow: 0 0 5px rgba(227, 82, 5, 0.5); }
+
         @media print {
             body { background-color: #fff !important; color: #000 !important; background-image: none !important; }
             #login-screen, .fitness-bg, .fitness-overlay, .no-print, .custom-tab { display: none !important; }
@@ -169,6 +183,9 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            .bar-label { color: #000 !important; text-shadow: none !important; top: -20px !important; }
+            /* Tooltips invisiveis na impressão */
+            .tooltip-hover { display: none !important; }
         }
     </style>
 </head>
@@ -223,7 +240,7 @@
             <section class="mb-24">
                 <div class="flex items-center gap-4 mb-10">
                     <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">01</div>
-                    <h2 class="text-3xl font-bold text-white">Principais Insights (Visão por Gênero)</h2>
+                    <h2 class="text-3xl font-bold text-white">Principais Insights por Gênero</h2>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -304,47 +321,91 @@
                     <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
                     <div class="grid lg:grid-cols-2 gap-12 items-end">
                         <div class="h-64 flex items-end justify-between gap-4 w-full pr-4">
-                            <div class="chart-bar-group flex-1">
-                                <div class="text-xs font-bold text-white mb-1 animate-num" data-value="57" data-suffix="%">0%</div>
-                                <div class="w-full bg-blue-600/50 rounded-t chart-bar relative animate-vertical-bar" style="height: 0%;" data-height="57%">
-                                    <div class="absolute bottom-0 left-0 w-full bg-orange-500/80 transition-all duration-1000" style="height: 83%;"></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="57.9%">
+                                        <span class="bar-label text-white text-glow-white">57,9%</span>
+                                    </div>
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="48.3%">
+                                        <span class="bar-label text-terra-orange text-glow-orange">48,3%</span>
+                                    </div>
                                 </div>
                                 <div class="chart-label">16-24</div>
                             </div>
-                            <div class="chart-bar-group flex-1">
-                                <div class="text-xs font-bold text-white mb-1 animate-num" data-value="61" data-suffix="%">0%</div>
-                                <div class="w-full bg-blue-600/50 rounded-t chart-bar relative animate-vertical-bar" style="height: 0%;" data-height="61%">
-                                    <div class="absolute bottom-0 left-0 w-full bg-orange-500 transition-all duration-1000 shadow-[0_0_15px_rgba(227,82,5,0.6)]" style="height: 85%;"></div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="61.4%">
+                                        <span class="bar-label text-white text-glow-white">61,4%</span>
+                                    </div>
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="52.4%">
+                                        <span class="bar-label text-terra-orange text-glow-orange">52,4%</span>
+                                    </div>
                                 </div>
                                 <div class="chart-label font-bold text-white">25-34</div>
                             </div>
-                            <div class="chart-bar-group flex-1">
-                                <div class="text-xs font-bold text-white mb-1 animate-num" data-value="46" data-suffix="%">0%</div>
-                                <div class="w-full bg-blue-600/50 rounded-t chart-bar relative animate-vertical-bar" style="height: 0%;" data-height="46%">
-                                    <div class="absolute bottom-0 left-0 w-full bg-orange-500/80 transition-all duration-1000" style="height: 110%;"></div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="46.0%">
+                                        <span class="bar-label text-white text-glow-white">46,0%</span>
+                                    </div>
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="50.8%">
+                                        <span class="bar-label text-terra-orange text-glow-orange">50,8%</span>
+                                    </div>
                                 </div>
                                 <div class="chart-label">35-44</div>
                             </div>
-                            <div class="chart-bar-group flex-1">
-                                <div class="text-xs font-bold text-white mb-1 animate-num" data-value="38" data-suffix="%">0%</div>
-                                <div class="w-full bg-blue-600/50 rounded-t chart-bar relative animate-vertical-bar" style="height: 0%;" data-height="38%">
-                                    <div class="absolute bottom-0 left-0 w-full bg-orange-500/40 transition-all duration-1000" style="height: 86%;"></div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="38.5%">
+                                        <span class="bar-label text-white text-glow-white">38,5%</span>
+                                    </div>
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="33.3%">
+                                        <span class="bar-label text-terra-orange text-glow-orange">33,3%</span>
+                                    </div>
                                 </div>
                                 <div class="chart-label">45-59</div>
                             </div>
-                            <div class="chart-bar-group flex-1">
-                                <div class="text-xs font-bold text-white mb-1 animate-num" data-value="25" data-suffix="%">0%</div>
-                                <div class="w-full bg-blue-600/50 rounded-t chart-bar relative animate-vertical-bar" style="height: 0%;" data-height="25%">
-                                    <div class="absolute bottom-0 left-0 w-full bg-orange-500/30 transition-all duration-1000" style="height: 75%;"></div>
+
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full">
+                                <div class="flex items-end gap-1 h-full w-full justify-center pb-2">
+                                    <div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="25.0%">
+                                        <span class="bar-label text-white text-glow-white">25,0%</span>
+                                    </div>
+                                    <div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="18.8%">
+                                        <span class="bar-label text-terra-orange text-glow-orange">18,8%</span>
+                                    </div>
                                 </div>
                                 <div class="chart-label">60+</div>
                             </div>
                         </div>
                         <div>
                              <ul class="space-y-4">
-                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-terra-orange"><strong class="block text-white mb-1">O Auge (25-34 anos)</strong> Maior taxa de atividade (61,38%).</li>
-                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-blue-500"><strong class="block text-white mb-1">A Oportunidade (35-44 anos)</strong> Matrícula supera a prática (Ghost Members).</li>
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-purple-500 hover:bg-white/10 transition-colors cursor-default">
+                                    <strong class="block text-white mb-1">Entrada no Funil (16-24 anos)</strong>
+                                    <p class="text-sm text-gray-400">Alta prática (57%) mas com gap de matrícula. Exigem planos flexíveis e experiência digital.</p>
+                                </li>
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-terra-orange hover:bg-white/10 transition-colors cursor-default">
+                                    <strong class="block text-white mb-1">O Auge (25-34 anos)</strong>
+                                    <p class="text-sm text-gray-400">Maior taxa de atividade (61,38%) e matrícula (52,41%). É o público core.</p>
+                                </li>
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-blue-500 hover:bg-white/10 transition-colors cursor-default">
+                                    <strong class="block text-white mb-1">A Oportunidade (35-44 anos)</strong>
+                                    <p class="text-sm text-gray-400">Curiosamente, a taxa de matrícula (50,79%) supera a de prática declarada (46%), indicando alunos pagantes mas inativos (Ghost Members).</p>
+                                </li>
                             </ul>
+                             <div class="flex gap-6 mt-6 justify-center lg:justify-start">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-blue-600/60 rounded-full"></div>
+                                    <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">Praticam Atividade</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-3 h-3 bg-orange-500/80 rounded-full"></div>
+                                    <span class="text-xs font-bold text-gray-300 uppercase tracking-wider">Matriculados</span>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -356,7 +417,7 @@
                     <h2 class="text-3xl font-bold text-white">Raio-X por Geração</h2>
                 </div>
                 <div class="tab-scroll-container mb-8">
-                    <button class="custom-tab active" onclick="updateAgeTab('allAges', this)">Média Geral (Todos)</button>
+                    <button class="custom-tab active" onclick="updateAgeTab('allAges', this)">Média Geral</button>
                     <button class="custom-tab" onclick="updateAgeTab('age1624', this)">16 – 24 Anos</button>
                     <button class="custom-tab" onclick="updateAgeTab('age2534', this)">25 – 34 Anos</button>
                     <button class="custom-tab" onclick="updateAgeTab('age3544', this)">35 – 44 Anos</button>
@@ -415,13 +476,14 @@
         // === DADOS ===
         const ageData = {
             allAges: {
-                title: "Visão Geral (Todas as Idades)",
+                title: "Média Geral",
                 summary: "O mercado é polarizado: jovens buscam preço, adultos buscam tempo/conveniência e seniores buscam saúde funcional. O desafio é reter o público após os 35 anos.",
                 brands: [ 
                     { name: "Smart Fit", val: "15,7%" }, 
                     { name: "Ultra", val: "11,4%" }, 
                     { name: "Panobianco", val: "10,7%" },
-                    { name: "Bluefit", val: "8,6%" } 
+                    { name: "Bluefit", val: "8,6%" },
+                    { name: "Bodytech", val: "3%" }
                 ],
                 stats: [ { label: "Prática Média", val: "53%", icon: "📊" }, { label: "Matrícula Média", val: "48%", icon: "💳" }, { label: "Fator Decisão", val: "Preço/Local", icon: "⚖️" } ],
                 bars: [ { label: "Intenção Média (Nova Gym)", val: 26.5, color: "orange" }, { label: "Frequência Média 3-4x", val: 22.0, color: "blue" }, { label: "Frequência Média 1-2x", val: 20.0, color: "blue" } ],
@@ -438,7 +500,7 @@
                 ],
                 stats: [ { label: "Atividade", val: "Corrida (35%)", icon: "🏃" }, { label: "Gatilho", val: "Promo R$9,90", icon: "🏷️" }, { label: "Barreira", val: "Não gostei", icon: "😒" } ],
                 bars: [ { label: "Intenção Nova Academia (Sim)", val: 22.3, color: "orange" }, { label: "Frequência 1-2x/sem", val: 12.7, color: "blue" }, { label: "Frequência 5x+/sem", val: 10.5, color: "blue" } ],
-                insight: "Barreira principal não é apenas tempo (13%), mas experiência ruim."
+                insight: "Barreira principal não é apenas tempo (13%), mas experiência ruim ('Já tentei e não gostei'). Solução: Gamificação, aulas em grupo dinâmicas e planos flexíveis sem fidelidade longa."
             },
             age2534: {
                 title: "O Praticante Core (25-34)",
@@ -450,18 +512,18 @@
                 ],
                 stats: [ { label: "Atividade", val: "Caminhada+Gym", icon: "🏋️" }, { label: "Gatilho", val: "Proximidade 21%", icon: "📍" }, { label: "Objetivo", val: "Estética", icon: "💪" } ],
                 bars: [ { label: "Intenção Nova Academia (Sim)", val: 23.0, color: "orange" }, { label: "Indecisos (Oportunidade)", val: 22.3, color: "gray" }, { label: "Frequência 1-2x/sem", val: 21.5, color: "blue" } ],
-                insight: "A barreira do tempo explode aqui (20,54%). A academia precisa vender 'tempo': treinos curtos e proximidade."
+                insight: "A barreira do tempo explode aqui (20,54%). A academia precisa vender 'tempo': treinos curtos (30min), proximidade e zero atrito na entrada (check-in rápido). Formato 'Express' é o ideal."
             },
             age3544: {
                 title: "O Aluno Consolidado (35-44)",
                 summary: "Menor volume, mas mais fiéis.",
                 brands: [ 
                     { name: "Smart Fit", val: "15,7%" }, 
-                    { name: "Bodytech", val: "~3%" } 
+                    { name: "Bodytech", val: "3%" } 
                 ],
                 stats: [ { label: "Frequência", val: "3-4x (29%)", icon: "📅" }, { label: "Matrícula", val: "50,8%", icon: "💳" }, { label: "Propensão", val: "Consideraria", icon: "🤔" } ],
                 bars: [ { label: "Consideraria Nova Academia", val: 30.4, color: "green" }, { label: "Frequência 3-4x", val: 29.5, color: "blue" } ],
-                insight: "Maior propensão declarada para a Nova Academia Completa (30,4%)."
+                insight: "Maior propensão declarada para a Nova Academia Completa (30,4%). Muitos são 'Ghost Members' (pagam e não vão). Estratégia: Reativação via comunidade e desafios de bem-estar, focando em qualidade de vida."
             },
             age60: {
                 title: "O Público Sênior (60+)",
@@ -471,7 +533,7 @@
                 ],
                 stats: [ { label: "Atividade", val: "Outra (100%)", icon: "🏊" }, { label: "Barreira", val: "Outra (63%)", icon: "🚫" }, { label: "Rejeição", val: "75%", icon: "📉" } ],
                 bars: [ { label: "Rejeição Nova Academia", val: 75.5, color: "red" }, { label: "Matrícula Ativa", val: 18.7, color: "blue" } ],
-                insight: "Precisam de produtos específicos (Hidro, Pilates, Dança)."
+                insight: "O modelo de academia de ferro não funciona (rejeição de 75%). Eles precisam de 'Centros de Longevidade': Hidro, Pilates e Dança, com forte componente de socialização e segurança."
             }
         };
 
@@ -676,7 +738,6 @@
                 let statsHtml = '<div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6">';
                 data.stats.forEach(stat => {
                     let valNum = parseFloat(stat.value.replace('%','').replace(',','.'));
-                    // Regex verifica se é número "puro" (20, 20.5, 20%)
                     const isPureNumber = !isNaN(valNum) && /^[0-9.,]+%?$/.test(stat.value.trim());
 
                     let contentHtml = '';
@@ -684,7 +745,6 @@
                         const suffix = stat.value.includes('%') ? '%' : '';
                         contentHtml = `<span class="text-4xl md:text-5xl font-black text-white block mb-2 animate-num" data-value="${valNum}" data-suffix="${suffix}">0${suffix}</span>`;
                     } else {
-                        // Caso especial: se não for número puro mas for curto, exibe grande também
                         contentHtml = `<span class="text-3xl md:text-4xl font-black text-white block mb-2">${stat.value}</span>`;
                     }
 
@@ -724,11 +784,14 @@
         }
 
         // === INICIALIZAÇÃO ===
-        const correctPassword = "Terra2025";
+        const correctPassword = "123";
         
         function checkPassword() {
             const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('error-msg');
+            
             if (input.value === correctPassword) {
+                errorMsg.classList.add('hidden'); 
                 document.getElementById('login-screen').style.opacity = '0';
                 document.getElementById('login-screen').style.visibility = 'hidden';
                 document.getElementById('main-content').style.display = 'block';
@@ -741,13 +804,19 @@
                     triggerAnimations(document.getElementById('main-content'));
                 }, 50);
             } else {
+                errorMsg.classList.remove('hidden');
+                input.value = ''; 
+                input.focus();
                 document.querySelector('.login-box').classList.add('shake');
                 setTimeout(() => document.querySelector('.login-box').classList.remove('shake'), 500);
             }
         }
 
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') checkPassword();
+        document.getElementById('passwordInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                checkPassword();
+            }
         });
 
         const observer = new IntersectionObserver((entries) => {
