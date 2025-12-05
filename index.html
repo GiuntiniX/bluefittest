@@ -469,6 +469,18 @@
 
             }
 
+            /* NOVO: Cabeçalho da Primeira Página */
+            #print-header {
+                display: block !important;
+                padding: 1.5rem 2rem;
+                margin-bottom: 1rem;
+                border-bottom: 1px solid #ccc;
+            }
+            .brand-logo-print { /* Ajusta o logo do patrocinador para impressão (preto) */
+                filter: grayscale(100%) brightness(0);
+            }
+
+
             /* 2. Remoção de Elementos Interativos/Desnecessários */
 
             #login-screen, .fitness-bg, .fitness-overlay, .no-print, .custom-tab, .tab-scroll-container, .content-area { 
@@ -616,6 +628,20 @@
         </nav>
 
         <div class="pt-10 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 relative z-10">
+            
+            <div id="print-header" class="no-print" style="display: none;">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto brand-logo-print">
+                        <div class="h-5 w-px bg-gray-600/50" style="background-color: #999;"></div>
+                        <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="h-6 w-auto">
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #111;">Patrocinado por:</span>
+                        <img src="https://bluefitcampolargo.com.br/wp-content/uploads/2024/06/Bluefit-Branco-Photoroom.webp" alt="Manforte Engenharia" class="h-8 w-auto brand-logo-print" style="filter: grayscale(100%) brightness(0) !important;">
+                    </div>
+                </div>
+            </div>
 
             <header class="mb-20 text-center">
 
@@ -832,7 +858,7 @@
 
                                 </div>
 
-                                <div class="chart-label font-bold text-white">25-34</div>
+                                <div class="chart-label">25-34</div>
 
                             </div>
 
@@ -1475,7 +1501,6 @@
             }
 
             // --- Inclui o Mapa Geral no final ---
-            const initialMapData = detailedRegionData.todos; // Se o mapa geral tiver dados como as outras regiões, você os renderizaria aqui
             const initialMapHtml = `
                 <div class="glass-panel print-section-data" style="margin-top: 1.5rem; border: 1px solid #ccc !important; padding: 1.5rem;">
                     <h3 style="font-size: 1.4rem; font-weight: 800; color: #E35205; margin-bottom: 1rem;">Resumo: Mapa Geral</h3>
@@ -1797,36 +1822,61 @@
         // Função que injeta o conteúdo estático no container de impressão
         function handlePrintInjection() {
             const printContainer = document.getElementById('print-data-container');
+            const mainContent = document.querySelector('.pt-10'); // A área principal do conteúdo
+            const printHeader = document.getElementById('print-header'); // O novo cabeçalho de impressão
             
             // 1. Oculta o conteúdo dinâmico (visível no browser)
             document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'none');
-
+            
             // 2. Injeta o conteúdo de todas as abas de Idade e Região na área oculta
             const agePrintHtml = renderAllAgesForPrint(ageData);
             const regionPrintHtml = renderAllRegionsForPrint(detailedRegionData);
             
-            // Adiciona títulos de seção para o PDF
-            const section3Title = document.querySelector('section:nth-of-type(3) h2').outerHTML.replace(/text-white/, 'text-black');
-            const section4Title = document.querySelector('section:nth-of-type(4) h2').outerHTML.replace(/text-white/, 'text-black');
+            // 3. Reorganiza e insere o conteúdo para impressão
+            
+            // Move o cabeçalho principal da página (Raio-X do Mercado Fitness)
+            const mainHeader = document.querySelector('header.mb-20').cloneNode(true);
+            
+            printContainer.innerHTML = ''; // Limpa o container antes de injetar
+            
+            // Adiciona o cabeçalho superior (logo e patrocinador)
+            printContainer.appendChild(printHeader.cloneNode(true));
+            printContainer.querySelector('#print-header').style.display = 'flex'; // Exibe o cabeçalho no PDF
 
-            // 3. Monta a estrutura para o PDF
-            printContainer.innerHTML = `
-                ${section3Title}
-                ${agePrintHtml}
-                ${section4Title}
-                ${regionPrintHtml}
-            `;
+            // Adiciona o cabeçalho principal (Raio-X)
+            printContainer.appendChild(mainHeader);
+
+
+            // Adiciona o restante das seções (01 e 02)
+            document.querySelectorAll('section:nth-of-type(1), section:nth-of-type(2)').forEach(sec => {
+                printContainer.appendChild(sec.cloneNode(true));
+            });
+
+            // Adiciona as seções 03 e 04 (abas)
+            printContainer.innerHTML += agePrintHtml;
+            printContainer.innerHTML += regionPrintHtml;
+            
+            mainContent.appendChild(printContainer); // Move o container injetado para dentro da área principal
             printContainer.style.display = 'block';
+
+            // Oculta o conteúdo original do main-content durante a impressão
+            document.querySelectorAll('section, header').forEach(el => el.classList.add('hidden-during-print'));
+            
+            // Garante que o container de impressão não seja ocultado
+            document.getElementById('print-data-container').classList.remove('hidden-during-print');
         }
 
         // Função que limpa o conteúdo injetado após o PDF ser fechado
         function handlePrintCleanup() {
             const printContainer = document.getElementById('print-data-container');
-            printContainer.innerHTML = '';
-            printContainer.style.display = 'none';
+            const mainContent = document.querySelector('.pt-10');
 
-            // Reexibe o conteúdo dinâmico da página
+            // 1. Remove o conteúdo injetado do container principal
+            printContainer.innerHTML = '';
+            
+            // 2. Reexibe o conteúdo original da página web
             document.querySelectorAll('section.no-print').forEach(sec => sec.style.display = 'block');
+            document.querySelectorAll('.hidden-during-print').forEach(el => el.classList.remove('hidden-during-print'));
             
             // Re-renderiza o conteúdo da aba ativa para evitar tela vazia
             renderAgeContent(document.querySelector('.tab-scroll-container:nth-of-type(1) .custom-tab.active').getAttribute('onclick').split("'")[1]);
