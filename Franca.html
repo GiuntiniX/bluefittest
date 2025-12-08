@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra Insights: Bluefit Franca/SP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Montserrat:wght@700;900&display=swap');
+        :root { --terra-orange: #E35205; --terra-dark: #121212; --terra-gray: #2D2D2D; --text-light: #F3F4F6; --accent-blue: #0057FF; --vivo-purple: #660099; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--terra-dark); color: var(--text-light); overflow-x: hidden; position: relative; }
+
+        /* ANIMATIONS */
+        #main-content { opacity: 0; transition: opacity 1.5s ease; }
+        
+        .fitness-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0.15; filter: grayscale(100%) contrast(120%); mix-blend-mode: luminosity; }
+        .fitness-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 20%, rgba(18, 18, 18, 0.8), var(--terra-dark)); }
+        
+        h1, h2, h3, h4, .stat-number { font-family: 'Montserrat', sans-serif; letter-spacing: -0.03em; }
+        
+        .glass-panel { background: rgba(20, 20, 20, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-left: 4px solid var(--terra-orange); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); border-radius: 1rem; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); break-inside: avoid; }
+        .glass-panel:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 20px 50px rgba(227, 82, 5, 0.1); border-color: rgba(227, 82, 5, 0.3); }
+        
+        .text-terra { color: var(--terra-orange); }
+        .text-gradient { background: linear-gradient(135deg, #E35205, #FF8C00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* BARS */
+        .bar-track { width: 100%; background-color: rgba(255,255,255,0.05); border-radius: 99px; height: 8px; overflow: hidden; margin-top: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+        .bar-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; }
+        .bar-fill::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: translateX(-100%); animation: shimmer 2s infinite; }
+        
+        .fill-orange { background: linear-gradient(90deg, #E35205, #ff9100); }
+        .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); }
+        .fill-green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .fill-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .fill-white { background: linear-gradient(90deg, #9ca3af, #f3f4f6); }
+
+        /* TABS */
+        .tab-scroll-container { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--terra-orange) transparent; }
+        .custom-tab { cursor: pointer; padding: 10px 24px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; background: rgba(0,0,0,0.3); color: #aaa; font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
+        .custom-tab.active { background: var(--terra-orange); color: white; border-color: var(--terra-orange); box-shadow: 0 0 20px rgba(227, 82, 5, 0.3); transform: scale(1.05); }
+        .content-area { opacity: 1; transition: opacity 0.3s ease; }
+        .tab-pane { display: none; animation: fadeIn 0.5s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CHART BARS */
+        .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 200px; gap: 4px; }
+        .chart-bar-group { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; width: 100%; }
+        .chart-bar { width: 40px; border-radius: 4px 4px 0 0; transition: height 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; opacity: 0.8; height: 0%; min-width: 8px; }
+        .chart-bar:hover { opacity: 1; transform: scaleY(1.02); }
+        .bar-label { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 900; white-space: nowrap; }
+        .text-glow-white { text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        .text-glow-orange { text-shadow: 0 0 5px rgba(227, 82, 5, 0.5); }
+
+        /* LISTS & TABLES */
+        ul.custom-list li { position: relative; padding-left: 1.2rem; margin-bottom: 0.4rem; color: #d1d5db; font-size: 0.9rem; }
+        ul.custom-list li::before { content: '•'; position: absolute; left: 0; color: var(--terra-orange); font-weight: bold; }
+        .highlight-val { color: #fff; font-weight: 700; }
+
+        .data-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: 0.85rem; }
+        .data-table th { text-align: left; padding: 8px; color: #888; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; }
+        .data-table td { background: rgba(255,255,255,0.05); padding: 10px; color: white; border: 1px solid rgba(255,255,255,0.05); }
+        .data-table tr td:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; font-weight: bold; }
+        .data-table tr td:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+        /* PRINT STYLES */
+        #print-cover { display: none; }
+        
+        @media print {
+            @page { margin: 0.5cm; size: A4; }
+            body { background-color: #fff !important; color: #000 !important; font-size: 9pt; line-height: 1.3; }
+            
+            /* Hide Screen Elements */
+            #login-screen, .fitness-bg, .fitness-overlay, .no-print, .custom-tab, .tab-scroll-container, footer { display: none !important; }
+            header { display: none !important; }
+            
+            /* Cover Page */
+            #print-cover { display: flex !important; flex-direction: column; justify-content: center; align-items: center; height: 98vh; page-break-after: always; text-align: center; }
+            .cover-content-box { border: 2px solid #E35205; border-radius: 15px; padding: 2rem; text-align: center; width: 70%; }
+            #print-cover h1 { font-size: 3rem !important; color: #000 !important; margin-bottom: 0.5rem !important; line-height: 1.1; }
+            
+            /* Organized Logos on Cover */
+            .print-logos-container { display: flex; justify-content: center; align-items: center; gap: 30px; margin-top: 40px; }
+            .print-logos-container img { height: 25px; width: auto; filter: brightness(0); opacity: 0.8; }
+
+            /* Content Layout */
+            #main-content { display: block !important; opacity: 1 !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
+            
+            /* Tighter Spacing */
+            section { margin-bottom: 1rem !important; break-inside: avoid; page-break-inside: avoid; }
+            .glass-panel { background-color: #fff !important; border: 1px solid #ddd !important; border-left: 4px solid #E35205 !important; box-shadow: none !important; color: #000 !important; break-inside: avoid; margin-bottom: 0.5rem !important; padding: 0.75rem !important; }
+            
+            /* Typography Fixes */
+            h2 { color: #E35205 !important; font-size: 1.2rem !important; margin-bottom: 0.5rem !important; border-bottom: 1px solid #eee; margin-top: 0.5rem !important; display: block !important; }
+            h3 { color: #000 !important; font-size: 1rem !important; margin-top: 0; margin-bottom: 3px; }
+            h4 { color: #444 !important; font-size: 0.8rem !important; margin-bottom: 5px !important; }
+            
+            .text-white { color: #000 !important; }
+            .text-gray-300, .text-gray-400, .text-gray-500 { color: #444 !important; }
+            .text-gradient { -webkit-text-fill-color: #E35205 !important; }
+            
+            /* Color Fixes for Charts/Bars */
+            .text-blue-legend { color: #0057FF !important; -webkit-print-color-adjust: exact; }
+            .text-orange-legend { color: #E35205 !important; -webkit-print-color-adjust: exact; }
+            .bar-track { background-color: #eee !important; height: 6px !important; }
+            .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; } 
+            .fill-orange, .bg-orange-500, .text-terra-orange { color: #E35205 !important; background-color: #E35205 !important; }
+            .fill-blue, .bg-blue-600, .text-blue-400, .text-blue-500 { color: #0057FF !important; background-color: #0057FF !important; }
+            .fill-white, .bg-gray-400 { color: #666 !important; background-color: #ddd !important; }
+            
+            /* Grids must act like grids */
+            .grid { display: grid !important; gap: 10px !important; }
+            .lg\:grid-cols-2 { grid-template-columns: 1fr 1fr !important; }
+            .lg\:grid-cols-3 { grid-template-columns: 1fr 1fr 1fr !important; }
+            .md\:grid-cols-2 { grid-template-columns: 1fr 1fr !important; }
+            .md\:grid-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr !important; }
+            
+            /* Chart Adjustments */
+            .chart-bar { height: 80px !important; }
+            .chart-bar.animate-vertical-bar, .chart-bar.animate-vertical-bar > div { opacity: 1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .bg-blue-600\/60 { background-color: #2563eb !important; }
+            .bg-orange-500\/80 { background-color: #E35205 !important; }
+            .bar-label { color: #000 !important; text-shadow: none !important; top: -15px !important; font-size: 8px !important; }
+            
+            /* Tab Content Visibility */
+            .tab-pane { display: block !important; opacity: 1 !important; margin-bottom: 0.5rem; border-top: 1px dashed #ccc; padding-top: 0.5rem; }
+            .print-tab-title { display: block !important; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #666; text-transform: uppercase; background: #f0f0f0; padding: 2px 5px; display: inline-block; border-radius: 3px; }
+            
+            .data-table td { color: #000 !important; background: #fff !important; border: 1px solid #ddd !important; padding: 4px !important; }
+            
+            /* Specific fix for Persona Images */
+            img.rounded-full { border: 1px solid #ccc !important; box-shadow: none !important; }
+        }
+        .print-tab-title { display: none; }
+    </style>
+</head>
+<body class="antialiased selection:bg-orange-500 selection:text-white">
+
+    <div id="print-cover">
+        <div class="cover-content-box">
+            <h1 style="line-height: 1.2;">Raio-X do<br>Mercado Fitness<br><span style="font-size: 1.5rem; color: #666;">Franca/SP</span></h1>
+            <div style="margin-top: 15px; margin-bottom: 15px;">
+                <span class="pill" style="display:block; margin-bottom:5px;">📅 Dez/2025</span>
+                <span class="pill" style="display:block; margin-bottom:5px;">👥 539 Respondentes Classe A/B e C</span>
+                <span class="pill" style="display:block;">📍 Franca/SP</span>
+            </div>
+            <div class="print-logos-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra">
+                <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights">
+                <img src="https://www.manforteengenharia.com.br/img/brand/logo5.png" alt="Manforte">
+            </div>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="fitness-bg"></div>
+        <div class="fitness-overlay"></div>
+
+        <div class="pt-10 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto pb-32 relative z-10">
+            
+            <header class="mb-20 text-center no-print">
+                <div class="inline-flex items-center justify-center bg-white/5 backdrop-blur-md border border-white/10 px-10 py-5 rounded-full shadow-2xl mb-10 transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-8 md:h-10 w-auto mr-6">
+                    <div class="h-8 w-px bg-gray-500/50 mx-4"></div>
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="logo-screen h-7 md:h-9 w-auto opacity-90">
+                    <div class="h-8 w-px bg-gray-500/50 mx-4"></div>
+                    <img src="https://www.manforteengenharia.com.br/img/brand/logo5.png" alt="Bluefit" class="h-7 md:h-9 w-auto brightness-0 invert opacity-90">
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-none uppercase drop-shadow-lg">Raio-X do <br><span class="text-gradient">Mercado Fitness</span></h1>
+                <div class="flex flex-col md:flex-row flex-wrap justify-center items-center gap-4 text-sm font-medium text-gray-400 mt-8">
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">📅 Dez/2025</span>
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">👥 539 Respondentes Classe A/B e C</span>
+                    <span class="bg-gray-800/80 px-4 py-1 rounded-full border border-gray-700">📍 Franca/SP</span>
+                </div>
+            </header>
+
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">01</div>
+                    <h2 class="text-3xl font-bold text-white">Principais Insights por Gênero</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 border-l-orange-500 relative overflow-hidden group">
+                        <h3 class="text-2xl font-black text-terra-orange mb-6 flex items-center gap-2">👩 Feminino</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num" data-value="65.5" data-suffix="%">0%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculadas</span><span class="block text-2xl font-bold text-white animate-num" data-value="40.9" data-suffix="%">0%</span></div>
+                        </div>
+                        <div class="space-y-6">
+                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-orange-400 font-bold animate-num" data-value="67.8" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill fill-orange" data-width="67.8%"></div></div></div>
+                            <ul class="custom-list">
+                                <li><span class="highlight-val">Foco:</span> Corrida (40,9%), Caminhada (20,1%).</li>
+                                <li><span class="highlight-val">Objetivo:</span> Emagrecimento (60%).</li>
+                                <li><span class="highlight-val">Gatilho Troca:</span> Preços mais baixos (73,9%).</li>
+                                <li><span class="highlight-val">Barreira:</span> Falta de tempo (47,1%).</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-8 border-l-blue-600 relative overflow-hidden group">
+                        <h3 class="text-2xl font-black text-blue-500 mb-6 flex items-center gap-2">👨 Masculino</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num" data-value="62.0" data-suffix="%">0%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculados</span><span class="block text-2xl font-bold text-blue-400 animate-num" data-value="33.5" data-suffix="%">0%</span></div>
+                        </div>
+                        <div class="space-y-6">
+                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-blue-400 font-bold animate-num" data-value="59.5" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill fill-blue" data-width="59.5%"></div></div></div>
+                            <ul class="custom-list">
+                                <li><span class="highlight-val">Mix:</span> Corrida (31%), Futebol (19%), Natação (13%).</li>
+                                <li><span class="highlight-val">Objetivo:</span> Ganho de Massa (63,6%).</li>
+                                <li><span class="highlight-val">Barreira:</span> Falta de tempo (66,3%).</li>
+                                <li><span class="highlight-val">Perfil:</span> Autônomos e Pedreiros.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">02</div>
+                    <h2 class="text-3xl font-bold text-white">O Ciclo de Vida do Aluno</h2>
+                </div>
+                <div class="glass-panel p-8">
+                    <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
+                    <div class="grid lg:grid-cols-2 gap-12 items-end">
+                        <div class="h-64 flex items-end justify-between gap-4 w-full pr-4">
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="68.8%"><span class="bar-label text-white text-glow-white">68,8%</span></div><div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="44.5%"><span class="bar-label text-terra-orange text-glow-orange">44,5%</span></div></div><div class="chart-label">16-24</div></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="52.1%"><span class="bar-label text-white text-glow-white">52,1%</span></div><div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="27.6%"><span class="bar-label text-terra-orange text-glow-orange">27,6%</span></div></div><div class="chart-label font-bold text-white">25-34</div></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-600/60 rounded-t chart-bar relative animate-vertical-bar hover:bg-blue-600" style="height: 0%;" data-height="66.7%"><span class="bar-label text-white text-glow-white">66,7%</span></div><div class="flex-1 bg-orange-500/80 rounded-t chart-bar relative animate-vertical-bar hover:bg-orange-500 shadow-[0_0_10px_rgba(227,82,5,0.3)]" style="height: 0%;" data-height="33.3%"><span class="bar-label text-terra-orange text-glow-orange">33,3%</span></div></div><div class="chart-label">35-44</div></div>
+                        </div>
+                        <div>
+                             <ul class="space-y-4">
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-purple-500 hover:bg-white/10 transition-colors cursor-default"><strong class="block text-white mb-1">Entrada no Funil (16-24 anos)</strong><p class="text-sm text-gray-400">Alta prática (68,8%) e maior taxa de matrícula (44,5%), impulsionada por preço.</p></li>
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-terra-orange hover:bg-white/10 transition-colors cursor-default"><strong class="block text-white mb-1">O Gap (25-34 anos)</strong><p class="text-sm text-gray-400">Queda na prática (52%) e baixa matrícula (27%). Falta de tempo (47%) é crítica.</p></li>
+                                <li class="bg-white/5 p-4 rounded-lg border-l-2 border-blue-500 hover:bg-white/10 transition-colors cursor-default"><strong class="block text-white mb-1">Qualidade (35-44 anos)</strong><p class="text-sm text-gray-400">Alta prática (66,7%) e matrícula estável (33%). Público mais consolidado.</p></li>
+                            </ul>
+                             <div class="flex gap-6 mt-6 justify-center lg:justify-start">
+                                <div class="flex items-center gap-2"><div class="w-3 h-3 bg-blue-600/60 rounded-full"></div><span class="text-xs font-bold text-gray-300 text-blue-legend uppercase tracking-wider">PRATICAM ATIVIDADE</span></div>
+                                <div class="flex items-center gap-2"><div class="w-3 h-3 bg-orange-500/80 rounded-full"></div><span class="text-xs font-bold text-gray-300 text-orange-legend uppercase tracking-wider">MATRICULADOS</span></div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">03</div>
+                    <h2 class="text-3xl font-bold text-white">Raio-X por Geração</h2>
+                </div>
+                <div class="tab-scroll-container mb-8">
+                    <button class="custom-tab active" onclick="updateAgeTab('allAges', this)">Média Geral</button>
+                    <button class="custom-tab" onclick="updateAgeTab('age1624', this)">16 – 24 Anos</button>
+                    <button class="custom-tab" onclick="updateAgeTab('age2534', this)">25 – 34 Anos</button>
+                    <button class="custom-tab" onclick="updateAgeTab('age3544', this)">35 – 44 Anos</button>
+                </div>
+                <div id="age-content-area" class="content-area"></div>
+            </section>
+
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">04</div>
+                    <h2 class="text-3xl font-bold text-white">Perfil de Renda</h2>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tab-scroll-container mb-8 justify-center">
+                        <button class="custom-tab active" onclick="updateRegion('renda510', this)">Renda 5-10 SM</button>
+                        <button class="custom-tab" onclick="updateRegion('renda10plus', this)">Renda >10 SM</button>
+                    </div>
+                    <div id="region-content-area" class="content-area"></div>
+                </div>
+            </section>
+
+            <section class="mb-24">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-600 to-orange-800 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-900/50">05</div>
+                    <h2 class="text-3xl font-bold text-white">Personas Detalhadas</h2>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="tab-scroll-container mb-4 justify-center">
+                        <button class="custom-tab active" onclick="updatePersona('persona1', this)">Carlos (Jovem)</button>
+                        <button class="custom-tab" onclick="updatePersona('persona2', this)">Fábio (Adulto)</button>
+                        <button class="custom-tab" onclick="updatePersona('persona3', this)">Tatiana (Executiva)</button>
+                    </div>
+                    <div id="persona-content-area" class="content-area"></div>
+                </div>
+            </section>
+
+            <footer class="text-center pt-12 border-t border-gray-800">
+                <div class="flex justify-center items-center gap-6 mb-6 opacity-70 hover:opacity-100 transition-opacity">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" alt="Terra" class="h-6 w-auto">
+                    <div class="h-4 w-px bg-gray-600"></div>
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-dark-vbt0ghlq0g9y.png" alt="Insights" class="logo-screen h-6 w-auto">
+                    <img src="https://p2.trrsf.com/image/fget/cf/259/80/images.terra.com/2025/01/08/insights-light-qdvhzhm8n3hi.png" alt="Insights" class="logo-print hidden h-6 w-auto">
+                    <div class="h-4 w-px bg-gray-600"></div>
+                    <img src="https://www.manforteengenharia.com.br/img/brand/logo5.png" alt="Manforte Engenharia" class="brand-logo h-6 w-auto brightness-0 invert">
+                </div>
+                <p class="text-gray-600 text-xs px-4 leading-relaxed mb-8">
+                    © 2025 Terra Insights. Dados baseados em 539 respondentes de Franca/SP.<br>
+                    Metodologia: O levantamento foi realizado via plataforma mobile e seguiu critérios demográficos do IBGE.
+                </p>
+            </footer>
+        </div>
+        
+        <div class="fixed bottom-8 right-8 z-50 no-print group">
+            <button onclick="window.print()" class="flex items-center gap-3 bg-terra-orange text-white hover:bg-orange-600 font-bold py-3 px-6 rounded-full shadow-lg shadow-orange-900/50 transition-all transform hover:scale-105 active:scale-95">Baixar Relatório</button>
+        </div>
+    </div>
+
+    <script>
+        // === DADOS ATUALIZADOS FRANCA/SP ===
+        const ageData = {
+            allAges: {
+                title: "Média Geral", summary: "Público predominante de classes B/A (81% entre 5-10 SM).",
+                stats: [ { label: "Prática", val: "64%", icon: "📊" }, { label: "Matrícula", val: "37%", icon: "💳" } ],
+                bars: [ { label: "Intenção R$159,90 (Mulheres)", val: 67.8, color: "orange" }, { label: "Intenção R$159,90 (Homens)", val: 59.5, color: "blue" } ],
+                triggers: ["Preço Baixo (Driver #1)", "Proximidade (Homens)", "Aulas Variadas"],
+                barriers: ["Falta de Tempo (Principal)", "Preço Alto (Mulheres)", "Motivação"],
+                activities: ["Corrida (Outdoor)", "Caminhada", "Musculação"],
+                // MEDIA GERAL DE TODAS AS MARCAS CITADAS
+                brandChart: [ { name: "Smart Fit", val: 13, color: "orange" }, { name: "Clube", val: 5, color: "white" }, { name: "Panobianco", val: 5, color: "white" } ],
+                insight: "O mercado é fragmentado. Embora a Smart Fit lidere o 'Top of Mind', 77% do público ainda frequenta academias de bairro ou 'Outras'. A oportunidade está em converter esse público insatisfeito com estruturas básicas."
+            },
+            age1624: {
+                title: "16-24 Anos", summary: "Estudantes (48%). Alta atividade, maior taxa de matrícula.",
+                stats: [ { label: "Prática", val: "68,8%", icon: "📊" }, { label: "Matrícula", val: "44,5%", icon: "💳" } ],
+                bars: [ { label: "Intenção Positiva", val: 30.8, color: "orange" }, { label: "Matrícula Ativa", val: 44.5, color: "blue" } ],
+                triggers: ["Preços mais baixos (22,2%)", "Proximidade (9,6%)"],
+                barriers: ["Falta de tempo (25,2%)", "Preço alto (9,8%)"],
+                activities: ["Corrida (36%)", "Futebol (14%)", "Academia (11%)"],
+                brandChart: [ { name: "Smart Fit", val: 13.8, color: "orange" }, { name: "Clube", val: 4.6, color: "white" }, { name: "Panobianco", val: 4.2, color: "white" } ],
+                insight: "Jovens (16-24) preferem marcas de rede (Smart Fit 13,8%) por status e socialização. Alta sensibilidade a preço e necessidade de gamificação para manutenção do hábito."
+            },
+            age2534: {
+                title: "25-34 Anos", summary: "Autônomos e Domésticas. Rotina apertada.",
+                stats: [ { label: "Prática", val: "52,1%", icon: "📊" }, { label: "Matrícula", val: "27,6%", icon: "💳" } ],
+                bars: [ { label: "Intenção Positiva", val: 50.3, color: "orange" }, { label: "Matrícula Ativa", val: 27.6, color: "blue" } ],
+                triggers: ["Preços mais baixos (11,3%)"],
+                barriers: ["Falta de tempo (47,7%)", "Falta de motivação (11%)"],
+                activities: ["Corrida (36%)", "Caminhada (28%)", "Futebol (14%)"],
+                brandChart: [ { name: "Smart Fit", val: 10, color: "orange" }, { name: "Panobianco", val: 6, color: "white" }, { name: "Clube", val: 3, color: "white" } ],
+                insight: "Adultos (25-34) têm a menor adesão a grandes redes e maior evasão (apenas 27% matriculados). Buscam proximidade e treinos rápidos. Panobianco aparece com 6%."
+            },
+            age3544: {
+                title: "35-44 Anos", summary: "Consolidados. Alta prática, matrícula estável.",
+                stats: [ { label: "Prática", val: "66,7%", icon: "📊" }, { label: "Matrícula", val: "33,3%", icon: "💳" } ],
+                bars: [ { label: "Intenção Positiva", val: 50.0, color: "green" }, { label: "Matrícula Ativa", val: 33.3, color: "blue" } ],
+                triggers: ["Preço", "Qualidade"],
+                barriers: ["Tempo", "Rotina"],
+                activities: ["Caminhada", "Musculação"],
+                brandChart: [ { name: "Smart Fit", val: 15, color: "orange" }, { name: "Clube", val: 8, color: "white" }, { name: "Panobianco", val: 4, color: "white" } ],
+                insight: "Público maduro (35+) valoriza estrutura e ambiente, com maior adesão a Clubes (8%) e Smart Fit (15%). Dispostos a pagar mais por conforto e menos lotação."
+            }
+        };
+
+        const incomeData = {
+            renda510: { stats: [ { label: "Praticam", value: "61,4%", sub: "Sim" }, { label: "Matrícula", value: "38,1%", sub: "Ativos" }, { label: "Intenção", value: "37,7%", sub: "Positiva" }, { label: "Barreira", value: "28,4%", sub: "Tempo" } ], list: [ "<strong>Perfil:</strong> Estudantes, Autônomos, Pedreiros.", "<strong>Marcas:</strong> Smart Fit (10,6%), Panobianco (3,1%).", "<strong>Objetivo:</strong> Emagrecimento (12,4%) e Massa (8,6%)." ] },
+            renda10plus: { stats: [ { label: "Praticam", value: "62,4%", sub: "Sim" }, { label: "Matrícula", value: "34,6%", sub: "Ativos" }, { label: "Intenção", value: "37,6%", sub: "Positiva" }, { label: "Barreira", value: "38,6%", sub: "Tempo" } ], list: [ "<strong>Frequência:</strong> Baixa frequência declarada.", "<strong>Outdoor:</strong> Corrida (34,6%) e Caminhada (30,7%).", "<strong>Insight:</strong> Público com dinheiro mas sem tempo." ] }
+        };
+
+        // SEPARANDO PERSONAS
+        const personaData = {
+            persona1: { 
+                isPersona: true, name: "Carlos", role: "Jovem Conectado", age: "16-24", income: "5-10 SM", 
+                img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300",
+                profile: "Estudante, busca praticidade e preço acessível.",
+                behavior: "68,85% praticam (destaque para Corrida 36,89%). 21,81% não têm rotina definida.",
+                barriers: "Falta de tempo (25%) e Preço (9%).",
+                insight: "Alta intenção de matrícula (30,84%) se houver estrutura moderna e preço competitivo.",
+                message: "Planos acessíveis, treinos rápidos e aulas dinâmicas para quem quer resultado sem perder tempo.",
+                terra: { users: "18 Mil", reach: "12%", views: "0MM" },
+                vivo: { users: "4 Mil", reach: "3%", views: "0MM" }
+            },
+            persona2: { 
+                isPersona: true, name: "Fábio", role: "Adulto Atarefado", age: "25-34", income: "5-10 SM", 
+                img: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=300",
+                profile: "Autônomo/Doméstico, rotina intensa, busca conveniência.",
+                behavior: "Apenas 52,15% praticam. Objetivo principal: Ganho de Massa Muscular (13%).",
+                barriers: "Falta de tempo (47,71%) e Motivação (11%).",
+                insight: "Maior aceitação da proposta Bluefit (50,31% positiva) com estrutura premium e proximidade.",
+                message: "Treinos express, horários flexíveis e equipamentos modernos para quem tem pouco tempo.",
+                terra: { users: "413 Mil", reach: "35%", views: "1MM" },
+                vivo: { users: "111 Mil", reach: "9.4%", views: "0MM" }
+            },
+            persona3: { 
+                isPersona: true, name: "Tatiana", role: "Executiva Premium", age: "35-44+", income: ">10 SM", 
+                img: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=80&w=300",
+                profile: "Profissional consolidada, valoriza qualidade e exclusividade.",
+                behavior: "62,38% praticam, mas com frequência baixa. Objetivo: Condicionamento e Saúde.",
+                barriers: "Falta de tempo (38,6%) é a principal barreira.",
+                insight: "Aceitação positiva (37,62%) para planos premium com serviços diferenciados.",
+                message: "Estrutura completa, aulas exclusivas e conveniência para quem busca performance e bem-estar.",
+                terra: { users: "313 Mil", reach: "38%", views: "1MM" },
+                vivo: { users: "62 Mil", reach: "7%", views: "0MM" }
+            }
+        };
+
+        // === RENDERIZAÇÃO UNIFICADA ===
+        function initAllContent() {
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.opacity = '1';
+
+            const ageContainer = document.getElementById('age-content-area');
+            ageContainer.innerHTML = '';
+            Object.keys(ageData).forEach(key => {
+                const data = ageData[key];
+                const div = document.createElement('div');
+                div.id = `tab-age-${key}`;
+                div.className = `tab-pane ${key === 'allAges' ? 'active' : ''}`;
+                div.innerHTML = `
+                    <h3 class="print-tab-title hidden">${data.title}</h3>
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="glass-panel p-6 flex flex-col justify-between"><div><h3 class="text-2xl font-bold text-white mb-2">${data.title}</h3><p class="text-gray-400 text-sm mb-6">${data.summary}</p><div class="space-y-6">${data.stats.map(s => `<div class="flex items-center gap-4 bg-white/5 p-6 rounded-lg border border-white/5"><span class="text-3xl">${s.icon}</span><div><p class="text-xs text-gray-500 uppercase font-bold">${s.label}</p><p class="text-white font-bold animate-num text-xl" data-value="${parseFloat(s.val)}" data-suffix="${s.val.replace(/[\d.,]/g, '')}">0</p></div></div>`).join('')}</div></div></div>
+                        <div class="glass-panel p-6">
+                            <h4 class="text-terra-orange font-bold text-sm uppercase mb-4">Comportamento</h4>
+                            <div class="space-y-4 mb-6"><div class="text-xs"><strong class="text-blue-400 block mb-1">Motivadores</strong>${(data.triggers || []).join(', ')}</div><div class="text-xs"><strong class="text-red-400 block mb-1">Barreiras</strong>${(data.barriers || []).join(', ')}</div></div>
+                            <div class="space-y-4 mb-6">${data.bars.map(bar => `<div><div class="flex justify-between mb-1"><span class="text-sm text-gray-300">${bar.label}</span><span class="text-sm font-bold text-white animate-num" data-value="${bar.val}" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill ${bar.color === 'orange' ? 'fill-orange' : bar.color === 'green' ? 'fill-green' : 'fill-blue'}" data-width="${bar.val}%"></div></div></div>`).join('')}</div>
+                            <h4 class="text-gray-400 font-bold text-xs uppercase mb-2 mt-4 pt-4 border-t border-white/10">Share of Mind (Marcas)</h4>
+                            <div class="space-y-3">${(data.brandChart || []).map(b => `<div><div class="flex justify-between text-[10px] mb-1"><span class="text-gray-300">${b.name}</span><span class="font-bold text-white">${b.val}%</span></div><div class="bar-track" style="height:4px;"><div class="bar-fill ${b.color === 'orange' ? 'fill-orange' : 'fill-white'}" data-width="${b.val}%"></div></div></div>`).join('')}</div>
+                        </div>
+                        <div class="glass-panel p-6 bg-gradient-to-br from-gray-900 to-gray-800 border-l-orange-500"><h4 class="text-white font-bold text-lg mb-4">🧠 Insight Terra</h4><p class="text-gray-300 leading-relaxed text-sm italic">"${data.insight}"</p></div>
+                    </div>`;
+                ageContainer.appendChild(div);
+            });
+
+            // RENDERIZAÇÃO RENDA (SEÇÃO 4)
+            const regionContainer = document.getElementById('region-content-area');
+            regionContainer.innerHTML = '';
+            Object.keys(incomeData).forEach(key => {
+                const data = incomeData[key];
+                const div = document.createElement('div');
+                div.id = `tab-region-${key}`;
+                div.className = `tab-pane ${key === 'renda510' ? 'active' : ''}`;
+                
+                let statsHtml = '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">';
+                data.stats.forEach(stat => {
+                    const val = parseFloat(stat.value.replace(',', '.'));
+                    const suffix = stat.value.replace(/[\d.,]/g, '');
+                    statsHtml += `<div class="bg-white/5 p-4 rounded-xl text-center group hover:border-terra-orange transition-colors border border-white/10"><span class="text-xs text-gray-400 uppercase tracking-widest block mb-2">${stat.label}</span><span class="text-2xl font-black text-white block mb-1 animate-num" data-value="${val}" data-suffix="${suffix}">0</span><span class="text-sm text-terra-orange block">${stat.sub}</span></div>`;
+                });
+                statsHtml += '</div>';
+                let listHtml = '<div class="bg-black/20 p-6 rounded-lg border-l-4 border-terra-orange"><ul class="space-y-3 text-sm text-gray-300 custom-list">';
+                data.list.forEach(item => { listHtml += `<li>${item}</li>`; });
+                listHtml += '</ul></div>';
+                div.innerHTML = `<h3 class="print-tab-title hidden">${key}</h3>` + statsHtml + listHtml;
+                regionContainer.appendChild(div);
+            });
+
+            // RENDERIZAÇÃO PERSONAS (SEÇÃO 5)
+            const personaContainer = document.getElementById('persona-content-area');
+            personaContainer.innerHTML = '';
+            Object.keys(personaData).forEach(key => {
+                const data = personaData[key];
+                const div = document.createElement('div');
+                div.id = `tab-persona-${key}`;
+                div.className = `tab-pane ${key === 'persona1' ? 'active' : ''}`; // Default active
+                
+                // Helper to animate table values
+                const parseTableVal = (str) => {
+                    const num = parseFloat(str.replace('Mil', '').replace('MM', '').replace('%', ''));
+                    const suf = str.replace(/[\d.,]/g, '');
+                    return { num, suf };
+                };
+                
+                const terraUsers = parseTableVal(data.terra.users);
+                const terraReach = parseTableVal(data.terra.reach);
+                const terraViews = parseTableVal(data.terra.views);
+                const vivoUsers = parseTableVal(data.vivo.users);
+                const vivoReach = parseTableVal(data.vivo.reach);
+                const vivoViews = parseTableVal(data.vivo.views);
+
+                div.innerHTML = `
+                    <h3 class="print-tab-title hidden">PERSONA: ${data.name}</h3>
+                    <div class="glass-panel p-6 border-l-purple-500">
+                        <div class="flex items-center gap-4 mb-6 border-b border-gray-700 pb-4">
+                            <img src="${data.img}" class="w-16 h-16 rounded-full object-cover border-2 border-terra-orange shadow-lg shrink-0" alt="${data.name}">
+                            <div>
+                                <h3 class="text-2xl font-black text-white leading-none">${data.name}</h3>
+                                <p class="text-terra-orange font-bold text-sm uppercase">${data.role}</p>
+                                <span class="text-xs text-gray-400 block mt-1">${data.age} • ${data.income}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-5">
+                                <div>
+                                    <h4 class="text-white font-bold text-sm uppercase mb-2">Perfil & Comportamento</h4>
+                                    <p class="text-sm text-gray-300 mb-2">${data.profile}</p>
+                                    <p class="text-sm text-gray-400 italic">"${data.behavior}"</p>
+                                </div>
+                                <div class="bg-red-900/20 p-3 rounded border border-red-900/30">
+                                    <span class="text-red-400 text-xs font-bold uppercase block mb-1">Barreiras Principais</span>
+                                    <p class="text-white text-sm">${data.barriers}</p>
+                                </div>
+                                <div class="bg-green-900/20 p-3 rounded border border-green-900/30">
+                                    <span class="text-green-400 text-xs font-bold uppercase block mb-1">Insight Chave</span>
+                                    <p class="text-white text-sm font-semibold">"${data.insight}"</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col h-full">
+                                <div class="bg-black/30 p-4 rounded-xl border border-white/10 mb-4 flex-grow">
+                                    <h4 class="text-gray-400 text-xs uppercase font-bold mb-3 tracking-widest text-center">Comparativo de Alcance</h4>
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Plataforma</th>
+                                                <th>Usuários</th>
+                                                <th>Alcance</th>
+                                                <th>Views</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-terra-orange font-bold flex items-center gap-2">
+                                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" class="h-4 w-auto object-contain" alt="Terra">
+                                                </td>
+                                                <td><span class="animate-num" data-value="${terraUsers.num}" data-suffix="${terraUsers.suf}">0</span></td>
+                                                <td><span class="animate-num" data-value="${terraReach.num}" data-suffix="${terraReach.suf}">0</span></td>
+                                                <td><span class="animate-num" data-value="${terraViews.num}" data-suffix="${terraViews.suf}">0</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #a855f7;" class="font-bold flex items-center gap-2">
+                                                    <img src="https://logopng.com.br/logos/vivo-119.png" class="h-4 w-auto object-contain" alt="Vivo">
+                                                    VIVO
+                                                </td>
+                                                <td><span class="animate-num" data-value="${vivoUsers.num}" data-suffix="${vivoUsers.suf}">0</span></td>
+                                                <td><span class="animate-num" data-value="${vivoReach.num}" data-suffix="${vivoReach.suf}">0</span></td>
+                                                <td><span class="animate-num" data-value="${vivoViews.num}" data-suffix="${vivoViews.suf}">0</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="text-[10px] text-gray-500 mt-2 text-center">* Total Internet BR base: 149Mil (Jovem) / 1MM (Adulto)</p>
+                                </div>
+
+                                <div class="bg-orange-100 border-l-4 border-terra-orange p-4 rounded-r-xl shadow-lg mt-auto">
+                                    <span class="text-terra-orange text-[10px] font-black uppercase block mb-1">Mensagem Sugerida</span>
+                                    <p class="text-gray-800 font-bold text-sm leading-tight">"${data.message}"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                personaContainer.appendChild(div);
+            });
+            
+            // Trigger initial animations
+            setTimeout(() => {
+                triggerAnimations(document.querySelector('#tab-age-allAges'));
+                triggerAnimations(document.querySelector('#tab-region-renda510'));
+                triggerAnimations(document.querySelector('#tab-persona-persona1'));
+            }, 100);
+        }
+
+        // === CONTROLES ===
+        function updateAgeTab(key, btn) {
+            document.querySelectorAll('.tab-scroll-container button').forEach(b => { if(b.getAttribute('onclick').includes('updateAgeTab')) b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('#age-content-area .tab-pane').forEach(el => el.classList.remove('active'));
+            const p = document.getElementById(`tab-age-${key}`); if(p) { p.classList.add('active'); triggerAnimations(p); }
+        }
+        function updateRegion(key, btn) {
+            document.querySelectorAll('.tab-scroll-container button').forEach(b => { if(b.getAttribute('onclick').includes('updateRegion')) b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('#region-content-area .tab-pane').forEach(el => el.classList.remove('active'));
+            const p = document.getElementById(`tab-region-${key}`); if(p) { p.classList.add('active'); triggerAnimations(p); }
+        }
+        function updatePersona(key, btn) {
+            document.querySelectorAll('.tab-scroll-container button').forEach(b => { if(b.getAttribute('onclick').includes('updatePersona')) b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('#persona-content-area .tab-pane').forEach(el => el.classList.remove('active'));
+            const p = document.getElementById(`tab-persona-${key}`); if(p) { p.classList.add('active'); triggerAnimations(p); }
+        }
+        
+        function animateValue(obj, s, e, d, suf) { let start = null; const step = (t) => { if (!start) start = t; const p = Math.min((t - start) / d, 1); obj.innerHTML = ((1 - Math.pow(2, -10 * p)) * e).toFixed(1).replace('.', ',') + (suf || ''); if (p < 1) window.requestAnimationFrame(step); else obj.innerHTML = e.toFixed(1).replace('.', ',') + (suf || ''); }; window.requestAnimationFrame(step); }
+        function triggerAnimations(c) { if(!c) return; c.querySelectorAll('.animate-num').forEach(n => animateValue(n, 0, parseFloat(n.getAttribute('data-value')), 2000, n.getAttribute('data-suffix'))); c.querySelectorAll('.bar-fill').forEach(b => { b.style.width = '0%'; setTimeout(() => b.style.width = b.getAttribute('data-width'), 100); }); c.querySelectorAll('.animate-vertical-bar').forEach(b => { b.style.height = '0%'; setTimeout(() => b.style.height = b.getAttribute('data-height'), 100); }); }
+
+        document.addEventListener('DOMContentLoaded', initAllContent);
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { if(entry.target.classList.contains('tab-pane') && entry.target.classList.contains('active')) triggerAnimations(entry.target); else if(!entry.target.closest('.tab-pane')) triggerAnimations(entry.target); observer.unobserve(entry.target); } }); }, { threshold: 0.2 });
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
