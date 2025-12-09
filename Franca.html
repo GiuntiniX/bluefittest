@@ -26,13 +26,12 @@
         .reveal { opacity: 1; transform: none; }
         
         /* === EFEITOS DE BRILHO (Neon & Shimmer) === */
-        
         @keyframes shimmer { 
             0% { transform: translateX(-150%); } 
             100% { transform: translateX(150%); } 
         }
 
-        /* TEXT GLOW - BRILHO NOS NÚMEROS E % */
+        /* TEXT GLOW */
         .glow-text-white { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4); }
         .glow-text-orange { text-shadow: 0 0 10px rgba(227, 82, 5, 0.9), 0 0 20px rgba(227, 82, 5, 0.5); }
         .glow-text-blue { text-shadow: 0 0 10px rgba(0, 87, 255, 0.9), 0 0 20px rgba(0, 87, 255, 0.5); }
@@ -42,7 +41,6 @@
         .bar-track { width: 100%; background-color: rgba(255,255,255,0.05); border-radius: 99px; height: 10px; overflow: hidden; margin-top: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
         .bar-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; }
         
-        /* Shimmer ATIVO nas barras horizontais */
         .bar-fill::after { 
             content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0; 
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); 
@@ -50,11 +48,14 @@
             animation: shimmer 2s infinite ease-in-out; 
         }
         
-        /* Cores Horizontais */
         .fill-orange { background: linear-gradient(90deg, #E35205, #FF8C00); box-shadow: 0 0 8px rgba(227, 82, 5, 0.4); }
         .fill-blue { background: linear-gradient(90deg, #0041c2, #0057FF); box-shadow: 0 0 8px rgba(0, 87, 255, 0.4); }
         .fill-green { background: linear-gradient(90deg, #059669, #10b981); box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
         .fill-white { background: linear-gradient(90deg, #9ca3af, #f3f4f6); box-shadow: 0 0 5px rgba(156, 163, 175, 0.2); }
+
+        /* CLASSES PARA A LEGENDA */
+        .bg-blue-gradient { background: linear-gradient(to top, #0033aa, #0057FF); }
+        .bg-orange-gradient { background: linear-gradient(to top, #9a3600, #E35205); }
 
         /* TABS */
         .tab-scroll-container { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; scrollbar-width: thin; scrollbar-color: var(--terra-orange) transparent; }
@@ -69,7 +70,9 @@
         /* CHART BARS (Vertical - SEM REFLEXO, ESTÁTICO) */
         .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 200px; gap: 4px; }
         .chart-bar-group { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; width: 100%; }
-        .chart-bar { width: 45px; border-radius: 6px 6px 0 0; transition: height 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; opacity: 1; height: 0%; min-width: 8px; overflow: hidden; }
+        
+        /* CORREÇÃO AQUI: overflow: visible para mostrar o número acima da barra */
+        .chart-bar { width: 45px; border-radius: 6px 6px 0 0; position: relative; opacity: 1; height: 0%; min-width: 8px; overflow: visible; }
         .chart-bar:hover { transform: scaleY(1.05); filter: brightness(1.2); }
         
         /* SEM SHIMMER NO VERTICAL */
@@ -144,8 +147,17 @@
             .md\:grid-cols-2 { grid-template-columns: 1fr 1fr !important; }
             .md\:grid-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr !important; }
             
-            .chart-bar { height: auto !important; } /* Permite que o height inline funcione no print */
-            .bar-label { color: #000 !important; text-shadow: none !important; top: -15px !important; font-size: 8px !important; }
+            /* Gráfico no PDF: Corrigido o height e borda */
+            .chart-container { height: 150px !important; display: flex !important; align-items: flex-end !important; }
+            .chart-bar-group { height: 100% !important; justify-content: flex-end !important; }
+            /* Importante: Borda para garantir visibilidade e overflow visible para números */
+            .chart-bar { border: 1px solid #000 !important; overflow: visible !important; height: auto !important; }
+            
+            /* Cores sólidas para impressão */
+            .chart-bar.bg-blue-gradient { background-color: #0057FF !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .chart-bar.bg-orange-gradient { background-color: #E35205 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            .bar-label { color: #000 !important; text-shadow: none !important; top: -15px !important; font-size: 9px !important; display: block !important; position: absolute !important; font-weight: bold !important; }
             
             .tab-pane { display: block !important; opacity: 1 !important; margin-bottom: 0.5rem; border-top: 1px dashed #ccc; padding-top: 0.5rem; }
             .print-tab-title { display: block !important; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #666; text-transform: uppercase; background: #f0f0f0; padding: 2px 5px; display: inline-block; border-radius: 3px; }
@@ -205,11 +217,11 @@
                     <div class="glass-panel p-8 border-l-orange-500 relative overflow-hidden group">
                         <h3 class="text-2xl font-black text-terra-orange mb-6 flex items-center gap-2">👩 Feminino</h3>
                         <div class="grid grid-cols-2 gap-4 mb-8">
-                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="65.5" data-suffix="%">0%</span></div>
-                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculadas</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="40.9" data-suffix="%">0%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="65.5" data-suffix="%">65,5%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculadas</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="40.9" data-suffix="%">40,9%</span></div>
                         </div>
                         <div class="space-y-6">
-                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-orange-400 font-bold glow-text-orange animate-num" data-value="67.8" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill fill-orange" data-width="67.8%"></div></div></div>
+                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-orange-400 font-bold glow-text-orange animate-num" data-value="67.8" data-suffix="%">67,8%</span></div><div class="bar-track"><div class="bar-fill fill-orange" data-width="67.8%"></div></div></div>
                             <ul class="custom-list">
                                 <li><span class="highlight-val">Foco:</span> Corrida (40,9%), Caminhada (20,1%).</li>
                                 <li><span class="highlight-val">Objetivo:</span> Emagrecimento (60%).</li>
@@ -221,11 +233,11 @@
                     <div class="glass-panel p-8 border-l-blue-600 relative overflow-hidden group">
                         <h3 class="text-2xl font-black text-blue-500 mb-6 flex items-center gap-2">👨 Masculino</h3>
                         <div class="grid grid-cols-2 gap-4 mb-8">
-                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="62.0" data-suffix="%">0%</span></div>
-                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculados</span><span class="block text-2xl font-bold text-blue-400 animate-num glow-text-blue" data-value="33.5" data-suffix="%">0%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Praticam</span><span class="block text-2xl font-bold text-white animate-num glow-text-white" data-value="62.0" data-suffix="%">62,0%</span></div>
+                            <div class="bg-black/20 p-4 rounded-lg"><span class="text-xs text-gray-400 uppercase">Matriculados</span><span class="block text-2xl font-bold text-blue-400 animate-num glow-text-blue" data-value="33.5" data-suffix="%">33,5%</span></div>
                         </div>
                         <div class="space-y-6">
-                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-blue-400 font-bold glow-text-blue animate-num" data-value="59.5" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill fill-blue" data-width="59.5%"></div></div></div>
+                            <div><div class="flex justify-between text-sm mb-1"><span class="text-gray-300">Intenção Compra (R$ 159,90)</span><span class="text-blue-400 font-bold glow-text-blue animate-num" data-value="59.5" data-suffix="%">59,5%</span></div><div class="bar-track"><div class="bar-fill fill-blue" data-width="59.5%"></div></div></div>
                             <ul class="custom-list">
                                 <li><span class="highlight-val">Mix:</span> Corrida (31%), Futebol (19%), Natação (13%).</li>
                                 <li><span class="highlight-val">Objetivo:</span> Ganho de Massa (63,6%).</li>
@@ -245,7 +257,7 @@
                 <div class="glass-panel p-8">
                     <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
                     <div class="grid lg:grid-cols-2 gap-12 items-end">
-                        <div class="h-64 flex items-end justify-between gap-4 w-full pr-4">
+                        <div class="h-64 flex items-end justify-between gap-4 w-full pr-4 chart-container">
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 68.8%;"><span class="bar-label text-white glow-text-white">68,8%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 44.5%;"><span class="bar-label text-terra-orange glow-text-orange">44,5%</span></div></div><div class="chart-label">16-24</div></div>
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 52.1%;"><span class="bar-label text-white glow-text-white">52,1%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 27.6%;"><span class="bar-label text-terra-orange glow-text-orange">27,6%</span></div></div><div class="chart-label font-bold text-white">25-34</div></div>
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 66.7%;"><span class="bar-label text-white glow-text-white">66,7%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 33.3%;"><span class="bar-label text-terra-orange glow-text-orange">33,3%</span></div></div><div class="chart-label">35-44</div></div>
@@ -258,11 +270,11 @@
                             </ul>
                             <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mt-8 pt-6 border-t border-white/10">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-4 h-4 rounded bg-gradient-to-t from-[#0033aa] to-[#0057FF]"></div>
+                                    <div class="w-4 h-4 rounded bg-blue-gradient"></div>
                                     <span class="text-sm font-medium text-gray-300">Praticam Atividade</span>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <div class="w-4 h-4 rounded bg-gradient-to-t from-[#9a3600] to-[#E35205]"></div>
+                                    <div class="w-4 h-4 rounded bg-orange-gradient"></div>
                                     <span class="text-sm font-medium text-gray-300">Matriculados</span>
                                 </div>
                             </div>
@@ -438,11 +450,11 @@
                 div.innerHTML = `
                     <h3 class="print-tab-title hidden">${data.title}</h3>
                     <div class="grid lg:grid-cols-3 gap-6">
-                        <div class="glass-panel p-6 flex flex-col justify-between"><div><h3 class="text-2xl font-bold text-white mb-2">${data.title}</h3><p class="text-gray-400 text-sm mb-6">${data.summary}</p><div class="space-y-6">${data.stats.map(s => `<div class="flex items-center gap-4 bg-white/5 p-6 rounded-lg border border-white/5"><span class="text-3xl">${s.icon}</span><div><p class="text-xs text-gray-500 uppercase font-bold">${s.label}</p><p class="text-white font-bold animate-num text-xl text-glow-white" data-value="${parseFloat(s.val)}" data-suffix="${s.val.replace(/[\d.,]/g, '')}">0</p></div></div>`).join('')}</div></div></div>
+                        <div class="glass-panel p-6 flex flex-col justify-between"><div><h3 class="text-2xl font-bold text-white mb-2">${data.title}</h3><p class="text-gray-400 text-sm mb-6">${data.summary}</p><div class="space-y-6">${data.stats.map(s => `<div class="flex items-center gap-4 bg-white/5 p-6 rounded-lg border border-white/5"><span class="text-3xl">${s.icon}</span><div><p class="text-xs text-gray-500 uppercase font-bold">${s.label}</p><p class="text-white font-bold animate-num text-xl text-glow-white" data-value="${parseFloat(s.val)}" data-suffix="${s.val.replace(/[\d.,]/g, '')}">${s.val}</p></div></div>`).join('')}</div></div></div>
                         <div class="glass-panel p-6">
                             <h4 class="text-terra-orange font-bold text-sm uppercase mb-4">Comportamento</h4>
                             <div class="space-y-4 mb-6"><div class="text-xs"><strong class="text-blue-400 block mb-1">Motivadores</strong>${(data.triggers || []).join(', ')}</div><div class="text-xs"><strong class="text-red-400 block mb-1">Barreiras</strong>${(data.barriers || []).join(', ')}</div></div>
-                            <div class="space-y-4 mb-6">${data.bars.map(bar => `<div><div class="flex justify-between mb-1"><span class="text-sm text-gray-300">${bar.label}</span><span class="text-sm font-bold text-white animate-num text-glow-white" data-value="${bar.val}" data-suffix="%">0%</span></div><div class="bar-track"><div class="bar-fill ${bar.color === 'orange' ? 'fill-orange' : bar.color === 'green' ? 'fill-green' : 'fill-blue'}" data-width="${bar.val}%"></div></div></div>`).join('')}</div>
+                            <div class="space-y-4 mb-6">${data.bars.map(bar => `<div><div class="flex justify-between mb-1"><span class="text-sm text-gray-300">${bar.label}</span><span class="text-sm font-bold text-white animate-num text-glow-white" data-value="${bar.val}" data-suffix="%">${bar.val}%</span></div><div class="bar-track"><div class="bar-fill ${bar.color === 'orange' ? 'fill-orange' : bar.color === 'green' ? 'fill-green' : 'fill-blue'}" data-width="${bar.val}%"></div></div></div>`).join('')}</div>
                             <h4 class="text-gray-400 font-bold text-xs uppercase mb-2 mt-4 pt-4 border-t border-white/10">Share of Mind (Marcas)</h4>
                             <div class="space-y-3">${(data.brandChart || []).map(b => `<div><div class="flex justify-between text-[10px] mb-1"><span class="text-gray-300">${b.name}</span><span class="font-bold text-white text-glow-white">${b.val}%</span></div><div class="bar-track" style="height:4px;"><div class="bar-fill ${b.color === 'orange' ? 'fill-orange' : 'fill-white'}" data-width="${b.val}%"></div></div></div>`).join('')}</div>
                         </div>
@@ -464,7 +476,7 @@
                 data.stats.forEach(stat => {
                     const val = parseFloat(stat.value.replace(',', '.'));
                     const suffix = stat.value.replace(/[\d.,]/g, '');
-                    statsHtml += `<div class="bg-white/5 p-4 rounded-xl text-center group hover:border-terra-orange transition-colors border border-white/10"><span class="text-xs text-gray-400 uppercase tracking-widest block mb-2">${stat.label}</span><span class="text-2xl font-black text-white block mb-1 animate-num text-glow-white" data-value="${val}" data-suffix="${suffix}">0</span><span class="text-sm text-terra-orange block">${stat.sub}</span></div>`;
+                    statsHtml += `<div class="bg-white/5 p-4 rounded-xl text-center group hover:border-terra-orange transition-colors border border-white/10"><span class="text-xs text-gray-400 uppercase tracking-widest block mb-2">${stat.label}</span><span class="text-2xl font-black text-white block mb-1 animate-num text-glow-white" data-value="${val}" data-suffix="${suffix}">${stat.value}</span><span class="text-sm text-terra-orange block">${stat.sub}</span></div>`;
                 });
                 statsHtml += '</div>';
                 let listHtml = '<div class="bg-black/20 p-6 rounded-lg border-l-4 border-terra-orange"><ul class="space-y-3 text-sm text-gray-300 custom-list">';
@@ -543,18 +555,18 @@
                                                 <td class="text-terra-orange font-bold flex items-center gap-2">
                                                     <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Terra_Logo.png" class="h-4 w-auto object-contain" alt="Terra">
                                                 </td>
-                                                <td><span class="animate-num text-glow-white" data-value="${terraUsers.num}" data-suffix="${terraUsers.suf}">0</span></td>
-                                                <td><span class="animate-num text-glow-white" data-value="${terraReach.num}" data-suffix="${terraReach.suf}">0</span></td>
-                                                <td><span class="animate-num text-glow-white" data-value="${terraViews.num}" data-suffix="${terraViews.suf}">0</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${terraUsers.num}" data-suffix="${terraUsers.suf}">${data.terra.users}</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${terraReach.num}" data-suffix="${terraReach.suf}">${data.terra.reach}</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${terraViews.num}" data-suffix="${terraViews.suf}">${data.terra.views}</span></td>
                                             </tr>
                                             <tr>
                                                 <td style="color: #a855f7;" class="font-bold flex items-center gap-2">
                                                     <img src="https://logopng.com.br/logos/vivo-119.png" class="h-4 w-auto object-contain" alt="Vivo">
                                                     VIVO
                                                 </td>
-                                                <td><span class="animate-num text-glow-white" data-value="${vivoUsers.num}" data-suffix="${vivoUsers.suf}">0</span></td>
-                                                <td><span class="animate-num text-glow-white" data-value="${vivoReach.num}" data-suffix="${vivoReach.suf}">0</span></td>
-                                                <td><span class="animate-num text-glow-white" data-value="${vivoViews.num}" data-suffix="${vivoViews.suf}">0</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${vivoUsers.num}" data-suffix="${vivoUsers.suf}">${data.vivo.users}</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${vivoReach.num}" data-suffix="${vivoReach.suf}">${data.vivo.reach}</span></td>
+                                                <td><span class="animate-num text-glow-white" data-value="${vivoViews.num}" data-suffix="${vivoViews.suf}">${data.vivo.views}</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
