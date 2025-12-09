@@ -258,9 +258,9 @@
                     <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
                     <div class="grid lg:grid-cols-2 gap-12 items-end">
                         <div class="h-64 flex items-end justify-between gap-4 w-full pr-4 chart-container">
-                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 68.8%;"><span class="bar-label text-white glow-text-white">68,8%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 44.5%;"><span class="bar-label text-terra-orange glow-text-orange">44,5%</span></div></div><div class="chart-label">16-24</div></div>
-                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 52.1%;"><span class="bar-label text-white glow-text-white">52,1%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 27.6%;"><span class="bar-label text-terra-orange glow-text-orange">27,6%</span></div></div><div class="chart-label font-bold text-white">25-34</div></div>
-                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 66.7%;"><span class="bar-label text-white glow-text-white">66,7%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 33.3%;"><span class="bar-label text-terra-orange glow-text-orange">33,3%</span></div></div><div class="chart-label">35-44</div></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 68.8%;"><span class="bar-label">68,8%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 44.5%;"><span class="bar-label">44,5%</span></div></div><div class="chart-label">16-24</div></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 52.1%;"><span class="bar-label">52,1%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 27.6%;"><span class="bar-label">27,6%</span></div></div><div class="chart-label font-bold text-white">25-34</div></div>
+                            <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 66.7%;"><span class="bar-label">66,7%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 33.3%;"><span class="bar-label">33,3%</span></div></div><div class="chart-label">35-44</div></div>
                         </div>
                         <div>
                              <ul class="space-y-4">
@@ -394,7 +394,7 @@
         };
 
         const incomeData = {
-            renda510: { stats: [ { label: "Praticam", value: "61,4%", sub: "Sim" }, { label: "Matrícula", value: "38,1%", sub: "Ativos" }, { label: "Intenção", value: "37,7%", sub: "Positiva" }, { label: "Barreira", value: "28,4%", sub: "Tempo" } ], list: [ "<strong>Perfil:</strong> Estudantes, Autônomos, Pedreiros.", "<strong>Marcas:</strong> Smart Fit (10,6%), Panobianco (3,1%).", "<strong>Objetivo:</strong> Emagrecimento (12,4%) e Massa (8,6%)." ] },
+            renda510: { stats: [ { label: "Praticam", value: "61,4%", sub: "Sim" }, { label: "Matrícula", value: "38,1%", sub: "Ativos" }, { label: "Intenção", value: "37,7%", sub: "Positiva" }, { label: "Barreira", value: "28,4%", sub: "Tempo" } ], list: [ "<strong>Perfil:</strong> Estudantes, Autônom, Pedreiros.", "<strong>Marcas:</strong> Smart Fit (10,6%), Panobianco (3,1%).", "<strong>Objetivo:</strong> Emagrecimento (12,4%) e Massa (8,6%)." ] },
             renda10plus: { stats: [ { label: "Praticam", value: "62,4%", sub: "Sim" }, { label: "Matrícula", value: "34,6%", sub: "Ativos" }, { label: "Intenção", value: "37,6%", sub: "Positiva" }, { label: "Barreira", value: "38,6%", sub: "Tempo" } ], list: [ "<strong>Frequência:</strong> Baixa frequência declarada.", "<strong>Outdoor:</strong> Corrida (34,6%) e Caminhada (30,7%).", "<strong>Insight:</strong> Público com dinheiro mas sem tempo." ] }
         };
 
@@ -561,8 +561,8 @@
                                             </tr>
                                             <tr>
                                                 <td style="color: #a855f7;" class="font-bold flex items-center gap-2">
-                                                    <img src="https://logopng.com.br/logos/vivo-119.png" class="h-4 w-auto object-contain" alt="Vivo">
                                                     VIVO
+                                                    <img src="https://logopng.com.br/logos/vivo-119.png" class="h-4 w-auto object-contain" alt="Vivo">
                                                 </td>
                                                 <td><span class="animate-num text-glow-white" data-value="${vivoUsers.num}" data-suffix="${vivoUsers.suf}">${data.vivo.users}</span></td>
                                                 <td><span class="animate-num text-glow-white" data-value="${vivoReach.num}" data-suffix="${vivoReach.suf}">${data.vivo.reach}</span></td>
