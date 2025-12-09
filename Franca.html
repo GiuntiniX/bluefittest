@@ -256,7 +256,8 @@
                 </div>
                 <div class="glass-panel p-8">
                     <p class="text-gray-300 mb-8 max-w-3xl">Análise de <strong>Prática</strong> vs <strong>Matrícula</strong> por idade.</p>
-                    <div class="grid lg:grid-cols-2 gap-12 items-center"> <div class="h-64 flex items-end justify-between gap-4 w-full pr-4 chart-container">
+                    <div class="grid lg:grid-cols-2 gap-12 items-end">
+                        <div class="h-64 flex items-end justify-between gap-4 w-full pr-4 chart-container">
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 68.8%;"><span class="bar-label text-white glow-text-white">68,8%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 44.5%;"><span class="bar-label text-terra-orange glow-text-orange">44,5%</span></div></div><div class="chart-label">16-24</div></div>
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 52.1%;"><span class="bar-label text-white glow-text-white">52,1%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 27.6%;"><span class="bar-label text-terra-orange glow-text-orange">27,6%</span></div></div><div class="chart-label font-bold text-white">25-34</div></div>
                             <div class="chart-bar-group flex-1 group relative justify-between h-full"><div class="flex items-end gap-1 h-full w-full justify-center pb-2"><div class="flex-1 bg-blue-gradient rounded-t chart-bar" style="height: 66.7%;"><span class="bar-label text-white glow-text-white">66,7%</span></div><div class="flex-1 bg-orange-gradient rounded-t chart-bar" style="height: 33.3%;"><span class="bar-label text-terra-orange glow-text-orange">33,3%</span></div></div><div class="chart-label">35-44</div></div>
@@ -407,8 +408,9 @@
                 barriers: "Falta de tempo (25%) e Preço (9%).",
                 insight: "Alta intenção de matrícula (30,84%) se houver estrutura moderna e preço competitivo.",
                 message: "Planos acessíveis, treinos rápidos e aulas dinâmicas para quem quer resultado sem perder tempo.",
-                terra: { users: "18 Mil", reach: "12%", views: "0MM" },
-                vivo: { users: "4 Mil", reach: "3%", views: "0MM" }
+                total_internet: "5MM",
+                terra: { users: "2 MM", reach: "28%", views: "9 MM" },
+                vivo: { users: "386 Mil", reach: "7%", views: "1 MM" }
             },
             persona2: { 
                 isPersona: true, name: "Fábio", role: "Adulto Atarefado", age: "25-34", income: "5-10 SM", 
@@ -418,8 +420,9 @@
                 barriers: "Falta de tempo (47,71%) e Motivação (11%).",
                 insight: "Maior aceitação da proposta Bluefit (50,31% positiva) com estrutura premium e proximidade.",
                 message: "Treinos express, horários flexíveis e equipamentos modernos para quem tem pouco tempo.",
-                terra: { users: "413 Mil", reach: "35%", views: "1MM" },
-                vivo: { users: "111 Mil", reach: "9.4%", views: "0MM" }
+                total_internet: "11MM",
+                terra: { users: "4 MM", reach: "39%", views: "9 MM" },
+                vivo: { users: "1 MM", reach: "13%", views: "4 MM" }
             },
             persona3: { 
                 isPersona: true, name: "Tatiana", role: "Executiva Premium", age: "35-44+", income: ">10 SM", 
@@ -429,8 +432,9 @@
                 barriers: "Falta de tempo (38,6%) é a principal barreira.",
                 insight: "Aceitação positiva (37,62%) para planos premium com serviços diferenciados.",
                 message: "Estrutura completa, aulas exclusivas e conveniência para quem busca performance e bem-estar.",
-                terra: { users: "313 Mil", reach: "38%", views: "1MM" },
-                vivo: { users: "62 Mil", reach: "7%", views: "0MM" }
+                total_internet: "13MM",
+                terra: { users: "6 MM", reach: "49%", views: "9 MM" },
+                vivo: { users: "2 MM", reach: "18%", views: "4 MM" }
             }
         };
 
@@ -569,7 +573,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <p class="text-[10px] text-gray-500 mt-2 text-center">* Total Internet BR base: 149Mil (Jovem) / 1MM (Adulto)</p>
+                                    <p class="text-[10px] text-gray-500 mt-2 text-center">* Total Internet BR base: ${data.total_internet}</p>
                                 </div>
 
                                 <div class="bg-orange-100 border-l-4 border-terra-orange p-4 rounded-r-xl shadow-lg mt-auto">
